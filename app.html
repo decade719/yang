@@ -337,7 +337,7 @@
   }
   .deng-tile {
     --deng-rotate: 0deg;
-    position: absolute; width: 10%; aspect-ratio: 1 / 1; padding: 0; border: 0;
+    position: absolute; width: 12%; aspect-ratio: 1 / 1; padding: 0; border: 0;
     border-radius: 10px; background: transparent; cursor: pointer; overflow: hidden; z-index: 2;
     box-shadow: 0 5px 11px rgba(0,0,0,0.42), 0 1px 2px rgba(0,0,0,0.6);
     transform: rotate(var(--deng-rotate));
@@ -350,6 +350,9 @@
   .deng-tile.blocked { filter: saturate(.55) brightness(.62); cursor: not-allowed; }
   .deng-tile.hint { animation: deng-pulse .7s ease-in-out 2; }
   @keyframes deng-pulse { 50% { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(251,191,36,0.25), 0 12px 18px rgba(0,0,0,0.3); } }
+  @media (max-width: 480px) {
+    .deng-tile { width: 11%; }
+  }
   .deng-tray-wrap {
     position: relative; padding: 17px 14px 13px; background: linear-gradient(180deg, #b8793d 0%, #8b5427 100%);
     border: 3px solid #d29a5b; border-radius: 19px; box-shadow: inset 0 3px 0 rgba(255,226,165,0.45), inset 0 -8px 0 rgba(77,43,19,0.35), 0 10px 0 #4d2b16, 0 17px 24px rgba(0,0,0,0.34);
@@ -1549,13 +1552,24 @@ function buildDengRoute(total) {
   return route;
 }
 
+const SFX = {
+  click: new Audio('audio/click.mp3'),
+  match: new Audio('audio/match.mp3'),
+  shuffle: new Audio('audio/shuffle.mp3'),
+  fail: new Audio('audio/fail.mp3')
+};
+function playSFX(key) {
+  const audio = SFX[key];
+  if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+}
+
 function dengOverlaps(a, b) {
   // 以当前小图块实际宽高估算，只有真正覆盖到中心区域才算遮挡。
-  const tilePercent = window.innerWidth <= 480 ? 9 : 10;
+  const tilePercent = window.innerWidth <= 480 ? 11 : 12;
   const halfTile = tilePercent * 0.5;
   const overlapX = Math.max(0, halfTile * 2 - Math.abs(a.x - b.x));
   const overlapY = Math.max(0, halfTile * 2 - Math.abs(a.y - b.y));
-  return overlapX > 2 && overlapY > 2;
+  return overlapX > 2.5 && overlapY > 2.5;
 }
 
 function isDengAvailable(tile) {
@@ -1604,12 +1618,14 @@ function selectDengTile(index) {
   const tile = dState.tiles[index];
   if (!tile || tile.removed) return;
   if (!isDengAvailable(tile)) {
+    playSFX('fail');
     dState.mistakes++;
     updateDengStats();
     setDengMessage('这张照片被挡住了，先点击最上层的照片', 'danger');
     return;
   }
 
+  playSFX('click');
   tile.removed = true;
   dState.removed++;
   dState.tray.push(tile.type);
@@ -1628,6 +1644,7 @@ function resolveDengMatches() {
   if (match) {
     dState.processing = true;
     const indexes = match[1].slice(0, 3).sort((a, b) => b - a);
+    playSFX('match');
     setDengMessage('三张相同照片，消除！', 'success');
     setTimeout(() => {
       indexes.forEach(index => dState.tray.splice(index, 1));
@@ -1647,8 +1664,9 @@ function checkDengState() {
     return;
   }
   if (dState.tray.length >= 7) {
+    playSFX('fail');
     dState.finished = true;
-    setDengMessage('收集槽满了，再试一次吧！', 'danger');
+    setDengMessage('收集槽已满，挑战失败！', 'danger');
   }
 }
 
@@ -1741,12 +1759,16 @@ function openDengQuiz() {
     btn.onclick = () => {
       if (idx === quiz.answer) {
         btn.classList.add('correct');
+        playSFX('match');
         setTimeout(() => {
           modal.classList.remove('active');
+          playSFX('shuffle');
           executeDengShuffle();
+          setDengMessage('洗牌成功！', 'success');
         }, 380);
       } else {
         btn.classList.add('wrong');
+        playSFX('fail');
         setTimeout(() => {
           modal.classList.remove('active');
           setDengMessage('回答错误，洗牌未生效，请继续加油！', 'danger');
