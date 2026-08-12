@@ -30,6 +30,8 @@
     display: flex; flex-direction: column;
     min-height: 100dvh;
     padding: max(8px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+    position: relative;
+    overflow: hidden;
   }
   header.top {
     display: flex; align-items: center; gap: 10px;
@@ -67,6 +69,8 @@
     overflow: hidden;
     position: relative;
     z-index: 5;
+    background: var(--bg);
+    min-height: calc(100dvh - 60px);
   }
   .view {
     display: none;
@@ -389,6 +393,12 @@ function fmtTime(sec) {
 }
 const IMG = new Image();
 IMG.src = IMG_URL;
+// 确保图片完全加载后才初始化游戏
+IMG.onerror = function() {
+  console.error('图片加载失败:', IMG_URL);
+  // 显示错误提示
+  document.body.innerHTML = '<div style="text-align:center;padding:50px;color:red;">图片加载失败，请检查 images/1st.png 是否存在</div>';
+};
 
 /* ================ tab router ================ */
 const tabsEl = $('#tabs');
@@ -560,9 +570,26 @@ Game.puzzle = (() => {
   return {
     ensure() {
       if (!inited) {
-        if (!IMG.complete) IMG.addEventListener('load', () => { build(); reset(); }, {once:true});
-        else { build(); reset(); }
         timer = makeTimer('puzzle-time');
+        if (!IMG.complete) {
+          // 显示加载状态
+          const loadingMsg = document.createElement('div');
+          loadingMsg.style.cssText = 'text-align:center;padding:50px;color:var(--muted);';
+          loadingMsg.textContent = '正在加载图片...';
+          grid.appendChild(loadingMsg);
+
+          IMG.addEventListener('load', () => {
+            loadingMsg.remove();
+            build();
+            reset();
+          }, {once:true});
+          IMG.addEventListener('error', () => {
+            loadingMsg.textContent = '图片加载失败，请刷新页面重试';
+            loadingMsg.style.color = 'red';
+          }, {once:true});
+        } else {
+          build(); reset();
+        }
         inited = true;
       }
     }
@@ -652,8 +679,22 @@ Game.memory = (() => {
     ensure() {
       if (!inited) {
         timer = makeTimer('memory-time');
-        if (!IMG.complete) IMG.addEventListener('load', () => { build(); }, {once:true});
-        else build();
+        if (!IMG.complete) {
+          // 显示加载状态
+          const loadingMsg = document.createElement('div');
+          loadingMsg.style.cssText = 'text-align:center;padding:50px;color:var(--muted);';
+          loadingMsg.textContent = '正在加载图片...';
+          gridEl.appendChild(loadingMsg);
+
+          IMG.addEventListener('load', () => {
+            loadingMsg.remove();
+            build();
+          }, {once:true});
+          IMG.addEventListener('error', () => {
+            loadingMsg.textContent = '图片加载失败，请刷新页面重试';
+            loadingMsg.style.color = 'red';
+          }, {once:true});
+        } else build();
         inited = true;
       }
     }
@@ -759,8 +800,25 @@ Game.jigsaw = (() => {
     ensure() {
       if (!inited) {
         timer = makeTimer('jigsaw-time');
-        if (!IMG.complete) IMG.addEventListener('load', () => { build(); reset(); }, {once:true});
-        else { build(); reset(); }
+        if (!IMG.complete) {
+          // 显示加载状态
+          const loadingMsg = document.createElement('div');
+          loadingMsg.style.cssText = 'text-align:center;padding:50px;color:var(--muted);';
+          loadingMsg.textContent = '正在加载图片...';
+          gridEl.appendChild(loadingMsg);
+
+          IMG.addEventListener('load', () => {
+            loadingMsg.remove();
+            build();
+            reset();
+          }, {once:true});
+          IMG.addEventListener('error', () => {
+            loadingMsg.textContent = '图片加载失败，请刷新页面重试';
+            loadingMsg.style.color = 'red';
+          }, {once:true});
+        } else {
+          build(); reset();
+        }
         inited = true;
       }
     }
@@ -930,8 +988,22 @@ Game.spotdiff = (() => {
     ensure() {
       if (!inited) {
         timer = makeTimer('spotdiff-time');
-        if (!IMG.complete) IMG.addEventListener('load', () => { rebuild(); }, {once:true});
-        else rebuild();
+        if (!IMG.complete) {
+          // 显示加载状态
+          const loadingMsg = document.createElement('div');
+          loadingMsg.style.cssText = 'text-align:center;padding:50px;color:var(--muted);';
+          loadingMsg.textContent = '正在加载图片...';
+          document.querySelector('.stage-wrap').appendChild(loadingMsg);
+
+          IMG.addEventListener('load', () => {
+            loadingMsg.remove();
+            rebuild();
+          }, {once:true});
+          IMG.addEventListener('error', () => {
+            loadingMsg.textContent = '图片加载失败，请刷新页面重试';
+            loadingMsg.style.color = 'red';
+          }, {once:true});
+        } else rebuild();
         inited = true;
       } else {
         // canvas may need redraw if image loaded after first init
