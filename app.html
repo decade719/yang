@@ -21,15 +21,19 @@
     --blur: 6px;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; margin: 0; }
+  html { height: 100%; margin: 0; overscroll-behavior: none; }
   body {
     background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg) 70%);
     color: var(--text);
     font: 15px/1.5 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
     display: flex; flex-direction: column;
     padding: max(12px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
-    min-height: 100dvh;
-    overflow-x: hidden;
+    height: 100svh;
+    min-height: 100svh;
+    max-height: 100svh;
+    overflow: hidden;
+    overscroll-behavior: none;
+    overscroll-behavior-x: none;
   }
 
   .top-nav {
@@ -58,6 +62,8 @@
   .tabs {
     display: flex; gap: 8px; overflow-x: auto; flex-shrink: 0;
     padding-bottom: 4px; scrollbar-width: none;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
   }
   .tabs::-webkit-scrollbar { display: none; }
   .tab {
@@ -68,7 +74,7 @@
   .tab:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: var(--panel-hover); }
   .tab.active { background: var(--accent); color: #0b0f19; border-color: var(--accent); font-weight: 700; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
 
-  main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  main { flex: 1; display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; }
   .view { display: none; flex: 1; flex-direction: column; align-items: center; }
   .view.active { display: flex; }
 
@@ -103,6 +109,9 @@
   .footnote kbd { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 11px; color: var(--text); }
 
   /* ===== puzzle ===== */
+  .puzzle-stage, .memory-stage, .jigsaw-stage, .g2048-stage {
+    touch-action: none;
+  }
   .puzzle-stage {
     position: relative;
     width: min(88vmin, 500px);
@@ -288,6 +297,7 @@
   .nonogram-col-clue { align-items: end; padding: 4px 2px 8px; }
   .nonogram-row-clue { justify-content: end; padding: 0 10px 0 4px; }
   .nonogram-cell {
+    touch-action: manipulation;
     appearance: none; border: 1px solid rgba(255,255,255,0.08); border-radius: 5px;
     background: rgba(255,255,255,0.045); cursor: pointer; position: relative;
     transition: background .14s, transform .12s, border-color .14s;
