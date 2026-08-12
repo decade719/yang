@@ -1442,51 +1442,37 @@ let dState = {
 
 function getDengPositions(level) {
   const positions = [];
-  const addGrid = (layer, rows, cols, left, top, gapX, gapY, offsetX = 0, offsetY = 0) => {
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-        const baseX = left + col * gapX + offsetX;
-        const baseY = top + row * gapY + offsetY;
-        // 轻微抖动打破网格感；幅度受控，避免图块跑出棋盘或完全失去可点击区域。
-        const jitterX = (Math.random() - 0.5) * Math.min(7, gapX * 0.34);
-        const jitterY = (Math.random() - 0.5) * Math.min(6, gapY * 0.34);
-        const rotate = Math.round((Math.random() * 16 - 8) * 10) / 10;
-        positions.push({ layer, x: baseX + jitterX, y: baseY + jitterY, rotate });
-      }
-    }
-  };
-  addGrid(0, 4, 4, 5, 19, 23, 17);
-  addGrid(1, 3, 4, 6, 28, 22, 20, 4, 0);
-  addGrid(2, 3, 4, 4, 25, 22, 20, 0, 4);
-  addGrid(3, 2, 4, 10, 35, 22, 22, 2, 0);
-  // 轻松局 5 层、60 张，适合先熟悉叠层关系。
-  addGrid(4, 3, 4, 5, 25, 22, 20, 4, 2);
-  if (level === 2) {
-    // 挑战局额外增加 15 层，每层 12 张，总计 20 层 / 240 张。
-    for (let layer = 5; layer < 20; layer++) {
-      const left = 4 + (layer % 4) * 2;
-      const top = 20 + (layer % 3) * 8;
-      const offsetX = (layer % 2) * 3;
-      const offsetY = (layer % 3) * 2;
-      addGrid(layer, 3, 4, left, top, 22, 18, offsetX, offsetY);
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const layerCounts = [16, 12, 12, 8, 12];
+  const totalLayers = level === 2 ? 20 : layerCounts.length;
+  const spread = level === 2 ? 34 : 29;
+
+  // 不再使用行列网格：每层围绕同一个中心点按极坐标随机散落，形成集中照片堆。
+  for (let layer = 0; layer < totalLayers; layer++) {
+    const count = layer < layerCounts.length ? layerCounts[layer] : 12;
+    const centerX = 50 + (Math.random() - 0.5) * 7 + ((layer % 3) - 1) * 1.8;
+    const centerY = 46 + (Math.random() - 0.5) * 6 + ((layer % 4) - 1.5) * 1.4;
+    const layerSpread = spread * (0.78 + Math.random() * 0.28);
+
+    for (let index = 0; index < count; index++) {
+      const angle = Math.random() * Math.PI * 2;
+      // 幂次越大，越多图块靠近中心，边缘只保留少量自然散落的牌。
+      const radius = Math.pow(Math.random(), 1.65) * layerSpread;
+      const x = clamp(centerX + Math.cos(angle) * radius - 5, 3, 87);
+      const y = clamp(centerY + Math.sin(angle) * radius * 0.72 - 5, 11, 78);
+      const rotate = Math.round((Math.random() * 22 - 11) * 10) / 10;
+      positions.push({ layer, x, y, rotate });
     }
   }
-  // 每层的位置随机打散，保留层级关系但避免每局路线固定。
-  const layerGroups = new Map();
-  positions.forEach(position => {
-    if (!layerGroups.has(position.layer)) layerGroups.set(position.layer, []);
-    layerGroups.get(position.layer).push(position);
-  });
-  const randomized = [];
-  [...layerGroups.keys()].sort((a, b) => a - b).forEach(layer => {
-    const group = layerGroups.get(layer);
-    for (let i = group.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [group[i], group[j]] = [group[j], group[i]];
-    }
-    randomized.push(...group);
-  });
-  return randomized;
+
+  // 层内再次随机，避免同一批牌保留可预测的生成顺序。
+  for (let i = positions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [positions[i], positions[j]] = [positions[j], positions[i]];
+  }
+  // 恢复层级升序，保证高层牌始终覆盖低层牌，但同层仍完全随机。
+  positions.sort((a, b) => a.layer - b.layer || Math.random() - 0.5);
+  return positions;
 }
 
 function initDeng() {
