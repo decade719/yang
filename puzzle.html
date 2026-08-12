@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0f1115">
+<title>数字华容道 · 拼图</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1f232c;
+    --border: #2a2f3a;
+    --text: #e8eaed;
+    --muted: #9aa0ac;
+    --accent: #6ea8fe;
+    --accent-2: #8ab4ff;
+    --good: #5ec98f;
+    --tile-radius: 12px;
+    --grid-gap: 6px;
+    --blur: 4px;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 800px at 50% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+    min-height: 100dvh;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin: 4px 0 2px;
+    letter-spacing: .5px;
+  }
+  .sub { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+
+  .topbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .stats {
+    display: flex;
+    gap: 14px;
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .stats b { color: var(--text); font-weight: 600; }
+
+  .diff {
+    display: inline-flex;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .diff button {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    padding: 5px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all .15s;
+  }
+  .diff button.active {
+    background: var(--accent);
+    color: #0b1220;
+    font-weight: 600;
+  }
+
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all .15s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent-2); }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary { background: var(--accent); color: #0b1220; border-color: var(--accent); font-weight: 600; }
+  .btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); color: #0b1220; }
+
+  .stage {
+    position: relative;
+    width: min(94vw, 92dvh - 160px, 560px);
+    aspect-ratio: 1 / 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: var(--grid-gap);
+    box-shadow: 0 18px 48px rgba(0,0,0,.45);
+    overflow: hidden;
+  }
+
+  .grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .tile {
+    position: absolute;
+    border-radius: var(--tile-radius);
+    background-color: #000;
+    background-size: 400% 400%;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: transform .22s cubic-bezier(.2,.8,.2,1), filter .2s, opacity .2s;
+    will-change: transform;
+    box-shadow: 0 2px 6px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04);
+    user-select: none;
+    overflow: hidden;
+  }
+  .tile::after {
+    content: "";
+    position: absolute; inset: 0;
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    pointer-events: none;
+    border-radius: inherit;
+  }
+  .tile .num {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0,0,0,.7), 0 0 12px rgba(0,0,0,.45);
+    letter-spacing: .5px;
+    z-index: 2;
+    font-size: clamp(22px, 7vmin, 44px);
+  }
+  .tile:hover { filter: brightness(1.08); }
+  .tile:active { transform: scale(.97); }
+
+  /* 完成后盖在 grid 上方,显示完整原图 */
+  .reveal {
+    position: absolute;
+    inset: var(--grid-gap);
+    border-radius: var(--tile-radius);
+    background-size: 100% 100%;
+    background-position: center;
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+    pointer-events: none;
+    z-index: 5;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .stage.done .reveal { opacity: 1; transform: scale(1); }
+  .stage.done .grid { opacity: 0; transition: opacity .4s; }
+
+  .win-banner {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%) scale(.9);
+    background: rgba(8, 10, 14, .82);
+    border: 1px solid var(--good);
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 14px;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .45s ease .35s, transform .45s cubic-bezier(.2,.8,.2,1) .35s;
+    z-index: 6;
+    backdrop-filter: blur(8px);
+  }
+  .stage.done .win-banner { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .win-banner .big { font-size: 20px; font-weight: 700; color: var(--good); }
+  .win-banner .small { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .footnote {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+    max-width: 520px;
+  }
+  .footnote kbd {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 11px;
+  }
+
+  .loading {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 13px;
+    z-index: 8;
+  }
+  .loading.hide { display: none; }
+
+  @media (max-width: 380px) {
+    h1 { font-size: 16px; }
+    .stats { font-size: 12px; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+  <h1>数字华容道 · 图片拼图</h1>
+  <div class="sub">把 15 块按 1→15 顺序拼好,空格在右下角</div>
+
+  <div class="topbar">
+    <div class="diff" id="diff">
+      <button data-d="30">简单</button>
+      <button data-d="200" class="active">中等</button>
+      <button data-d="600">困难</button>
+    </div>
+    <button class="btn primary" id="shuffleBtn">重新开始</button>
+    <button class="btn" id="peekBtn">看完整图</button>
+  </div>
+
+  <div class="stats">
+    <div>步数 <b id="moves">0</b></div>
+    <div>用时 <b id="time">00:00</b></div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="grid" id="grid"></div>
+    <div class="reveal" id="reveal"></div>
+    <div class="win-banner">
+      <div class="big">完成!</div>
+      <div class="small" id="winMeta">—</div>
+    </div>
+    <div class="loading" id="loading">加载图片中…</div>
+  </div>
+
+  <div class="footnote">
+    点击与空格相邻的方块即可滑动;也可用方向键 <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> 操作。
+  </div>
+
+<script>
+(() => {
+  const N = 4;                  // 4x4
+  const TOTAL = N * N;          // 16
+  const EMPTY = TOTAL - 1;      // 用 15 表示空格(编号 0..14 对应 1..15 号块)
+  const IMG_URL = 'images/1st.png';
+
+  const stage = document.getElementById('stage');
+  const grid  = document.getElementById('grid');
+  const reveal = document.getElementById('reveal');
+  const movesEl = document.getElementById('moves');
+  const timeEl  = document.getElementById('time');
+  const loading = document.getElementById('loading');
+  const winMeta = document.getElementById('winMeta');
+  const diffBox = document.getElementById('diff');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const peekBtn = document.getElementById('peekBtn');
+
+  // state[i] = 当前排在位置 i 的瓦片编号(0..14 是方块,15 是空格)
+  let state = [];
+  let tiles = [];          // tiles[num] = 该编号对应的 DOM
+  let moves = 0;
+  let startTs = 0;
+  let timerId = null;
+  let won = false;
+  let peeking = false;
+  let shuffleSteps = 200;
+
+  // 预加载图片,加载完再初始化
+  function preload(cb) {
+    const img = new Image();
+    img.onload = () => cb();
+    img.onerror = () => { loading.textContent = '图片加载失败,请检查 images/1st.png'; };
+    img.src = IMG_URL;
+  }
+
+  function buildTiles() {
+    grid.innerHTML = '';
+    tiles = [];
+    for (let num = 0; num < TOTAL - 1; num++) {
+      const el = document.createElement('div');
+      el.className = 'tile';
+      const row = Math.floor(num / N);
+      const col = num % N;
+      el.style.backgroundImage = `url("${IMG_URL}")`;
+      // background-size: 400% 400% → 把整图放大到 4×4
+      // background-position 用百分比:col/(N-1) * 100%  (N=4 → 0,33.33,66.66,100)
+      el.style.backgroundPosition = `${(col / (N - 1)) * 100}% ${(row / (N - 1)) * 100}%`;
+      const numEl = document.createElement('div');
+      numEl.className = 'num';
+      numEl.textContent = String(num + 1);
+      el.appendChild(numEl);
+      el.addEventListener('click', () => tryMove(num));
+      tiles[num] = el;
+      grid.appendChild(el);
+    }
+    reveal.style.backgroundImage = `url("${IMG_URL}")`;
+  }
+
+  // 根据 state 重排 DOM 位置
+  function render() {
+    const cellPct = 100 / N;     // 每格占百分比(相对 grid)
+    for (let pos = 0; pos < TOTAL; pos++) {
+      const num = state[pos];
+      if (num === EMPTY) continue;
+      const el = tiles[num];
+      const row = Math.floor(pos / N);
+      const col = pos % N;
+      // tile 宽高也是 cellPct,然后 translate 到 (col, row)
+      el.style.width  = cellPct + '%';
+      el.style.height = cellPct + '%';
+      el.style.transform = `translate(${col * 100}%, ${row * 100}%)`;
+    }
+  }
+
+  function posOf(num) { return state.indexOf(num); }
+  function isNeighbor(a, b) {
+    const ra = Math.floor(a / N), ca = a % N;
+    const rb = Math.floor(b / N), cb = b % N;
+    return (ra === rb && Math.abs(ca - cb) === 1) ||
+           (ca === cb && Math.abs(ra - rb) === 1);
+  }
+
+  function tryMove(num) {
+    if (won || peeking) return;
+    const p = posOf(num);
+    const e = posOf(EMPTY);
+    if (!isNeighbor(p, e)) return;
+    [state[p], state[e]] = [state[e], state[p]];
+    moves++;
+    movesEl.textContent = String(moves);
+    if (!startTs) startTimer();
+    render();
+    checkWin();
+  }
+
+  function moveByDir(dir) {
+    // dir: 用户希望"哪个方向"的瓦片滑入空格
+    // 比如按 → 表示:空格右边的瓦片向左滑入空格 → 空格往右走
+    if (won || peeking) return;
+    const e = posOf(EMPTY);
+    const r = Math.floor(e / N), c = e % N;
+    let tr = r, tc = c;
+    if (dir === 'left')  tc = c + 1;
+    if (dir === 'right') tc = c - 1;
+    if (dir === 'up')    tr = r + 1;
+    if (dir === 'down')  tr = r - 1;
+    if (tr < 0 || tr >= N || tc < 0 || tc >= N) return;
+    const num = state[tr * N + tc];
+    tryMove(num);
+  }
+
+  function checkWin() {
+    for (let i = 0; i < TOTAL; i++) {
+      if (state[i] !== i) return;
+    }
+    won = true;
+    stopTimer();
+    stage.classList.add('done');
+    const sec = Math.floor((Date.now() - startTs) / 1000);
+    winMeta.textContent = `${moves} 步 · ${fmtTime(sec)}`;
+  }
+
+  // 打乱:从已求解状态开始,做 N 步"合法随机移动",
+  // 保证可达(避免不可解的随机排列)
+  function shuffle(steps) {
+    state = Array.from({ length: TOTAL }, (_, i) => i);
+    let lastEmpty = -1; // 防止立刻来回
+    for (let i = 0; i < steps; i++) {
+      const e = posOf(EMPTY);
+      const r = Math.floor(e / N), c = e % N;
+      const cands = [];
+      if (r > 0)      cands.push(e - N);
+      if (r < N - 1)  cands.push(e + N);
+      if (c > 0)      cands.push(e - 1);
+      if (c < N - 1)  cands.push(e + 1);
+      const filtered = cands.filter(x => x !== lastEmpty);
+      const pick = (filtered.length ? filtered : cands)[
+        Math.floor(Math.random() * (filtered.length ? filtered.length : cands.length))
+      ];
+      [state[pick], state[e]] = [state[e], state[pick]];
+      lastEmpty = e;
+    }
+    // 极小概率打乱后仍是已解状态 → 再来一次
+    if (state.every((v, i) => v === i)) shuffle(steps);
+  }
+
+  function reset() {
+    won = false;
+    peeking = false;
+    stage.classList.remove('done', 'peek');
+    moves = 0;
+    movesEl.textContent = '0';
+    stopTimer();
+    startTs = 0;
+    timeEl.textContent = '00:00';
+    shuffle(shuffleSteps);
+    render();
+  }
+
+  function startTimer() {
+    startTs = Date.now();
+    timerId = setInterval(() => {
+      const sec = Math.floor((Date.now() - startTs) / 1000);
+      timeEl.textContent = fmtTime(sec);
+    }, 500);
+  }
+  function stopTimer() {
+    if (timerId) { clearInterval(timerId); timerId = null; }
+  }
+  function fmtTime(sec) {
+    const m = String(Math.floor(sec / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    return `${m}:${s}`;
+  }
+
+  // 难度切换
+  diffBox.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-d]');
+    if (!b) return;
+    [...diffBox.children].forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    shuffleSteps = parseInt(b.dataset.d, 10);
+    reset();
+  });
+
+  shuffleBtn.addEventListener('click', reset);
+
+  // 看完整图(按住 / 点一下切换)
+  peekBtn.addEventListener('click', () => {
+    if (won) return;
+    peeking = !peeking;
+    stage.classList.toggle('done', peeking);
+    peekBtn.textContent = peeking ? '隐藏完整图' : '看完整图';
+    if (!peeking) {
+      // 还原显示拼图状态
+      stage.classList.remove('done');
+    }
+  });
+
+  // 键盘
+  window.addEventListener('keydown', (e) => {
+    const map = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' };
+    const d = map[e.key];
+    if (d) { e.preventDefault(); moveByDir(d); }
+    else if (e.key === ' ' || e.key === 'Enter') { if (won) reset(); }
+  });
+
+  // 触摸滑动(在 grid 内任意位置起手)
+  let touchStart = null;
+  grid.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    touchStart = { x: t.clientX, y: t.clientY };
+  }, { passive: true });
+  grid.addEventListener('touchend', (e) => {
+    if (!touchStart) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStart.x;
+    const dy = t.clientY - touchStart.y;
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+    const TH = 18;
+    if (Math.max(ax, ay) < TH) { touchStart = null; return; }
+    if (ax > ay) moveByDir(dx > 0 ? 'right' : 'left');
+    else         moveByDir(dy > 0 ? 'down' : 'up');
+    touchStart = null;
+  }, { passive: true });
+
+  // 启动
+  preload(() => {
+    loading.classList.add('hide');
+    buildTiles();
+    reset();
+  });
+})();
+</script>
+</body>
+</html>
