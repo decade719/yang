@@ -121,6 +121,8 @@
     opacity: 0; transform: scale(1.04); pointer-events: none; z-index: 5;
     transition: opacity .5s, transform .6s cubic-bezier(.2,.8,.2,1);
   }
+  .puzzle-stage.peek .puzzle-reveal { opacity: 1; transform: scale(1); }
+  .puzzle-stage.peek .puzzle-grid { opacity: 0; transition: opacity .4s; }
   .puzzle-stage.done .puzzle-reveal { opacity: 1; transform: scale(1); }
   .puzzle-stage.done .puzzle-grid { opacity: 0; transition: opacity .4s; }
   .win-banner {
@@ -492,7 +494,7 @@ var Game = {};
   }
 
   function reset() {
-    won = false; peeking = false; stage.classList.remove('done');
+    won = false; peeking = false; stage.classList.remove('done', 'peek');
     moves = 0; movesEl.textContent = '0'; timer.reset();
     shuffle(shuffleSteps); render();
   }
@@ -507,7 +509,7 @@ var Game = {};
   $('[data-act="puzzle-peek"]').addEventListener('click', function () {
     if (won) return;
     peeking = !peeking;
-    stage.classList.toggle('done', peeking);
+    stage.classList.toggle('peek', peeking);
     this.textContent = peeking ? '隐藏完整图' : '看完整图';
   });
 
