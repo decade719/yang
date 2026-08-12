@@ -588,6 +588,15 @@
       <div class="footnote">仿经典三消堆叠玩法 · 每次只可点击当前最上层的照片</div>
     </section>
 
+    <!-- ===== DENG QUIZ MODAL ===== -->
+    <div class="deng-modal" id="deng-modal">
+      <div class="deng-modal-card">
+        <div class="deng-modal-title"><span>🧠 答题洗牌挑战</span></div>
+        <div class="deng-quiz-q" id="deng-quiz-q">加载中…</div>
+        <div class="deng-options" id="deng-options"></div>
+      </div>
+    </div>
+
     <!-- ===== NONOGRAM ===== -->
     <section class="view" id="view-nonogram">
       <div class="topbar">
@@ -1674,13 +1683,23 @@ function hintDeng() {
 /* ===== Deng Quiz & Shuffle Bank ===== */
 const DENG_QUIZ_BANK = [
   {
-    q: "在经典消除游戏中，收集槽最多可以容纳几张未消除的照片？",
-    options: ["5 张", "7 张", "9 张", "10 张"],
+    q: "请问“苹果”用英语怎么说？",
+    options: ["Banana", "Apple", "Orange", "Grape"],
     answer: 1
   },
   {
-    q: "当场上照片被其他照片完全覆盖时，正确的做法是？",
-    options: ["直接点击被压在底下的照片", "先消除或移开上方遮挡的照片", "摇晃手机让它们掉落", "关闭网页重新下载"],
+    q: "请问“香蕉”的英语单词是？",
+    options: ["Apple", "Pear", "Banana", "Peach"],
+    answer: 2
+  },
+  {
+    q: "请问“猫”的英语单词是？",
+    options: ["Dog", "Cat", "Bird", "Fish"],
+    answer: 1
+  },
+  {
+    q: "在经典消除游戏中，底部收集槽最多可以容纳几张未消除的照片？",
+    options: ["5 张", "7 张", "9 张", "10 张"],
     answer: 1
   },
   {
@@ -1689,13 +1708,18 @@ const DENG_QUIZ_BANK = [
     answer: 1
   },
   {
-    q: "为了让手机端加载如飞，我们在项目中把大图转成了哪种现代图片格式？",
+    q: "为了让手机端网页加载如飞，我们在项目中将大图转成了哪种高效格式？",
     options: ["GIF", "BMP", "WebP", "TIFF"],
     answer: 2
   },
   {
-    q: "如果游戏进入僵局，使用哪个功能可以通过回答问题来重新洗牌？",
-    options: ["重新开局", "找提示", "答题洗牌", "退出游戏"],
+    q: "如果游戏陷入僵局，通过回答正确哪个按钮的功能可以重新洗牌？",
+    options: ["重新开局", "找提示", "答题洗牌", "返回首页"],
+    answer: 2
+  },
+  {
+    q: "请问“谢谢”用英语怎么说？",
+    options: ["Hello", "Goodbye", "Thank you", "Sorry"],
     answer: 2
   }
 ];
