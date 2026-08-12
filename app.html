@@ -266,6 +266,43 @@
   }
   .g2048-tile .tile-num { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
+  /* ===== nonogram ===== */
+  .nonogram-stage {
+    width: min(96vw, 820px); max-height: min(72vh, 700px); overflow: auto;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 20px; padding: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    backdrop-filter: blur(12px);
+  }
+  .nonogram-board {
+    --nonogram-size: 10;
+    display: grid; grid-template-columns: 78px repeat(var(--nonogram-size), minmax(30px, 1fr));
+    grid-template-rows: 72px repeat(var(--nonogram-size), minmax(32px, 1fr));
+    min-width: 458px; aspect-ratio: 1.08 / 1; gap: 2px;
+  }
+  .nonogram-corner { border-radius: 10px; background: rgba(255,255,255,0.03); }
+  .nonogram-clue {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 12px; font-weight: 700; line-height: 1.25;
+    white-space: pre-line; text-align: center; user-select: none;
+  }
+  .nonogram-col-clue { align-items: end; padding: 4px 2px 8px; }
+  .nonogram-row-clue { justify-content: end; padding: 0 10px 0 4px; }
+  .nonogram-cell {
+    appearance: none; border: 1px solid rgba(255,255,255,0.08); border-radius: 5px;
+    background: rgba(255,255,255,0.045); cursor: pointer; position: relative;
+    transition: background .14s, transform .12s, border-color .14s;
+  }
+  .nonogram-cell:hover { border-color: var(--accent); background: rgba(56,189,248,0.12); }
+  .nonogram-cell:nth-of-type(11n + 12), .nonogram-cell:nth-of-type(11n + 13), .nonogram-cell:nth-of-type(11n + 14), .nonogram-cell:nth-of-type(11n + 15), .nonogram-cell:nth-of-type(11n + 16) { }
+  .nonogram-cell.filled { background: linear-gradient(135deg, #38bdf8, #2563eb); border-color: #7dd3fc; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.12), 0 0 10px rgba(56,189,248,0.18); }
+  .nonogram-cell.marked::before, .nonogram-cell.marked::after { content: ""; position: absolute; width: 70%; height: 2px; left: 15%; top: calc(50% - 1px); background: rgba(156,163,175,0.8); border-radius: 2px; }
+  .nonogram-cell.marked::before { transform: rotate(45deg); }
+  .nonogram-cell.marked::after { transform: rotate(-45deg); }
+  .nonogram-cell.wrong { background: rgba(239,68,68,0.8); border-color: #fca5a5; animation: nonogram-shake .28s ease-in-out; }
+  .nonogram-cell.solved { background: linear-gradient(135deg, #10b981, #047857); border-color: #6ee7b7; }
+  @keyframes nonogram-shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+  .nonogram-tip { color: var(--muted); font-size: 12px; text-align: center; margin-top: 10px; }
+
   @media (max-width: 480px) {
     body { padding: 8px 12px 12px; }
     h1 { font-size: 15px; }
@@ -288,6 +325,7 @@
       <button class="tab" data-game="spotdiff">找不同</button>
       <button class="tab" data-game="scratch">心动刮刮乐</button>
       <button class="tab" data-game="2048">写真 2048</button>
+      <button class="tab" data-game="nonogram">数织解谜</button>
     </div>
   </div>
 
@@ -419,6 +457,30 @@
       </div>
       <div class="footnote">滑动或方向键移动方块 · 合并相同碎片以进化图片</div>
     </section>
+
+    <!-- ===== NONOGRAM ===== -->
+    <section class="view" id="view-nonogram">
+      <div class="topbar">
+        <div class="diff" data-diff-for="nonogram">
+          <button data-d="8" class="active">入门 8×8</button>
+          <button data-d="10">进阶 10×10</button>
+        </div>
+        <button class="btn primary" data-act="nonogram-reset">重新开始</button>
+        <button class="btn" data-act="nonogram-hint">提示 <span data-stat="nonogram-hints">3</span></button>
+      </div>
+      <div class="stats">
+        <div>步数 <b data-stat="nonogram-moves">0</b></div>
+        <div>错误 <b data-stat="nonogram-mistakes">0</b></div>
+        <div>用时 <b data-stat="nonogram-time">00:00</b></div>
+      </div>
+      <div class="stage-wrap">
+        <div class="nonogram-stage">
+          <div class="nonogram-board" id="nonogram-board"></div>
+          <div class="nonogram-tip">左键填涂 · 右键标记排除 · 根据行列数字还原图案</div>
+        </div>
+      </div>
+      <div class="footnote">每组数字代表连续填涂的格子数量 · 连续数字之间至少间隔一格</div>
+    </section>
   </main>
 
 <script>
@@ -465,6 +527,7 @@ function initCurrentGame() {
   else if (currentGame === 'spotdiff') initSpotdiff();
   else if (currentGame === 'scratch') initScratch();
   else if (currentGame === '2048') init2048();
+  else if (currentGame === 'nonogram') initNonogram();
 }
 
 /* ==================== 1. PUZZLE ==================== */
@@ -1050,12 +1113,201 @@ function move2048(dir) {
   }
 }
 
+/* ==================== 5. NONOGRAM ==================== */
+let nState = {
+  size: 8, solution: [], board: [], moves: 0, mistakes: 0,
+  hints: 3, time: 0, timer: null, playing: false, finished: false, wrongIndex: -1
+};
+
+function getNonogramRuns(line) {
+  const runs = [];
+  let count = 0;
+  line.forEach(value => {
+    if (value) count++;
+    else if (count) { runs.push(count); count = 0; }
+  });
+  if (count) runs.push(count);
+  return runs.length ? runs.join('  ') : '·';
+}
+
+function buildNonogramSolution(img, size) {
+  const canvas = document.createElement('canvas');
+  const pixelsPerCell = 18;
+  canvas.width = canvas.height = size * pixelsPerCell;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  const values = [];
+  for (let row = 0; row < size; row++) {
+    for (let col = 0; col < size; col++) {
+      const data = ctx.getImageData(col * pixelsPerCell, row * pixelsPerCell, pixelsPerCell, pixelsPerCell).data;
+      let total = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        total += data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722;
+      }
+      values.push(total / (data.length / 4));
+    }
+  }
+  const sorted = [...values].sort((a, b) => a - b);
+  const threshold = sorted[Math.floor(sorted.length * 0.58)];
+  let solution = values.map(value => value >= threshold);
+  const filled = solution.filter(Boolean).length;
+  if (filled < size * 2 || filled > size * size - size * 2) {
+    const fallback = sorted[Math.floor(sorted.length * 0.5)];
+    solution = values.map(value => value >= fallback);
+  }
+  return solution;
+}
+
+function initNonogram() {
+  stopAllTimers();
+  nState.board = [];
+  nState.solution = [];
+  nState.moves = 0;
+  nState.mistakes = 0;
+  nState.hints = 3;
+  nState.time = 0;
+  nState.playing = false;
+  nState.finished = false;
+  nState.wrongIndex = -1;
+  updateNonogramStats();
+
+  preloadImage(img => {
+    nState.solution = buildNonogramSolution(img, nState.size);
+    nState.board = Array(nState.size * nState.size).fill(0);
+    renderNonogram();
+  });
+}
+
+function renderNonogram() {
+  const board = $('#nonogram-board');
+  const size = nState.size;
+  board.innerHTML = '';
+  board.style.setProperty('--nonogram-size', size);
+  board.style.gridTemplateColumns = `78px repeat(${size}, minmax(30px, 1fr))`;
+  board.style.gridTemplateRows = `72px repeat(${size}, minmax(32px, 1fr))`;
+
+  const corner = document.createElement('div');
+  corner.className = 'nonogram-corner';
+  board.appendChild(corner);
+
+  for (let col = 0; col < size; col++) {
+    const clue = document.createElement('div');
+    clue.className = 'nonogram-clue nonogram-col-clue';
+    const line = Array.from({ length: size }, (_, row) => nState.solution[row * size + col]);
+    clue.textContent = getNonogramRuns(line).replace(/  /g, '\\n');
+    board.appendChild(clue);
+  }
+
+  for (let row = 0; row < size; row++) {
+    const clue = document.createElement('div');
+    clue.className = 'nonogram-clue nonogram-row-clue';
+    const line = nState.solution.slice(row * size, row * size + size);
+    clue.textContent = getNonogramRuns(line);
+    board.appendChild(clue);
+
+    for (let col = 0; col < size; col++) {
+      const index = row * size + col;
+      const cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'nonogram-cell';
+      cell.setAttribute('aria-label', `第 ${row + 1} 行第 ${col + 1} 列`);
+      if (nState.board[index] === 1) cell.classList.add('filled');
+      if (nState.board[index] === 2) cell.classList.add('marked');
+      if (nState.wrongIndex === index) cell.classList.add('wrong');
+      if (nState.finished && nState.solution[index]) cell.classList.add('solved');
+      cell.onclick = () => handleNonogramCell(index, 'fill');
+      cell.oncontextmenu = event => {
+        event.preventDefault();
+        handleNonogramCell(index, 'mark');
+      };
+      board.appendChild(cell);
+    }
+  }
+}
+
+function startNonogramTimer() {
+  if (nState.playing) return;
+  nState.playing = true;
+  nState.timer = setInterval(() => {
+    nState.time++;
+    updateNonogramStats();
+  }, 1000);
+}
+
+function handleNonogramCell(index, action) {
+  if (nState.finished || !nState.solution.length) return;
+  startNonogramTimer();
+  nState.wrongIndex = -1;
+
+  if (action === 'mark') {
+    if (nState.board[index] === 1) return;
+    nState.board[index] = nState.board[index] === 2 ? 0 : 2;
+    nState.moves++;
+    renderNonogram();
+    updateNonogramStats();
+    return;
+  }
+
+  if (nState.board[index] === 2) nState.board[index] = 0;
+  else if (nState.board[index] === 1) nState.board[index] = 0;
+  else if (nState.solution[index]) nState.board[index] = 1;
+  else {
+    nState.mistakes++;
+    nState.moves++;
+    nState.wrongIndex = index;
+    renderNonogram();
+    updateNonogramStats();
+    setTimeout(() => {
+      if (nState.wrongIndex === index) {
+        nState.wrongIndex = -1;
+        renderNonogram();
+      }
+    }, 420);
+    return;
+  }
+
+  nState.moves++;
+  renderNonogram();
+  updateNonogramStats();
+  checkNonogramComplete();
+}
+
+function checkNonogramComplete() {
+  const complete = nState.solution.every((isFilled, index) => !isFilled || nState.board[index] === 1);
+  if (!complete) return;
+  nState.finished = true;
+  stopAllTimers();
+  renderNonogram();
+  setTimeout(() => alert(`数织完成！用时 ${fmtTime(nState.time)}，步数 ${nState.moves}，错误 ${nState.mistakes} 次`), 250);
+}
+
+function updateNonogramStats() {
+  $('[data-stat="nonogram-moves"]').textContent = nState.moves;
+  $('[data-stat="nonogram-mistakes"]').textContent = nState.mistakes;
+  $('[data-stat="nonogram-time"]').textContent = fmtTime(nState.time);
+  $('[data-stat="nonogram-hints"]').textContent = nState.hints;
+}
+
+function giveNonogramHint() {
+  if (nState.finished || nState.hints <= 0 || !nState.solution.length) return;
+  const target = nState.solution.findIndex((isFilled, index) => isFilled && nState.board[index] !== 1);
+  if (target < 0) return;
+  startNonogramTimer();
+  nState.board[target] = 1;
+  nState.hints--;
+  nState.moves++;
+  renderNonogram();
+  updateNonogramStats();
+  checkNonogramComplete();
+}
+
 /* ==================== Controls & Event Bindings ==================== */
 function stopAllTimers() {
   clearInterval(pState.timer);
   clearInterval(mState.timer);
   clearInterval(jState.timer);
   clearInterval(sState.timer);
+  clearInterval(nState.timer);
 }
 
 // Difficulty buttons
@@ -1070,6 +1322,7 @@ $all('.diff').forEach(group => {
       else if (game === 'memory') { mState.pairsCount = val; initMemory(); }
       else if (game === 'jigsaw') { jState.size = Math.sqrt(val); initJigsaw(); }
       else if (game === 'spotdiff') { sState.diffCount = val; initSpotdiff(); }
+      else if (game === 'nonogram') { nState.size = val; initNonogram(); }
     };
   });
 });
@@ -1085,6 +1338,8 @@ $('[data-act="memory-reset"]').onclick = initMemory;
 
 $('[data-act="scratch-reset"]').onclick = initScratch;
 $('[data-act="2048-reset"]').onclick = init2048;
+$('[data-act="nonogram-reset"]').onclick = initNonogram;
+$('[data-act="nonogram-hint"]').onclick = giveNonogramHint;
 
 // 2048 Touch Support
 let touchStartX, touchStartY;
@@ -1140,7 +1395,7 @@ window.onkeydown = (e) => {
 window.onload = () => {
   const params = new URLSearchParams(location.search);
   const g = params.get('game');
-  const validGames = ['puzzle', 'memory', 'jigsaw', 'spotdiff', 'scratch', '2048'];
+  const validGames = ['puzzle', 'memory', 'jigsaw', 'spotdiff', 'scratch', '2048', 'nonogram'];
   if (validGames.includes(g)) {
     switchGame(g, false);
   } else {
