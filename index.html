@@ -125,6 +125,18 @@
   }
   .footer span { display: inline-block; width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
 
+  /* ===== seamless SPA navigation ===== */
+  #home-view { width: 100%; display: flex; flex-direction: column; align-items: center; opacity: 1; transform: translateY(0); transition: opacity .22s ease, transform .22s ease; }
+  #home-view.spa-hidden { opacity: 0; transform: translateY(-8px); pointer-events: none; }
+  #app-view { position: fixed; inset: 0; z-index: 20; display: none; flex-direction: column; width: 100%; height: 100svh; opacity: 0; transform: translateY(8px); transition: opacity .24s ease, transform .24s ease; overflow: hidden; }
+  #app-view.spa-active { display: flex; opacity: 1; transform: translateY(0); }
+  body.spa-app-active { display: block; align-items: initial; padding: 0; min-height: 100svh; height: 100svh; overflow: hidden; }
+  .spa-loader { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: rgba(11,15,25,.76); backdrop-filter: blur(7px); opacity: 0; pointer-events: none; transition: opacity .18s ease; }
+  .spa-loader.active { opacity: 1; pointer-events: auto; }
+  .spa-loader-card { padding: 14px 18px; border-radius: 14px; border: 1px solid rgba(56,189,248,.25); background: rgba(23,28,41,.9); color: var(--muted); font-size: 13px; box-shadow: 0 16px 40px rgba(0,0,0,.35); }
+  .spa-loader-card::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: spa-pulse 1s ease-in-out infinite; }
+  @keyframes spa-pulse { 50% { opacity: .35; transform: scale(.7); } }
+
   @media (max-width: 480px) {
     body { padding: 16px 12px; }
     .cards { grid-template-columns: 1fr; gap: 14px; }
@@ -132,8 +144,9 @@
   }
 </style>
 </head>
-<body>
-  <div class="bg-glow"></div>
+<body id="site-body">
+  <div id="home-view">
+    <div class="bg-glow"></div>
 
   <header>
     <div class="badge">Mobile-first mini games</div>
@@ -218,5 +231,113 @@
   <div class="footer">
     <span></span> 响应式单文件架构 · 支持手机与桌面端流畅畅玩
   </div>
+  </div>
+
+  <div id="app-view" aria-live="polite"></div>
+  <div class="spa-loader" id="spa-loader"><div class="spa-loader-card">正在打开游戏…</div></div>
+
+  <script>
+    (() => {
+      const homeView = document.getElementById('home-view');
+      const appView = document.getElementById('app-view');
+      const loader = document.getElementById('spa-loader');
+      const body = document.getElementById('site-body');
+      const appStyleId = 'spa-app-style';
+      let appStyleText = '';
+      let appLoaded = false;
+      let appBooted = false;
+
+      const validGames = ['puzzle', 'memory', 'jigsaw', 'spotdiff', 'scratch', '2048', 'nonogram', 'deng'];
+      const getGame = () => new URLSearchParams(location.search).get('game');
+
+      function setLoader(active) { loader.classList.toggle('active', active); }
+      function mountAppStyle() {
+        if (document.getElementById(appStyleId)) return;
+        const style = document.createElement('style');
+        style.id = appStyleId;
+        style.textContent = appStyleText;
+        document.head.appendChild(style);
+      }
+      function removeAppStyle() {
+        document.getElementById(appStyleId)?.remove();
+      }
+      function runAppScript(scriptText) {
+        const script = document.createElement('script');
+        script.textContent = `${scriptText}\nwindow.__spaGameBooted = true;`;
+        document.body.appendChild(script);
+        script.remove();
+        appBooted = true;
+      }
+      async function loadAppTemplate() {
+        if (appLoaded) return;
+        const response = await fetch('app.html', { cache: 'no-store' });
+        if (!response.ok) throw new Error('无法加载游戏页');
+        const text = await response.text();
+        const parsed = new DOMParser().parseFromString(text, 'text/html');
+        appStyleText = parsed.querySelector('style')?.textContent || '';
+        const appScript = parsed.querySelector('script')?.textContent || '';
+        appView.innerHTML = parsed.body.innerHTML;
+        appView.querySelectorAll('script').forEach(script => script.remove());
+        appView.dataset.script = appScript;
+        appLoaded = true;
+      }
+      function bootGame(game) {
+        mountAppStyle();
+        body.classList.add('spa-app-active');
+        homeView.classList.add('spa-hidden');
+        appView.classList.add('spa-active');
+        if (!appBooted) {
+          runAppScript(appView.dataset.script || '');
+        } else if (typeof window.switchGame === 'function') {
+          window.switchGame(game || 'deng', false);
+        }
+      }
+      function showHome(push = false) {
+        if (push) history.pushState({}, '', 'index.html');
+        if (typeof window.stopAllTimers === 'function') window.stopAllTimers();
+        appView.classList.remove('spa-active');
+        homeView.classList.remove('spa-hidden');
+        body.classList.remove('spa-app-active');
+        setTimeout(removeAppStyle, 250);
+      }
+      async function openGame(game, push = true) {
+        if (!validGames.includes(game)) return;
+        setLoader(true);
+        try {
+          if (push) history.pushState({}, '', `index.html?game=${encodeURIComponent(game)}`);
+          await loadAppTemplate();
+          const alreadyBooted = appBooted;
+          bootGame(game);
+          if (alreadyBooted && typeof window.switchGame === 'function') window.switchGame(game, false);
+        } catch (error) {
+          console.error(error);
+          showHome(false);
+        } finally {
+          requestAnimationFrame(() => setLoader(false));
+        }
+      }
+      document.addEventListener('click', event => {
+        const card = event.target.closest('a.card[href*="app.html?game="]');
+        if (card) {
+          event.preventDefault();
+          const url = new URL(card.href, location.href);
+          openGame(url.searchParams.get('game'));
+          return;
+        }
+        const back = event.target.closest('a.back');
+        if (back && appView.classList.contains('spa-active')) {
+          event.preventDefault();
+          showHome(true);
+        }
+      });
+      window.addEventListener('popstate', () => {
+        const game = getGame();
+        if (validGames.includes(game)) openGame(game, false);
+        else showHome(false);
+      });
+      const initialGame = getGame();
+      if (validGames.includes(initialGame)) openGame(initialGame, false);
+    })();
+  </script>
 </body>
 </html>

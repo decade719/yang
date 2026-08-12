@@ -1844,17 +1844,19 @@ window.onkeydown = (e) => {
   }
 };
 
-// Init on load from query param
-window.onload = () => {
+// 支持普通页面加载与首页 SPA 动态注入两种启动方式。
+function bootGamePage(initialGame) {
   const params = new URLSearchParams(location.search);
-  const g = params.get('game');
+  const g = initialGame || params.get('game');
   const validGames = ['puzzle', 'memory', 'jigsaw', 'spotdiff', 'scratch', '2048', 'nonogram', 'deng'];
-  if (validGames.includes(g)) {
-    switchGame(g, false);
-  } else {
-    switchGame('puzzle', false);
-  }
-};
+  switchGame(validGames.includes(g) ? g : 'puzzle', false);
+}
+window.bootGamePage = bootGamePage;
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', () => bootGamePage());
+} else if (document.querySelector('.top-nav')) {
+  bootGamePage();
+}
 </script>
 </body>
 </html>
