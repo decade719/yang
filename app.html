@@ -336,17 +336,19 @@
     pointer-events: none; z-index: 1;
   }
   .deng-tile {
-    position: absolute; width: 10%; aspect-ratio: 1 / 1; padding: 1px; border: 2px solid rgba(255,255,255,0.35);
-    border-radius: 15px; background: #f8fafc; cursor: pointer; overflow: hidden; z-index: 2;
-    box-shadow: 0 7px 0 rgba(15,23,42,0.4), 0 12px 18px rgba(0,0,0,0.25);
+    --deng-rotate: 0deg;
+    position: absolute; width: 10%; aspect-ratio: 1 / 1; padding: 0; border: 0;
+    border-radius: 10px; background: transparent; cursor: pointer; overflow: hidden; z-index: 2;
+    box-shadow: 0 5px 11px rgba(0,0,0,0.42), 0 1px 2px rgba(0,0,0,0.6);
+    transform: rotate(var(--deng-rotate));
     transition: filter .16s, transform .16s, opacity .18s;
     touch-action: none;
   }
-  .deng-tile img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 10px; pointer-events: none; }
-  .deng-tile.available:hover { filter: brightness(1.08); transform: translateY(-5px) scale(1.03); }
-  .deng-tile.available:active { transform: translateY(-1px) scale(.98); }
+  .deng-tile img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 9px; pointer-events: none; }
+  .deng-tile.available:hover { filter: brightness(1.08); transform: translateY(-5px) rotate(var(--deng-rotate)) scale(1.04); }
+  .deng-tile.available:active { transform: translateY(-1px) rotate(var(--deng-rotate)) scale(.98); }
   .deng-tile.blocked { filter: saturate(.55) brightness(.62); cursor: not-allowed; }
-  .deng-tile.hint { animation: deng-pulse .7s ease-in-out 2; border-color: #fbbf24; }
+  .deng-tile.hint { animation: deng-pulse .7s ease-in-out 2; }
   @keyframes deng-pulse { 50% { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(251,191,36,0.25), 0 12px 18px rgba(0,0,0,0.3); } }
   .deng-tray-wrap {
     position: relative; padding: 17px 14px 13px; background: linear-gradient(180deg, #b8793d 0%, #8b5427 100%);
@@ -363,7 +365,7 @@
   .deng-tray-title { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; color: #fff1cf; font-size: 12px; margin-bottom: 9px; text-shadow: 0 1px 1px rgba(72,39,18,0.75); }
   .deng-tray { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
   .deng-slot { aspect-ratio: 1 / 1; border-radius: 10px; background: linear-gradient(145deg, rgba(63,35,18,0.76), rgba(116,66,28,0.55)); border: 2px solid rgba(246,194,119,0.65); box-shadow: inset 0 4px 7px rgba(34,18,9,0.55), inset 0 -2px 0 rgba(255,226,165,0.12); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-  .deng-slot img { width: 78%; height: 78%; object-fit: cover; border-radius: 7px; border: 2px solid #f7d59b; box-shadow: 0 2px 5px rgba(34,18,9,0.55); animation: deng-slot-in .18s ease-out; }
+  .deng-slot img { width: 78%; height: 78%; object-fit: cover; border-radius: 7px; border: 0; box-shadow: 0 2px 5px rgba(34,18,9,0.55); animation: deng-slot-in .18s ease-out; }
   @keyframes deng-slot-in { from { transform: scale(.55); opacity: .3; } to { transform: scale(1); opacity: 1; } }
   .deng-slot.warning { border-color: #fb7185; box-shadow: 0 0 0 2px rgba(251,113,133,0.15), inset 0 4px 7px rgba(34,18,9,0.55); }
   .deng-help { color: var(--muted); font-size: 12px; text-align: center; }
@@ -1443,7 +1445,13 @@ function getDengPositions(level) {
   const addGrid = (layer, rows, cols, left, top, gapX, gapY, offsetX = 0, offsetY = 0) => {
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
-        positions.push({ layer, x: left + col * gapX + offsetX, y: top + row * gapY + offsetY });
+        const baseX = left + col * gapX + offsetX;
+        const baseY = top + row * gapY + offsetY;
+        // 轻微抖动打破网格感；幅度受控，避免图块跑出棋盘或完全失去可点击区域。
+        const jitterX = (Math.random() - 0.5) * Math.min(7, gapX * 0.34);
+        const jitterY = (Math.random() - 0.5) * Math.min(6, gapY * 0.34);
+        const rotate = Math.round((Math.random() * 16 - 8) * 10) / 10;
+        positions.push({ layer, x: baseX + jitterX, y: baseY + jitterY, rotate });
       }
     }
   };
@@ -1547,7 +1555,7 @@ function buildDengRoute(total) {
 
 function dengOverlaps(a, b) {
   // 以当前小图块实际宽高估算，只有真正覆盖到中心区域才算遮挡。
-  const tilePercent = window.innerWidth <= 480 ? 11 : 12;
+  const tilePercent = window.innerWidth <= 480 ? 9 : 10;
   const halfTile = tilePercent * 0.5;
   const overlapX = Math.max(0, halfTile * 2 - Math.abs(a.x - b.x));
   const overlapY = Math.max(0, halfTile * 2 - Math.abs(a.y - b.y));
@@ -1572,6 +1580,7 @@ function renderDeng() {
     tile.className = `deng-tile ${available ? 'available' : 'blocked'}`;
     tile.style.left = `${tileData.x}%`;
     tile.style.top = `${tileData.y}%`;
+    tile.style.setProperty('--deng-rotate', `${tileData.rotate || 0}deg`);
     tile.style.zIndex = String(tileData.layer + 2);
     tile.setAttribute('aria-label', `照片图块 ${tileData.type + 1}`);
     tile.appendChild(createDengImage(tileData.type));
