@@ -24,15 +24,6 @@
   header { text-align: center; margin-bottom: 22px; }
   h1 { margin: 0 0 6px; font-size: clamp(22px, 5.5vw, 32px); letter-spacing: 1px; }
   .lead { color: var(--muted); font-size: 13px; max-width: 420px; margin: 0 auto; }
-  .photo-strip {
-    margin-top: 14px;
-    width: min(94vw, 360px); aspect-ratio: 1 / 1;
-    border-radius: 16px;
-    background: url("images/1st.png") center/cover;
-    box-shadow: 0 18px 48px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.06);
-    border: 1px solid var(--border);
-    position: relative; overflow: hidden;
-  }
   .photo-strip::after {
     content: "本合集全部游戏使用这张照片";
     position: absolute; left: 0; right: 0; bottom: 0;
@@ -97,7 +88,6 @@
   <header>
     <h1>图片小游戏合集</h1>
     <p class="lead">同一张照片,四种玩法。挑一个开始吧。</p>
-    <div class="photo-strip" style="background-image: url('images/1st.png')" aria-hidden="true"></div>
   </header>
 
   <div class="cards">
