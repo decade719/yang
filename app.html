@@ -235,6 +235,37 @@
   }
   @keyframes pop { from { transform: translate(-50%, -50%) scale(0.3); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
 
+  /* ===== scratch ===== */
+  .scratch-stage {
+    position: relative; width: min(88vmin, 500px); aspect-ratio: 1 / 1;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  }
+  .scratch-canvas { position: absolute; inset: 0; cursor: crosshair; touch-action: none; z-index: 2; }
+  .scratch-img { position: absolute; inset: 0; background-size: cover; background-position: center; z-index: 1; }
+  .scratch-percent { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; padding: 4px 10px; border-radius: 999px; font-size: 12px; z-index: 3; pointer-events: none; }
+
+  /* ===== 2048 ===== */
+  .g2048-stage {
+    width: min(88vmin, 460px); aspect-ratio: 1 / 1;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 8px;
+    position: relative;
+  }
+  .g2048-tile {
+    background: rgba(255,255,255,0.05); border-radius: 8px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 20px; color: #fff;
+    overflow: hidden; transition: transform 0.1s, background 0.1s;
+  }
+  .g2048-tile.has-val { background: #333; }
+  .g2048-tile .tile-img {
+    position: absolute; inset: 0; background-size: 400% 400%;
+    transition: filter 0.3s;
+  }
+  .g2048-tile .tile-num { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
   @media (max-width: 480px) {
     body { padding: 8px 12px 12px; }
     h1 { font-size: 15px; }
@@ -255,6 +286,8 @@
       <button class="tab" data-game="memory">翻牌配对</button>
       <button class="tab" data-game="jigsaw">拼图复原</button>
       <button class="tab" data-game="spotdiff">找不同</button>
+      <button class="tab" data-game="scratch">心动刮刮乐</button>
+      <button class="tab" data-game="2048">写真 2048</button>
     </div>
   </div>
 
@@ -353,6 +386,39 @@
       </div>
       <div class="footnote">左右两图有若干不同 · 点击右图找出来</div>
     </section>
+
+    <!-- ===== SCRATCH ===== -->
+    <section class="view" id="view-scratch">
+      <div class="topbar">
+        <button class="btn primary" data-act="scratch-reset">重新覆盖</button>
+      </div>
+      <div class="stats">
+        <div>已揭开 <b data-stat="scratch-pct">0%</b></div>
+      </div>
+      <div class="stage-wrap">
+        <div class="scratch-stage">
+          <div class="scratch-img" id="scratch-img"></div>
+          <canvas class="scratch-canvas" id="scratch-canvas"></canvas>
+          <div class="scratch-percent" id="scratch-percent">0%</div>
+        </div>
+      </div>
+      <div class="footnote">涂抹银色区域揭开写真 · 揭开 80% 以上即算成功</div>
+    </section>
+
+    <!-- ===== 2048 ===== -->
+    <section class="view" id="view-2048">
+      <div class="topbar">
+        <button class="btn primary" data-act="2048-reset">重新开始</button>
+      </div>
+      <div class="stats">
+        <div>分数 <b data-stat="2048-score">0</b></div>
+        <div>最高分 <b data-stat="2048-best">0</b></div>
+      </div>
+      <div class="stage-wrap">
+        <div class="g2048-stage" id="g2048-stage"></div>
+      </div>
+      <div class="footnote">滑动或方向键移动方块 · 合并相同碎片以进化图片</div>
+    </section>
   </main>
 
 <script>
@@ -390,13 +456,15 @@ function switchGame(name, updateHistory = true) {
   initCurrentGame();
 }
 
-tabs.forEach(t => t.clicks = t.addEventListener('click', () => switchGame(t.dataset.game)));
+tabs.forEach(t => t.addEventListener('click', () => switchGame(t.dataset.game)));
 
 function initCurrentGame() {
   if (currentGame === 'puzzle') initPuzzle();
   else if (currentGame === 'memory') initMemory();
   else if (currentGame === 'jigsaw') initJigsaw();
   else if (currentGame === 'spotdiff') initSpotdiff();
+  else if (currentGame === 'scratch') initScratch();
+  else if (currentGame === '2048') init2048();
 }
 
 /* ==================== 1. PUZZLE ==================== */
@@ -816,6 +884,172 @@ function updateSpotdiffStats() {
   $('[data-stat="spotdiff-time"]').textContent = fmtTime(sState.time);
 }
 
+/* ==================== 5. SCRATCH ==================== */
+let scState = { active: false, pct: 0, finished: false };
+function initScratch() {
+  stopAllTimers();
+  scState.active = false; scState.pct = 0; scState.finished = false;
+  $('[data-stat="scratch-pct"]').textContent = '0%';
+  $('#scratch-percent').textContent = '0%';
+  $('#scratch-img').style.backgroundImage = `url(${IMG_URL})`;
+  
+  const canvas = $('#scratch-canvas');
+  const ctx = canvas.getContext('2d');
+  const rect = canvas.parentNode.getBoundingClientRect();
+  canvas.width = rect.width || 500;
+  canvas.height = rect.height || 500;
+  
+  ctx.fillStyle = '#b5b5b5';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Add some noise to make it look like silver scratch layer
+  for(let i=0; i<500; i++) {
+    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.1})`;
+    ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2);
+  }
+
+  const handleMove = (e) => {
+    if (scState.finished) return;
+    const r = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - r.left;
+    const y = (e.clientY || e.touches[0].clientY) - r.top;
+    
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(x, y, 25, 0, Math.PI * 2);
+    ctx.fill();
+    
+    if (!scState.active) {
+      scState.active = true;
+      const checkInterval = setInterval(() => {
+        if (scState.finished) { clearInterval(checkInterval); return; }
+        calcScratchPercent();
+      }, 500);
+    }
+  };
+
+  canvas.onmousedown = () => canvas.onmousemove = handleMove;
+  window.onmouseup = () => canvas.onmousemove = null;
+  canvas.ontouchmove = (e) => { e.preventDefault(); handleMove(e); };
+}
+
+function calcScratchPercent() {
+  const canvas = $('#scratch-canvas');
+  const ctx = canvas.getContext('2d');
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  let transparent = 0;
+  for (let i = 3; i < imgData.length; i += 4) {
+    if (imgData[i] === 0) transparent++;
+  }
+  const pct = Math.floor((transparent / (canvas.width * canvas.height)) * 100);
+  scState.pct = pct;
+  $('[data-stat="scratch-pct"]').textContent = pct + '%';
+  $('#scratch-percent').textContent = pct + '%';
+  
+  if (pct > 80 && !scState.finished) {
+    scState.finished = true;
+    canvas.style.transition = 'opacity 0.8s';
+    canvas.style.opacity = '0';
+    setTimeout(() => alert('恭喜！你已完整揭开这张精美写真！'), 500);
+  }
+}
+
+/* ==================== 6. 2048 ==================== */
+let g2State = { board: [], score: 0, best: 0, finished: false };
+function init2048() {
+  stopAllTimers();
+  g2State.board = Array(16).fill(0);
+  g2State.score = 0; g2State.finished = false;
+  addRandomTile2048();
+  addRandomTile2048();
+  render2048();
+}
+
+function addRandomTile2048() {
+  const empty = g2State.board.map((v, i) => v === 0 ? i : null).filter(v => v !== null);
+  if (empty.length) {
+    const idx = empty[Math.floor(Math.random() * empty.length)];
+    g2State.board[idx] = Math.random() < 0.9 ? 2 : 4;
+  }
+}
+
+function render2048() {
+  const stage = $('#g2048-stage');
+  stage.innerHTML = '';
+  g2State.board.forEach((val, i) => {
+    const tile = document.createElement('div');
+    tile.className = 'g2048-tile' + (val ? ' has-val' : '');
+    if (val) {
+      const img = document.createElement('div');
+      img.className = 'tile-img';
+      img.style.backgroundImage = `url(${IMG_URL})`;
+      const level = Math.log2(val);
+      img.style.filter = `blur(${Math.max(0, 10 - level * 2)}px) brightness(${0.5 + level * 0.1})`;
+      const r = Math.floor((val % 16) / 4), c = val % 4;
+      img.style.backgroundPosition = `${c * 33}% ${r * 33}%`;
+      tile.appendChild(img);
+      
+      const num = document.createElement('div');
+      num.className = 'tile-num';
+      num.textContent = val;
+      tile.appendChild(num);
+    }
+    stage.appendChild(tile);
+  });
+  $('[data-stat="2048-score"]').textContent = g2State.score;
+  if (g2State.score > g2State.best) {
+    g2State.best = g2State.score;
+    $('[data-stat="2048-best"]').textContent = g2State.best;
+  }
+}
+
+function move2048(dir) {
+  if (g2State.finished) return;
+  let moved = false;
+  
+  const getRow = (i) => [g2State.board[i*4], g2State.board[i*4+1], g2State.board[i*4+2], g2State.board[i*4+3]];
+  const getCol = (i) => [g2State.board[i], g2State.board[i+4], g2State.board[i+8], g2State.board[i+12]];
+  const setRow = (i, row) => row.forEach((v, j) => g2State.board[i*4+j] = v);
+  const setCol = (i, col) => col.forEach((v, j) => g2State.board[i+j*4] = v);
+
+  const process = (line) => {
+    let newLine = line.filter(v => v !== 0);
+    for (let i = 0; i < newLine.length - 1; i++) {
+      if (newLine[i] === newLine[i+1]) {
+        newLine[i] *= 2;
+        g2State.score += newLine[i];
+        newLine.splice(i+1, 1);
+        moved = true;
+      }
+    }
+    while (newLine.length < 4) newLine.push(0);
+    return newLine;
+  };
+
+  for (let i = 0; i < 4; i++) {
+    let line, newLine;
+    if (dir === 'left') {
+      line = getRow(i); newLine = process(line);
+      if (line.join(',') !== newLine.join(',')) { moved = true; setRow(i, newLine); }
+    } else if (dir === 'right') {
+      line = getRow(i).reverse(); newLine = process(line);
+      newLine.reverse();
+      if (getRow(i).join(',') !== newLine.join(',')) { moved = true; setRow(i, newLine); }
+    } else if (dir === 'up') {
+      line = getCol(i); newLine = process(line);
+      if (line.join(',') !== newLine.join(',')) { moved = true; setCol(i, newLine); }
+    } else if (dir === 'down') {
+      line = getCol(i).reverse(); newLine = process(line);
+      newLine.reverse();
+      if (getCol(i).join(',') !== newLine.join(',')) { moved = true; setCol(i, newLine); }
+    }
+  }
+
+  if (moved) {
+    addRandomTile2048();
+    render2048();
+  }
+}
+
 /* ==================== Controls & Event Bindings ==================== */
 function stopAllTimers() {
   clearInterval(pState.timer);
@@ -849,6 +1083,27 @@ $('[data-act="puzzle-peek"]').ontouchend = () => $('#puzzle-stage').classList.re
 
 $('[data-act="memory-reset"]').onclick = initMemory;
 
+$('[data-act="scratch-reset"]').onclick = initScratch;
+$('[data-act="2048-reset"]').onclick = init2048;
+
+// 2048 Touch Support
+let touchStartX, touchStartY;
+$('#g2048-stage').ontouchstart = (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+};
+$('#g2048-stage').ontouchend = (e) => {
+  if (!touchStartX || !touchStartY) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (Math.abs(dx) > 30) move2048(dx > 0 ? 'right' : 'left');
+  } else {
+    if (Math.abs(dy) > 30) move2048(dy > 0 ? 'down' : 'up');
+  }
+  touchStartX = touchStartY = null;
+};
+
 $('[data-act="jigsaw-reset"]').onclick = initJigsaw;
 $('[data-act="jigsaw-peek"]').onmousedown = () => $('#jigsaw-grid').style.filter = 'brightness(1.2)';
 $('[data-act="jigsaw-peek"]').onmouseup = () => $('#jigsaw-grid').style.filter = 'none';
@@ -861,20 +1116,23 @@ $('[data-act="spotdiff-hint"]').onclick = () => {
   }
 };
 
-// Keyboard controls for puzzle
+// Keyboard controls
 window.onkeydown = (e) => {
-  if (currentGame !== 'puzzle' || pState.finished) return;
-  const n = pState.size;
-  const er = Math.floor(pState.empty / n), ec = pState.empty % n;
-  let targetR = er, targetC = ec;
-  if (e.key === 'ArrowUp') targetR++;
-  else if (e.key === 'ArrowDown') targetR--;
-  else if (e.key === 'ArrowLeft') targetC++;
-  else if (e.key === 'ArrowRight') targetC--;
-  else return;
-
-  if (targetR >= 0 && targetR < n && targetC >= 0 && targetC < n) {
-    movePuzzleTile(targetR * n + targetC);
+  if (currentGame === 'puzzle' && !pState.finished) {
+    const n = pState.size;
+    const er = Math.floor(pState.empty / n), ec = pState.empty % n;
+    let targetR = er, targetC = ec;
+    if (e.key === 'ArrowUp') targetR++;
+    else if (e.key === 'ArrowDown') targetR--;
+    else if (e.key === 'ArrowLeft') targetC++;
+    else if (e.key === 'ArrowRight') targetC--;
+    else return;
+    if (targetR >= 0 && targetR < n && targetC >= 0 && targetC < n) movePuzzleTile(targetR * n + targetC);
+  } else if (currentGame === '2048' && !g2State.finished) {
+    if (e.key === 'ArrowUp') move2048('up');
+    else if (e.key === 'ArrowDown') move2048('down');
+    else if (e.key === 'ArrowLeft') move2048('left');
+    else if (e.key === 'ArrowRight') move2048('right');
   }
 };
 
@@ -882,7 +1140,8 @@ window.onkeydown = (e) => {
 window.onload = () => {
   const params = new URLSearchParams(location.search);
   const g = params.get('game');
-  if (['puzzle', 'memory', 'jigsaw', 'spotdiff'].includes(g)) {
+  const validGames = ['puzzle', 'memory', 'jigsaw', 'spotdiff', 'scratch', '2048'];
+  if (validGames.includes(g)) {
     switchGame(g, false);
   } else {
     switchGame('puzzle', false);
