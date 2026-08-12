@@ -73,6 +73,8 @@
   }
   .tab:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: var(--panel-hover); }
   .tab.active { background: var(--accent); color: #0b0f19; border-color: var(--accent); font-weight: 700; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+  .featured-tab { border-color: rgba(251,191,36,0.55); color: #fde68a; }
+  .featured-tab.active { background: linear-gradient(135deg, #fbbf24, #f59e0b); border-color: #fbbf24; color: #451a03; box-shadow: 0 0 22px rgba(251,191,36,0.42); }
 
   main { flex: 1; display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; }
   .view { display: none; flex: 1; flex-direction: column; align-items: center; }
@@ -313,11 +315,61 @@
   @keyframes nonogram-shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
   .nonogram-tip { color: var(--muted); font-size: 12px; text-align: center; margin-top: 10px; }
 
+  /* ===== deng-le-deng ===== */
+  .deng-stage {
+    width: min(94vw, 620px); display: flex; flex-direction: column; gap: 12px;
+  }
+  .deng-board {
+    position: relative; width: 100%; aspect-ratio: 1.1 / 1; min-height: 310px;
+    background: radial-gradient(circle at 50% 20%, rgba(251,191,36,0.16), transparent 48%), linear-gradient(145deg, rgba(30,41,59,0.92), rgba(15,23,42,0.92));
+    border: 1px solid rgba(251,191,36,0.28); border-radius: 24px; overflow: hidden;
+    box-shadow: inset 0 0 50px rgba(245,158,11,0.08), 0 22px 50px rgba(0,0,0,0.48);
+    touch-action: none;
+  }
+  .deng-board::before {
+    content: "蹬 了 个 蹬"; position: absolute; left: 50%; top: 10px; transform: translateX(-50%);
+    color: rgba(253,230,138,0.54); font-size: clamp(11px, 2.6vw, 16px); letter-spacing: 8px; font-weight: 800;
+    pointer-events: none; z-index: 1;
+  }
+  .deng-tile {
+    position: absolute; width: 22%; aspect-ratio: 1 / 1; padding: 3px; border: 2px solid rgba(255,255,255,0.35);
+    border-radius: 15px; background: #f8fafc; cursor: pointer; overflow: hidden; z-index: 2;
+    box-shadow: 0 7px 0 rgba(15,23,42,0.4), 0 12px 18px rgba(0,0,0,0.25);
+    transition: filter .16s, transform .16s, opacity .18s;
+    touch-action: none;
+  }
+  .deng-tile img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 10px; pointer-events: none; }
+  .deng-tile.available:hover { filter: brightness(1.08); transform: translateY(-5px) scale(1.03); }
+  .deng-tile.available:active { transform: translateY(-1px) scale(.98); }
+  .deng-tile.blocked { filter: saturate(.55) brightness(.62); cursor: not-allowed; }
+  .deng-tile.hint { animation: deng-pulse .7s ease-in-out 2; border-color: #fbbf24; }
+  @keyframes deng-pulse { 50% { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(251,191,36,0.25), 0 12px 18px rgba(0,0,0,0.3); } }
+  .deng-tray-wrap { padding: 10px 12px 12px; background: rgba(15,23,42,0.9); border: 1px solid rgba(148,163,184,0.18); border-radius: 18px; }
+  .deng-tray-title { display: flex; justify-content: space-between; align-items: center; color: #cbd5e1; font-size: 12px; margin-bottom: 8px; }
+  .deng-tray { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
+  .deng-slot { aspect-ratio: 1 / 1; border-radius: 10px; background: rgba(255,255,255,0.06); border: 1px dashed rgba(148,163,184,0.3); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .deng-slot img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; animation: deng-slot-in .18s ease-out; }
+  @keyframes deng-slot-in { from { transform: scale(.55); opacity: .3; } to { transform: scale(1); opacity: 1; } }
+  .deng-slot.warning { border-color: #fb7185; box-shadow: 0 0 0 2px rgba(251,113,133,0.15); }
+  .deng-help { color: var(--muted); font-size: 12px; text-align: center; }
+  .deng-message { min-height: 22px; text-align: center; font-size: 14px; font-weight: 700; color: #fde68a; }
+  .deng-message.success { color: #6ee7b7; }
+  .deng-message.danger { color: #fda4af; }
+
   @media (max-width: 480px) {
     body { padding: 8px 12px 12px; }
     h1 { font-size: 15px; }
     .stats { font-size: 12px; gap: 12px; margin-bottom: 8px; }
     .tab { padding: 6px 12px; font-size: 12px; }
+    .topbar { gap: 7px; margin-bottom: 7px; }
+    .btn { min-height: 38px; padding: 7px 12px; }
+    .deng-stage { width: 96vw; gap: 7px; }
+    .deng-board { min-height: 274px; border-radius: 19px; }
+    .deng-tile { border-radius: 11px; padding: 2px; }
+    .deng-tray-wrap { padding: 8px 8px 10px; }
+    .deng-tray { gap: 4px; }
+    .deng-slot { border-radius: 8px; }
+    .deng-help, .deng-tip { font-size: 11px; }
   }
 </style>
 </head>
@@ -336,6 +388,7 @@
       <button class="tab" data-game="scratch">心动刮刮乐</button>
       <button class="tab" data-game="2048">写真 2048</button>
       <button class="tab" data-game="nonogram">数织解谜</button>
+      <button class="tab featured-tab" data-game="deng">蹬了个蹬</button>
     </div>
   </div>
 
@@ -468,6 +521,35 @@
       <div class="footnote">滑动或方向键移动方块 · 合并相同碎片以进化图片</div>
     </section>
 
+    <!-- ===== DENG LE DENG ===== -->
+    <section class="view" id="view-deng">
+      <div class="topbar">
+        <div class="diff" data-diff-for="deng">
+          <button data-d="1" class="active">轻松局</button>
+          <button data-d="2">挑战局</button>
+        </div>
+        <button class="btn primary" data-act="deng-reset">重新开局</button>
+        <button class="btn" data-act="deng-hint">找提示</button>
+      </div>
+      <div class="stats">
+        <div>关卡 <b data-stat="deng-level">1</b></div>
+        <div>剩余 <b data-stat="deng-left">0</b></div>
+        <div>失误 <b data-stat="deng-mistakes">0</b></div>
+      </div>
+      <div class="stage-wrap">
+        <div class="deng-stage">
+          <div class="deng-board" id="deng-board"></div>
+          <div class="deng-message" id="deng-message">点击没有被遮挡的照片</div>
+          <div class="deng-tray-wrap">
+            <div class="deng-tray-title"><span>收集槽</span><span><b id="deng-tray-count">0</b> / 7</span></div>
+            <div class="deng-tray" id="deng-tray"></div>
+          </div>
+          <div class="deng-help">凑齐 3 张相同照片自动消除 · 收集槽装满前完成全部照片</div>
+        </div>
+      </div>
+      <div class="footnote">仿经典三消堆叠玩法 · 每次只可点击当前最上层的照片</div>
+    </section>
+
     <!-- ===== NONOGRAM ===== -->
     <section class="view" id="view-nonogram">
       <div class="topbar">
@@ -496,6 +578,7 @@
 <script>
 /* ==================== shared helpers ==================== */
 const IMG_URL = 'images/2nd.webp';
+const DENG_ASSETS = Array.from({ length: 8 }, (_, i) => `images/deng/${i + 1}.webp`);
 
 function $(s, r) { return (r || document).querySelector(s); }
 function $all(s, r) { return [...(r || document).querySelectorAll(s)]; }
@@ -538,6 +621,7 @@ function initCurrentGame() {
   else if (currentGame === 'scratch') initScratch();
   else if (currentGame === '2048') init2048();
   else if (currentGame === 'nonogram') initNonogram();
+  else if (currentGame === 'deng') initDeng();
 }
 
 /* ==================== 1. PUZZLE ==================== */
@@ -1311,6 +1395,187 @@ function giveNonogramHint() {
   checkNonogramComplete();
 }
 
+/* ==================== 6. DENG LE DENG ==================== */
+let dState = {
+  level: 1, tiles: [], tray: [], mistakes: 0, removed: 0,
+  processing: false, finished: false, timer: null
+};
+
+function getDengPositions(level) {
+  const positions = [];
+  const addGrid = (layer, rows, cols, left, top, gapX, gapY, offsetX = 0, offsetY = 0) => {
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        positions.push({ layer, x: left + col * gapX + offsetX, y: top + row * gapY + offsetY });
+      }
+    }
+  };
+  addGrid(0, 4, 4, 5, 19, 23, 17);
+  addGrid(1, 3, 4, 6, 28, 22, 20, 4, 0);
+  addGrid(2, 3, 4, 4, 25, 22, 20, 0, 4);
+  addGrid(3, 2, 4, 10, 35, 22, 22, 2, 0);
+  if (level === 2) {
+    addGrid(4, 3, 4, 5, 25, 22, 20, 4, 2);
+    addGrid(5, 3, 4, 7, 30, 22, 20, 1, 5);
+  }
+  return positions;
+}
+
+function initDeng() {
+  stopAllTimers();
+  const positions = getDengPositions(dState.level);
+  const total = positions.length;
+  const copies = total / DENG_ASSETS.length;
+  const types = [];
+  DENG_ASSETS.forEach((_, type) => {
+    for (let i = 0; i < copies; i++) types.push(type);
+  });
+  for (let i = types.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [types[i], types[j]] = [types[j], types[i]];
+  }
+  dState.tiles = positions.map((position, index) => ({
+    ...position, index, type: types[index], removed: false
+  }));
+  dState.tray = [];
+  dState.mistakes = 0;
+  dState.removed = 0;
+  dState.processing = false;
+  dState.finished = false;
+  updateDengStats();
+  setDengMessage('点击没有被遮挡的照片');
+  renderDeng();
+}
+
+function dengOverlaps(a, b) {
+  return Math.abs(a.x - b.x) < 18 && Math.abs(a.y - b.y) < 18;
+}
+
+function isDengAvailable(tile) {
+  return !dState.tiles.some(other => !other.removed && other.layer > tile.layer && dengOverlaps(tile, other));
+}
+
+function renderDeng() {
+  const board = $('#deng-board');
+  const tray = $('#deng-tray');
+  board.innerHTML = '';
+  tray.innerHTML = '';
+
+  dState.tiles.forEach(tileData => {
+    if (tileData.removed) return;
+    const tile = document.createElement('button');
+    const available = isDengAvailable(tileData);
+    tile.type = 'button';
+    tile.className = `deng-tile ${available ? 'available' : 'blocked'}`;
+    tile.style.left = `${tileData.x}%`;
+    tile.style.top = `${tileData.y}%`;
+    tile.style.zIndex = String(tileData.layer + 2);
+    tile.setAttribute('aria-label', `照片图块 ${tileData.type + 1}`);
+    const image = document.createElement('img');
+    image.src = DENG_ASSETS[tileData.type];
+    image.alt = '';
+    image.draggable = false;
+    tile.appendChild(image);
+    tile.onclick = () => selectDengTile(tileData.index);
+    board.appendChild(tile);
+  });
+
+  dState.tray.forEach(type => {
+    const slot = document.createElement('div');
+    slot.className = 'deng-slot';
+    const image = document.createElement('img');
+    image.src = DENG_ASSETS[type];
+    image.alt = '';
+    slot.appendChild(image);
+    tray.appendChild(slot);
+  });
+  for (let i = dState.tray.length; i < 7; i++) {
+    const slot = document.createElement('div');
+    slot.className = `deng-slot ${dState.tray.length >= 6 ? 'warning' : ''}`;
+    tray.appendChild(slot);
+  }
+  $('#deng-tray-count').textContent = dState.tray.length;
+  updateDengStats();
+}
+
+function selectDengTile(index) {
+  if (dState.finished || dState.processing) return;
+  const tile = dState.tiles[index];
+  if (!tile || tile.removed) return;
+  if (!isDengAvailable(tile)) {
+    dState.mistakes++;
+    updateDengStats();
+    setDengMessage('这张照片被挡住了，先点击最上层的照片', 'danger');
+    return;
+  }
+
+  tile.removed = true;
+  dState.removed++;
+  dState.tray.push(tile.type);
+  setDengMessage('好眼力！继续收集相同照片');
+  renderDeng();
+  resolveDengMatches();
+}
+
+function resolveDengMatches() {
+  const grouped = new Map();
+  dState.tray.forEach((type, index) => {
+    if (!grouped.has(type)) grouped.set(type, []);
+    grouped.get(type).push(index);
+  });
+  const match = [...grouped.entries()].find(([, indexes]) => indexes.length >= 3);
+  if (match) {
+    dState.processing = true;
+    const indexes = match[1].slice(0, 3).sort((a, b) => b - a);
+    setDengMessage('三张相同照片，消除！', 'success');
+    setTimeout(() => {
+      indexes.forEach(index => dState.tray.splice(index, 1));
+      dState.processing = false;
+      renderDeng();
+      checkDengState();
+    }, 260);
+    return;
+  }
+  checkDengState();
+}
+
+function checkDengState() {
+  if (dState.removed >= dState.tiles.length) {
+    dState.finished = true;
+    setDengMessage(`通关成功！${dState.level === 2 ? '挑战局也被你拿下了！' : '准备挑战更高难度吧！'}`, 'success');
+    return;
+  }
+  if (dState.tray.length >= 7) {
+    dState.finished = true;
+    setDengMessage('收集槽满了，再试一次吧！', 'danger');
+  }
+}
+
+function setDengMessage(text, tone = '') {
+  const message = $('#deng-message');
+  message.textContent = text;
+  message.className = `deng-message ${tone}`.trim();
+}
+
+function updateDengStats() {
+  $('[data-stat="deng-level"]').textContent = dState.level;
+  $('[data-stat="deng-left"]').textContent = Math.max(0, dState.tiles.length - dState.removed);
+  $('[data-stat="deng-mistakes"]').textContent = dState.mistakes;
+}
+
+function hintDeng() {
+  if (dState.finished || dState.processing) return;
+  const available = dState.tiles.find(tile => !tile.removed && isDengAvailable(tile));
+  if (!available) return;
+  const boardTiles = $all('.deng-tile');
+  const target = boardTiles.find(tile => tile.getAttribute('aria-label') === `照片图块 ${available.type + 1}`);
+  if (target) {
+    target.classList.add('hint');
+    setTimeout(() => target.classList.remove('hint'), 1500);
+  }
+  setDengMessage('金色闪烁的是当前可以点击的照片');
+}
+
 /* ==================== Controls & Event Bindings ==================== */
 function stopAllTimers() {
   clearInterval(pState.timer);
@@ -1318,6 +1583,7 @@ function stopAllTimers() {
   clearInterval(jState.timer);
   clearInterval(sState.timer);
   clearInterval(nState.timer);
+  clearInterval(dState.timer);
 }
 
 // Difficulty buttons
@@ -1333,6 +1599,7 @@ $all('.diff').forEach(group => {
       else if (game === 'jigsaw') { jState.size = Math.sqrt(val); initJigsaw(); }
       else if (game === 'spotdiff') { sState.diffCount = val; initSpotdiff(); }
       else if (game === 'nonogram') { nState.size = val; initNonogram(); }
+      else if (game === 'deng') { dState.level = val; initDeng(); }
     };
   });
 });
@@ -1350,6 +1617,8 @@ $('[data-act="scratch-reset"]').onclick = initScratch;
 $('[data-act="2048-reset"]').onclick = init2048;
 $('[data-act="nonogram-reset"]').onclick = initNonogram;
 $('[data-act="nonogram-hint"]').onclick = giveNonogramHint;
+$('[data-act="deng-reset"]').onclick = initDeng;
+$('[data-act="deng-hint"]').onclick = hintDeng;
 
 // 2048 Touch Support
 let touchStartX, touchStartY;
@@ -1405,7 +1674,7 @@ window.onkeydown = (e) => {
 window.onload = () => {
   const params = new URLSearchParams(location.search);
   const g = params.get('game');
-  const validGames = ['puzzle', 'memory', 'jigsaw', 'spotdiff', 'scratch', '2048', 'nonogram'];
+  const validGames = ['puzzle', 'memory', 'jigsaw', 'spotdiff', 'scratch', '2048', 'nonogram', 'deng'];
   if (validGames.includes(g)) {
     switchGame(g, false);
   } else {

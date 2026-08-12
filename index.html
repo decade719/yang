@@ -97,6 +97,10 @@
   }
   .card:hover::before { opacity: 0.15; }
   .card:active { transform: translateY(-2px); }
+  .featured-card { grid-column: 1 / -1; min-height: 178px; border-color: rgba(251,191,36,0.4); background: linear-gradient(135deg, rgba(77,51,12,0.62), rgba(23,28,41,0.82)); }
+  .featured-card::after { content: "主打推荐"; position: absolute; top: 16px; right: 18px; padding: 4px 10px; border-radius: 999px; background: rgba(251,191,36,0.16); border: 1px solid rgba(251,191,36,0.38); color: #fde68a; font-size: 11px; font-weight: 700; }
+  .featured-card .icon { width: 60px; height: 60px; font-size: 28px; }
+  .featured-card:hover { border-color: #fbbf24; box-shadow: 0 22px 45px -15px rgba(251,191,36,0.36); }
 
   .card-header { display: flex; align-items: center; gap: 14px; }
   .icon {
@@ -132,12 +136,21 @@
   <div class="bg-glow"></div>
 
   <header>
-    <div class="badge">Interactive Experience</div>
-    <h1>写真小游戏乐园</h1>
-    <p class="lead">精选四款精致小游戏，围绕同一张专属写真展开，体验智力与观察力的双重乐趣。</p>
+    <div class="badge">Mobile-first mini games</div>
+    <h1>照片小游戏乐园</h1>
+    <p class="lead">手机端优先设计，随时随地打开就玩。现在就挑战我们的主打游戏。</p>
   </header>
 
   <div class="cards">
+    <a class="card featured-card" href="app.html?game=deng" style="--grad: linear-gradient(135deg, #fbbf24, #ea580c)">
+      <div class="card-header">
+        <div class="icon">👟</div>
+        <div class="name">蹬了个蹬</div>
+      </div>
+      <div class="desc">全新主打玩法！点击没有被遮挡的萌娃照片，凑齐三张自动消除，在 7 格收集槽装满前完成挑战。</div>
+      <div class="tags"><span class="tag">手机单手</span><span class="tag">堆叠消除</span><span class="tag">轻松局 / 挑战局</span></div>
+    </a>
+
     <a class="card" href="app.html?game=puzzle" style="--grad: linear-gradient(135deg, #3b82f6, #1d4ed8)">
       <div class="card-header">
         <div class="icon">🧩</div>
