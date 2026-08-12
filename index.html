@@ -3,125 +3,178 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0f1115">
-<title>图片小游戏合集</title>
+<meta name="theme-color" content="#0b0f19">
+<title>写真小游戏乐园 - 精选趣味互动</title>
 <style>
   :root {
-    --bg: #0f1115; --panel: #171a21; --border: #2a2f3a;
-    --text: #e8eaed; --muted: #9aa0ac; --accent: #6ea8fe;
+    --bg: #0b0f19;
+    --panel: rgba(23, 28, 41, 0.75);
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.3);
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; }
   body {
     margin: 0;
-    background: radial-gradient(1200px 800px at 50% -10%, #1b2030 0%, var(--bg) 60%);
+    background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg) 70%);
     color: var(--text);
-    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
     display: flex; flex-direction: column; align-items: center;
-    padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+    padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
     min-height: 100dvh;
+    overflow-x: hidden;
   }
-  header { text-align: center; margin-bottom: 22px; }
-  h1 { margin: 0 0 6px; font-size: clamp(22px, 5.5vw, 32px); letter-spacing: 1px; }
-  .lead { color: var(--muted); font-size: 13px; max-width: 420px; margin: 0 auto; }
-  .photo-strip::after {
-    content: "本合集全部游戏使用这张照片";
-    position: absolute; left: 0; right: 0; bottom: 0;
-    padding: 8px 12px;
-    background: linear-gradient(transparent, rgba(0,0,0,.7));
-    color: #fff; font-size: 12px; text-align: center;
+  
+  /* Background decorative elements */
+  .bg-glow {
+    position: fixed;
+    top: -20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60vw;
+    height: 40vh;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(56, 189, 248, 0.15));
+    filter: blur(80px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
   }
+
+  header { text-align: center; margin-bottom: 32px; position: relative; z-index: 1; }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 999px;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  h1 { margin: 0 0 8px; font-size: clamp(26px, 6vw, 36px); font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .lead { color: var(--muted); font-size: 14px; max-width: 440px; margin: 0 auto; }
 
   .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 14px;
-    width: min(94vw, 880px);
-    margin-top: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    width: min(92vw, 900px);
+    position: relative;
+    z-index: 1;
+    margin-bottom: auto;
   }
   .card {
     text-decoration: none; color: inherit;
     background: var(--panel);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px;
-    display: flex; flex-direction: column; gap: 10px;
+    border-radius: 20px;
+    padding: 24px;
+    display: flex; flex-direction: column; gap: 14px;
     position: relative; overflow: hidden;
-    transition: transform .2s, border-color .2s, box-shadow .2s;
-    min-height: 140px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
   }
   .card::before {
     content: ""; position: absolute; inset: 0;
-    background: var(--grad); opacity: .35;
-    transition: opacity .2s;
+    background: var(--grad); opacity: 0.08;
+    transition: opacity 0.3s;
     pointer-events: none;
   }
-  .card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
-  .card:hover::before { opacity: .55; }
-  .card:active { transform: translateY(-1px); }
-  .icon {
-    width: 44px; height: 44px; border-radius: 12px;
-    background: var(--grad); display: flex; align-items: center; justify-content: center;
-    font-size: 24px; box-shadow: 0 6px 14px rgba(0,0,0,.3);
-    position: relative; z-index: 1;
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px -15px var(--accent-glow);
   }
-  .name { font-size: 17px; font-weight: 600; position: relative; z-index: 1; }
-  .desc { font-size: 12.5px; color: var(--muted); position: relative; z-index: 1; line-height: 1.5; }
-  .tags { display: flex; gap: 6px; flex-wrap: wrap; position: relative; z-index: 1; margin-top: auto; }
+  .card:hover::before { opacity: 0.15; }
+  .card:active { transform: translateY(-2px); }
+
+  .card-header { display: flex; align-items: center; gap: 14px; }
+  .icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--grad); display: flex; align-items: center; justify-content: center;
+    font-size: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+  }
+  .name { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+  .desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
   .tag {
-    font-size: 11px; color: var(--muted);
-    background: rgba(255,255,255,.04); border: 1px solid var(--border);
-    border-radius: 999px; padding: 2px 8px;
+    font-size: 11.5px; color: var(--muted);
+    background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
+    border-radius: 999px; padding: 3px 10px; font-weight: 500;
   }
 
   .footer {
-    margin-top: 26px; color: var(--muted); font-size: 12px; text-align: center;
+    margin-top: 40px; color: var(--muted); font-size: 12.5px; text-align: center;
+    position: relative; z-index: 1; display: flex; align-items: center; gap: 8px;
   }
+  .footer span { display: inline-block; width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
 
-  @media (max-width: 380px) {
-    .cards { grid-template-columns: 1fr; }
-    .card { min-height: 120px; }
+  @media (max-width: 480px) {
+    body { padding: 16px 12px; }
+    .cards { grid-template-columns: 1fr; gap: 14px; }
+    .card { padding: 18px; }
   }
 </style>
 </head>
 <body>
+  <div class="bg-glow"></div>
+
   <header>
-    <h1>图片小游戏合集</h1>
-    <p class="lead">同一张照片,四种玩法。挑一个开始吧。</p>
+    <div class="badge">Interactive Experience</div>
+    <h1>写真小游戏乐园</h1>
+    <p class="lead">精选四款精致小游戏，围绕同一张专属写真展开，体验智力与观察力的双重乐趣。</p>
   </header>
 
   <div class="cards">
-    <a class="card" href="app.html?game=puzzle" style="--grad: linear-gradient(135deg, #4a6cf7, #6ea8fe)">
-      <div class="icon">⊞</div>
-      <div class="name">滑块拼图</div>
-      <div class="desc">把照片切成 4×4,带数字提示,滑动方块按 1→15 顺序归位。完成后揭示完整照片。</div>
-      <div class="tags"><span class="tag">数字提示</span><span class="tag">轻微虚化</span><span class="tag">3 档难度</span></div>
+    <a class="card" href="app.html?game=puzzle" style="--grad: linear-gradient(135deg, #3b82f6, #1d4ed8)">
+      <div class="card-header">
+        <div class="icon">🧩</div>
+        <div class="name">数字滑块拼图</div>
+      </div>
+      <div class="desc">将写真划分为 4×4 网格，借助数字提示与微弱虚化背景，通过滑动方块按 1 到 15 顺序复原。</div>
+      <div class="tags"><span class="tag">数字提示</span><span class="tag">多档难度</span><span class="tag">手势滑动</span></div>
     </a>
 
-    <a class="card" href="app.html?game=memory" style="--grad: linear-gradient(135deg, #b06bb3, #d68ad1)">
-      <div class="icon">⇄</div>
-      <div class="name">翻牌配对</div>
-      <div class="desc">背面朝下的图块,每次翻开两张,记住位置把相同图块全部配对。考验记忆力。</div>
-      <div class="tags"><span class="tag">3D 翻转</span><span class="tag">6/8 对</span></div>
+    <a class="card" href="app.html?game=memory" style="--grad: linear-gradient(135deg, #a855f7, #7e22ce)">
+      <div class="card-header">
+        <div class="icon">✨</div>
+        <div class="name">沉浸翻牌配对</div>
+      </div>
+      <div class="desc">背面朝下的图块每次翻开两张，凭借记忆寻找并配对相同的写真切片，考验极致记忆力。</div>
+      <div class="tags"><span class="tag">3D 翻转</span><span class="tag">记忆挑战</span></div>
     </a>
 
-    <a class="card" href="app.html?game=jigsaw" style="--grad: linear-gradient(135deg, #2f9e6e, #5ec98f)">
-      <div class="icon">⊟</div>
-      <div class="name">拼图复原</div>
-      <div class="desc">照片切成 3×3 或 4×4 块并打乱,点击两块交换位置,把图复原即可。无数字,纯靠图像。</div>
-      <div class="tags"><span class="tag">无虚化</span><span class="tag">点选交换</span></div>
+    <a class="card" href="app.html?game=jigsaw" style="--grad: linear-gradient(135deg, #10b981, #047857)">
+      <div class="card-header">
+        <div class="icon">🖼️</div>
+        <div class="name">经典拼图复原</div>
+      </div>
+      <div class="desc">无数字纯视觉还原，将打乱的图块通过点选交换位置重新拼出完整画面。</div>
+      <div class="tags"><span class="tag">纯视觉</span><span class="tag">点选交换</span></div>
     </a>
 
-    <a class="card" href="app.html?game=spotdiff" style="--grad: linear-gradient(135deg, #d9924a, #f0b66a)">
-      <div class="icon">◎</div>
-      <div class="name">找不同</div>
-      <div class="desc">并排显示两张照片,右图有若干被悄悄改动的区域,点击把它们找出来。</div>
-      <div class="tags"><span class="tag">限时观察</span><span class="tag">3/5/7 处</span></div>
+    <a class="card" href="app.html?game=spotdiff" style="--grad: linear-gradient(135deg, #f59e0b, #b45309)">
+      <div class="card-header">
+        <div class="icon">🔍</div>
+        <div class="name">火眼金睛找不同</div>
+      </div>
+      <div class="desc">左右双图并排展示，右侧经过巧妙改动，在限时或自由模式下找出所有隐蔽的不同之处。</div>
+      <div class="tags"><span class="tag">观察力</span><span class="tag">多级难度</span></div>
     </a>
   </div>
 
   <div class="footer">
-    手机、电脑均可访问 · 单文件部署,无需服务器配置
+    <span></span> 响应式单文件架构 · 支持手机与桌面端流畅畅玩
   </div>
 </body>
 </html>

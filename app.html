@@ -3,96 +3,114 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0f1115">
-<title>图片小游戏合集</title>
+<meta name="theme-color" content="#0b0f19">
+<title>写真小游戏乐园 - 互动中心</title>
 <style>
   :root {
-    --bg: #0f1115; --panel: #171a21; --panel-2: #1f232c;
-    --border: #2a2f3a; --text: #e8eaed; --muted: #9aa0ac;
-    --accent: #6ea8fe; --accent-2: #8ab4ff; --good: #5ec98f; --warn: #f0b66a;
-    --tile-radius: 12px; --blur: 4px;
+    --bg: #0b0f19;
+    --panel: rgba(23, 28, 41, 0.8);
+    --panel-hover: rgba(30, 37, 56, 0.9);
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #38bdf8;
+    --accent-hover: #7dd3fc;
+    --good: #10b981;
+    --warn: #f59e0b;
+    --tile-radius: 12px;
+    --blur: 6px;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; margin: 0; }
   body {
-    background: radial-gradient(1200px 800px at 50% -10%, #1b2030 0%, var(--bg) 60%);
+    background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg) 70%);
     color: var(--text);
     font: 15px/1.5 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
     display: flex; flex-direction: column;
-    padding: max(8px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+    padding: max(12px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+    min-height: 100dvh;
+    overflow-x: hidden;
   }
 
   .top-nav {
     position: sticky; top: 0; z-index: 20; flex-shrink: 0;
-    background: linear-gradient(180deg, var(--bg) 60%, transparent);
-    padding-bottom: 4px;
+    background: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    margin: -12px -16px 12px -16px;
+    padding: 12px 16px 8px;
   }
   header.top {
-    display: flex; align-items: center; gap: 10px;
-    padding: 4px 2px 2px; flex-wrap: wrap; flex-shrink: 0;
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 10px;
   }
   .back {
     color: var(--muted); text-decoration: none;
     border: 1px solid var(--border); background: var(--panel);
-    padding: 6px 12px; border-radius: 8px; font-size: 13px;
+    padding: 6px 14px; border-radius: 10px; font-size: 13px; font-weight: 500;
+    transition: all 0.2s;
   }
-  .back:hover { color: var(--accent-2); border-color: var(--accent); }
-  h1 { font-size: 16px; margin: 0; flex: 1; letter-spacing: .5px; }
+  .back:hover { color: var(--text); border-color: var(--accent); background: var(--panel-hover); }
+  h1 { font-size: 17px; margin: 0; font-weight: 700; letter-spacing: -0.3px; }
 
   .tabs {
-    display: flex; gap: 6px; overflow-x: auto; flex-shrink: 0;
-    padding: 4px 0 10px; scrollbar-width: thin;
+    display: flex; gap: 8px; overflow-x: auto; flex-shrink: 0;
+    padding-bottom: 4px; scrollbar-width: none;
   }
+  .tabs::-webkit-scrollbar { display: none; }
   .tab {
     flex: 0 0 auto; border: 1px solid var(--border); background: var(--panel);
-    color: var(--muted); padding: 7px 14px; border-radius: 999px;
-    cursor: pointer; font-size: 13px; white-space: nowrap; transition: all .15s;
+    color: var(--muted); padding: 8px 16px; border-radius: 999px;
+    cursor: pointer; font-size: 13px; font-weight: 500; white-space: nowrap; transition: all 0.2s;
   }
-  .tab:hover { color: var(--text); border-color: var(--accent); }
-  .tab.active { background: var(--accent); color: #0b1220; border-color: var(--accent); font-weight: 600; }
+  .tab:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: var(--panel-hover); }
+  .tab.active { background: var(--accent); color: #0b0f19; border-color: var(--accent); font-weight: 700; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
 
   main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-  .view { display: none; flex: 1; flex-direction: column; }
+  .view { display: none; flex: 1; flex-direction: column; align-items: center; }
   .view.active { display: flex; }
 
   /* ===== shared UI ===== */
   .topbar {
-    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-    justify-content: center; margin-bottom: 8px; flex-shrink: 0;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    justify-content: center; margin-bottom: 12px; flex-shrink: 0;
   }
-  .stats { display: flex; gap: 14px; font-variant-numeric: tabular-nums; font-size: 13px; color: var(--muted); flex-shrink: 0; }
+  .stats { display: flex; gap: 20px; font-variant-numeric: tabular-nums; font-size: 13.5px; color: var(--muted); flex-shrink: 0; margin-bottom: 12px; }
   .stats b { color: var(--text); font-weight: 600; }
   .diff {
     display: inline-flex; background: var(--panel); border: 1px solid var(--border);
-    border-radius: 999px; padding: 3px; gap: 2px;
+    border-radius: 999px; padding: 3px; gap: 3px;
   }
   .diff button {
     border: 0; background: transparent; color: var(--muted);
-    padding: 5px 12px; border-radius: 999px; cursor: pointer; font-size: 12px; transition: all .15s;
+    padding: 6px 14px; border-radius: 999px; cursor: pointer; font-size: 12.5px; font-weight: 500; transition: all 0.2s;
   }
-  .diff button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+  .diff button.active { background: var(--accent); color: #0b0f19; font-weight: 700; }
   .btn {
     border: 1px solid var(--border); background: var(--panel); color: var(--text);
-    padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all .15s;
+    padding: 7px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s;
   }
-  .btn:hover { border-color: var(--accent); color: var(--accent-2); }
+  .btn:hover { border-color: var(--accent); color: var(--accent-hover); background: var(--panel-hover); }
   .btn:active { transform: translateY(1px); }
-  .btn.primary { background: var(--accent); color: #0b1220; border-color: var(--accent); font-weight: 600; }
-  .btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); color: #0b1220; }
-  .btn.warn { background: var(--warn); color: #20160a; border-color: var(--warn); font-weight: 600; }
+  .btn.primary { background: var(--accent); color: #0b0f19; border-color: var(--accent); font-weight: 700; }
+  .btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #0b0f19; }
+  .btn.warn { background: var(--warn); color: #0b0f19; border-color: var(--warn); font-weight: 700; }
 
-  .stage-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 4px 0 8px; min-height: 0; }
-  .footnote { color: var(--muted); font-size: 12px; text-align: center; padding: 4px 0 2px; flex-shrink: 0; }
-  .footnote kbd { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 11px; }
+  .stage-wrap { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 0; }
+  .footnote { color: var(--muted); font-size: 12px; text-align: center; padding: 10px 0 4px; flex-shrink: 0; }
+  .footnote kbd { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 11px; color: var(--text); }
 
   /* ===== puzzle ===== */
   .puzzle-stage {
     position: relative;
-    width: min(90vmin, 560px);
+    width: min(88vmin, 500px);
     aspect-ratio: 1 / 1;
     background: var(--panel); border: 1px solid var(--border);
-    border-radius: 16px; padding: 6px;
-    box-shadow: 0 18px 48px rgba(0,0,0,.45); overflow: hidden;
+    border-radius: 20px; padding: 8px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5); overflow: hidden;
+    backdrop-filter: blur(12px);
   }
   .puzzle-grid { position: relative; width: 100%; height: 100%; }
   .tile {
@@ -101,7 +119,7 @@
     cursor: pointer; user-select: none; overflow: hidden;
     transition: transform .22s cubic-bezier(.2,.8,.2,1);
     will-change: transform;
-    box-shadow: 0 2px 6px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.08);
   }
   .tile::after {
     content: ""; position: absolute; inset: 0;
@@ -110,13 +128,13 @@
   }
   .tile .num {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; color: #fff;
-    text-shadow: 0 1px 4px rgba(0,0,0,.7), 0 0 12px rgba(0,0,0,.45);
+    font-weight: 800; color: #fff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 0 16px rgba(0,0,0,0.5);
     z-index: 2; font-size: clamp(22px, 7vmin, 44px); pointer-events: none;
   }
-  .tile:hover { filter: brightness(1.08); }
+  .tile:hover { filter: brightness(1.12); }
   .puzzle-reveal {
-    position: absolute; inset: 6px; border-radius: var(--tile-radius);
+    position: absolute; inset: 8px; border-radius: var(--tile-radius);
     background-size: 100% 100%; background-position: center;
     opacity: 0; transform: scale(1.04); pointer-events: none; z-index: 5;
     transition: opacity .5s, transform .6s cubic-bezier(.2,.8,.2,1);
@@ -127,94 +145,101 @@
   .puzzle-stage.done .puzzle-grid { opacity: 0; transition: opacity .4s; }
   .win-banner {
     position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.9);
-    background: rgba(8,10,14,.82); border: 1px solid var(--good); color: #fff;
-    padding: 14px 22px; border-radius: 14px; text-align: center;
+    background: rgba(11, 15, 25, 0.9); border: 1px solid var(--good); color: #fff;
+    padding: 18px 28px; border-radius: 16px; text-align: center;
     opacity: 0; pointer-events: none; z-index: 6;
     transition: opacity .45s ease .35s, transform .45s cubic-bezier(.2,.8,.2,1) .35s;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
   }
   .puzzle-stage.done .win-banner { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  .win-banner .big { font-size: 20px; font-weight: 700; color: var(--good); }
-  .win-banner .small { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .win-banner .big { font-size: 22px; font-weight: 800; color: var(--good); }
+  .win-banner .small { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
 
   /* ===== memory ===== */
   .memory-stage {
     position: relative;
-    width: min(90vmin, 560px);
+    width: min(88vmin, 500px);
     aspect-ratio: 1 / 1;
     background: var(--panel); border: 1px solid var(--border);
-    border-radius: 16px; padding: 10px; box-shadow: 0 18px 48px rgba(0,0,0,.45);
+    border-radius: 20px; padding: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    backdrop-filter: blur(12px);
   }
   .memory-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
     height: 100%;
   }
   .card { position: relative; cursor: pointer; perspective: 600px; }
   .card-inner {
     position: relative; width: 100%; height: 100%;
-    transform-style: preserve-3d; transition: transform .35s;
+    transform-style: preserve-3d; transition: transform .35s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .card.flipped .card-inner, .card.matched .card-inner { transform: rotateY(180deg); }
   .card.matched { cursor: default; }
   .card.matched .face-back { outline: 2px solid var(--good); }
   .face {
-    position: absolute; inset: 0; border-radius: 10px;
+    position: absolute; inset: 0; border-radius: 12px;
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
     background-size: cover; background-position: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,.35);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   }
   .face-front {
-    background: linear-gradient(135deg, #2a2f3a, #1a1d24);
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center;
   }
-  .face-front::after { content: "?"; color: #4a5160; font-weight: 700; font-size: clamp(20px, 6vmin, 38px); }
+  .face-front::after { content: "?"; color: var(--muted); font-weight: 700; font-size: clamp(20px, 6vmin, 36px); }
   .face-back { transform: rotateY(180deg); background-color: #000; }
 
   /* ===== jigsaw ===== */
   .jigsaw-stage {
     position: relative;
-    width: min(90vmin, 560px);
+    width: min(88vmin, 500px);
     aspect-ratio: 1 / 1;
     background: var(--panel); border: 1px solid var(--border);
-    border-radius: 16px; padding: 10px; box-shadow: 0 18px 48px rgba(0,0,0,.45);
+    border-radius: 20px; padding: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    backdrop-filter: blur(12px);
   }
   .jigsaw-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
     height: 100%; user-select: none;
   }
   .piece {
-    position: relative; cursor: pointer; border-radius: 6px;
+    position: relative; cursor: pointer; border-radius: 8px;
     background-size: 400% 400%; background-repeat: no-repeat;
     transition: transform .15s, box-shadow .15s;
-    box-shadow: 0 1px 3px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.04);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.08);
   }
-  .piece:hover { box-shadow: 0 0 0 2px var(--accent), 0 1px 3px rgba(0,0,0,.4); }
-  .piece.selected { box-shadow: 0 0 0 3px var(--warn), 0 1px 3px rgba(0,0,0,.4); transform: scale(.96); }
-  .piece.correct { box-shadow: inset 0 0 0 2px rgba(94,201,143,.6); }
+  .piece:hover { box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(0,0,0,0.4); }
+  .piece.selected { box-shadow: 0 0 0 3px var(--warn), 0 4px 12px rgba(0,0,0,0.4); transform: scale(.95); }
+  .piece.correct { box-shadow: inset 0 0 0 2px rgba(16,185,129,0.8); }
 
   /* ===== spotdiff ===== */
   .spotdiff-stage {
-    width: min(96vw, 900px); background: var(--panel); border: 1px solid var(--border);
-    border-radius: 16px; padding: 10px; box-shadow: 0 18px 48px rgba(0,0,0,.45);
+    width: min(94vw, 860px); background: var(--panel); border: 1px solid var(--border);
+    border-radius: 20px; padding: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    backdrop-filter: blur(12px);
   }
-  .spotdiff-board { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .spotdiff-board { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .spotdiff-pane {
-    position: relative; aspect-ratio: 1 / 1; border-radius: 10px;
+    position: relative; aspect-ratio: 1 / 1; border-radius: 12px;
     overflow: hidden; background: #000;
+    box-shadow: inset 0 0 0 1px var(--border);
   }
   .spotdiff-pane canvas { width: 100%; height: 100%; display: block; cursor: crosshair; touch-action: manipulation; }
   .spotdiff-mark {
     position: absolute; border: 3px solid var(--warn); border-radius: 50%;
     pointer-events: none;
-    box-shadow: 0 0 0 2px rgba(0,0,0,.5), inset 0 0 0 2px rgba(0,0,0,.5);
-    animation: pop .25s ease-out; transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(0,0,0,0.6);
+    animation: pop .25s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: translate(-50%, -50%);
   }
-  @keyframes pop { from { transform: translate(-50%, -50%) scale(.4); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+  @keyframes pop { from { transform: translate(-50%, -50%) scale(0.3); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
 
-  @media (max-width: 380px) {
+  @media (max-width: 480px) {
+    body { padding: 8px 12px 12px; }
     h1 { font-size: 15px; }
-    .stats { font-size: 12px; gap: 10px; }
-    .tab { padding: 6px 11px; font-size: 12px; }
+    .stats { font-size: 12px; gap: 12px; margin-bottom: 8px; }
+    .tab { padding: 6px 12px; font-size: 12px; }
   }
 </style>
 </head>
@@ -222,11 +247,11 @@
   <div class="top-nav">
     <header class="top">
       <a class="back" href="index.html">← 首页</a>
-      <h1>图片小游戏</h1>
+      <h1>写真小游戏乐园</h1>
     </header>
 
     <div class="tabs" id="tabs">
-      <button class="tab" data-game="puzzle">滑块拼图</button>
+      <button class="tab" data-game="puzzle">数字滑块拼图</button>
       <button class="tab" data-game="memory">翻牌配对</button>
       <button class="tab" data-game="jigsaw">拼图复原</button>
       <button class="tab" data-game="spotdiff">找不同</button>
@@ -253,10 +278,10 @@
         <div class="puzzle-stage" id="puzzle-stage">
           <div class="puzzle-grid" id="puzzle-grid"></div>
           <div class="puzzle-reveal" id="puzzle-reveal"></div>
-          <div class="win-banner"><div class="big">完成!</div><div class="small" id="puzzle-winmeta">—</div></div>
+          <div class="win-banner"><div class="big">闯关成功！</div><div class="small" id="puzzle-winmeta">—</div></div>
         </div>
       </div>
-      <div class="footnote">点击与空格相邻的方块滑动 · 方向键 <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> · 手机可滑动</div>
+      <div class="footnote">点击与空格相邻的方块滑动 · 方向键 <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> · 手机触控滑动</div>
     </section>
 
     <!-- ===== MEMORY ===== -->
@@ -342,575 +367,527 @@ function fmtTime(sec) {
   return m + ':' + s;
 }
 
-/* preload image (no destructive error handler) */
-var IMG = new Image();
-IMG.src = IMG_URL;
-var imgReady = false;
-IMG.onload = function () { imgReady = true; };
-IMG.onerror = function () {
-  // show inline error, don't wipe the DOM
-  var el = document.getElementById('img-err');
-  if (el) el.style.display = 'block';
+let loadedImg = null;
+function preloadImage(cb) {
+  if (loadedImg) { cb(loadedImg); return; }
+  const img = new Image();
+  img.src = IMG_URL;
+  img.onload = () => { loadedImg = img; cb(img); };
+}
+
+/* ==================== Router / Tab Switcher ==================== */
+const tabs = $all('.tab');
+const views = $all('.view');
+let currentGame = 'puzzle';
+
+function switchGame(name, updateHistory = true) {
+  currentGame = name;
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.game === name));
+  views.forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
+  if (updateHistory) {
+    history.replaceState(null, '', '?game=' + name);
+  }
+  initCurrentGame();
+}
+
+tabs.forEach(t => t.clicks = t.addEventListener('click', () => switchGame(t.dataset.game)));
+
+function initCurrentGame() {
+  if (currentGame === 'puzzle') initPuzzle();
+  else if (currentGame === 'memory') initMemory();
+  else if (currentGame === 'jigsaw') initJigsaw();
+  else if (currentGame === 'spotdiff') initSpotdiff();
+}
+
+/* ==================== 1. PUZZLE ==================== */
+let pState = {
+  size: 4, empty: 15, tiles: [], moves: 0, time: 0, timer: null,
+  playing: false, finished: false, shuffleSteps: 200
 };
 
-/* timer factory */
-function makeTimer(statKey) {
-  var startTs = 0, id = null, running = false;
-  var el = $('[data-stat="' + statKey + '"]');
-  return {
-    start: function () {
-      if (running) return; running = true;
-      startTs = Date.now();
-      id = setInterval(function () {
-        el.textContent = fmtTime(Math.floor((Date.now() - startTs) / 1000));
-      }, 500);
-    },
-    stop: function () { if (!running) return; running = false; clearInterval(id); id = null; },
-    reset: function () { this.stop(); el.textContent = '00:00'; startTs = 0; },
-    elapsedSec: function () { return startTs ? Math.floor((Date.now() - startTs) / 1000) : 0; }
-  };
-}
+function initPuzzle() {
+  stopAllTimers();
+  const stage = $('#puzzle-stage');
+  stage.classList.remove('done', 'peek');
+  pState.moves = 0; pState.time = 0; pState.playing = false; pState.finished = false;
+  updatePuzzleStats();
 
-/* tab router */
-var tabsEl = $('#tabs');
-var games = ['puzzle', 'memory', 'jigsaw', 'spotdiff'];
-var currentGame = null;
-
-function switchGame(name) {
-  if (games.indexOf(name) === -1) name = 'puzzle';
-  currentGame = name;
-  $all('.tab').forEach(function (b) { b.classList.toggle('active', b.dataset.game === name); });
-  $all('.view').forEach(function (v) { v.classList.toggle('active', v.id === 'view-' + name); });
-  var url = new URL(location.href);
-  url.searchParams.set('game', name);
-  history.replaceState(null, '', url);
-  if (Game[name] && Game[name].ensure) Game[name].ensure();
-}
-
-tabsEl.addEventListener('click', function (e) {
-  var b = e.target.closest('.tab'); if (!b) return;
-  switchGame(b.dataset.game);
-});
-
-window.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') location.href = 'index.html';
-});
-
-/* ==================== Game modules ==================== */
-var Game = {};
-
-/* ---------- Puzzle (4x4 sliding) ---------- */
-(function () {
-  var N = 4, TOTAL = N * N, EMPTY = TOTAL - 1;
-  var state = [], tiles = [], moves = 0, won = false, peeking = false;
-  var shuffleSteps = 200, timer = null, inited = false;
-
-  var stage = $('#puzzle-stage');
-  var grid = $('#puzzle-grid');
-  var reveal = $('#puzzle-reveal');
-  var movesEl = $('[data-stat="puzzle-moves"]');
-  var winMeta = $('#puzzle-winmeta');
-
-  function build() {
-    grid.innerHTML = ''; tiles = [];
-    for (var num = 0; num < TOTAL - 1; num++) {
-      var el = document.createElement('div');
-      el.className = 'tile';
-      var r = Math.floor(num / N), c = num % N;
-      el.style.backgroundImage = 'url("' + IMG_URL + '")';
-      el.style.backgroundPosition = (c / (N - 1) * 100) + '% ' + (r / (N - 1) * 100) + '%';
-      var n = document.createElement('div'); n.className = 'num'; n.textContent = num + 1;
-      el.appendChild(n);
-      el.addEventListener('click', (function (v) { return function () { tryMove(v); }; })(num));
-      tiles[num] = el;
-      grid.appendChild(el);
-    }
-    reveal.style.backgroundImage = 'url("' + IMG_URL + '")';
-  }
-
-  function render() {
-    var cell = 100 / N;
-    for (var pos = 0; pos < TOTAL; pos++) {
-      var num = state[pos]; if (num === EMPTY) continue;
-      var el = tiles[num], r = Math.floor(pos / N), c = pos % N;
-      el.style.width = cell + '%'; el.style.height = cell + '%';
-      el.style.transform = 'translate(' + (c * 100) + '%, ' + (r * 100) + '%)';
-    }
-  }
-
-  function posOf(n) { return state.indexOf(n); }
-
-  function isNeighbor(a, b) {
-    var ra = Math.floor(a / N), ca = a % N, rb = Math.floor(b / N), cb = b % N;
-    return (ra === rb && Math.abs(ca - cb) === 1) || (ca === cb && Math.abs(ra - rb) === 1);
-  }
-
-  function tryMove(num) {
-    if (won || peeking) return;
-    var p = posOf(num), e = posOf(EMPTY);
-    if (!isNeighbor(p, e)) return;
-    var tmp = state[p]; state[p] = state[e]; state[e] = tmp;
-    moves++; movesEl.textContent = String(moves);
-    timer.start();
-    render();
-    checkWin();
-  }
-
-  function moveByDir(dir) {
-    if (won || peeking) return;
-    var e = posOf(EMPTY), r = Math.floor(e / N), c = e % N;
-    var tr = r, tc = c;
-    if (dir === 'left')  tc = c + 1;
-    if (dir === 'right') tc = c - 1;
-    if (dir === 'up')    tr = r + 1;
-    if (dir === 'down')  tr = r - 1;
-    if (tr < 0 || tr >= N || tc < 0 || tc >= N) return;
-    tryMove(state[tr * N + tc]);
-  }
-
-  function checkWin() {
-    for (var i = 0; i < TOTAL; i++) { if (state[i] !== i) return; }
-    won = true; timer.stop(); stage.classList.add('done');
-    winMeta.textContent = moves + ' 步 · ' + fmtTime(timer.elapsedSec());
-  }
-
-  function shuffle(steps) {
-    state = Array.from({ length: TOTAL }, function (_, i) { return i; });
-    var last = -1;
-    for (var i = 0; i < steps; i++) {
-      var e = posOf(EMPTY), r = Math.floor(e / N), c = e % N;
-      var cands = [];
-      if (r > 0)     cands.push(e - N);
-      if (r < N - 1) cands.push(e + N);
-      if (c > 0)     cands.push(e - 1);
-      if (c < N - 1) cands.push(e + 1);
-      var f = cands.filter(function (x) { return x !== last; });
-      var arr = f.length ? f : cands;
-      var pick = arr[Math.floor(Math.random() * arr.length)];
-      var tmp = state[pick]; state[pick] = state[e]; state[e] = tmp;
-      last = e;
-    }
-    if (state.every(function (v, i) { return v === i; })) shuffle(steps);
-  }
-
-  function reset() {
-    won = false; peeking = false; stage.classList.remove('done', 'peek');
-    moves = 0; movesEl.textContent = '0'; timer.reset();
-    shuffle(shuffleSteps); render();
-  }
-
-  /* wiring */
-  $('[data-diff-for="puzzle"]').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-d]'); if (!b) return;
-    $all('button', e.currentTarget).forEach(function (x) { x.classList.remove('active'); });
-    b.classList.add('active'); shuffleSteps = +b.dataset.d; reset();
-  });
-  $('[data-act="puzzle-reset"]').addEventListener('click', reset);
-  $('[data-act="puzzle-peek"]').addEventListener('click', function () {
-    if (won) return;
-    peeking = !peeking;
-    stage.classList.toggle('peek', peeking);
-    this.textContent = peeking ? '隐藏完整图' : '看完整图';
-  });
-
-  /* keyboard */
-  window.addEventListener('keydown', function (e) {
-    if (currentGame !== 'puzzle') return;
-    var map = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' };
-    var d = map[e.key];
-    if (d) { e.preventDefault(); moveByDir(d); }
-    if ((e.key === ' ' || e.key === 'Enter') && won) reset();
-  });
-
-  /* touch swipe */
-  var touchStart = null;
-  grid.addEventListener('touchstart', function (e) {
-    if (e.touches.length !== 1) return;
-    var t = e.touches[0]; touchStart = { x: t.clientX, y: t.clientY };
-  }, { passive: true });
-  grid.addEventListener('touchend', function (e) {
-    if (!touchStart) return;
-    var t = e.changedTouches[0];
-    var dx = t.clientX - touchStart.x, dy = t.clientY - touchStart.y;
-    var ax = Math.abs(dx), ay = Math.abs(dy), TH = 18;
-    if (Math.max(ax, ay) < TH) { touchStart = null; return; }
-    if (ax > ay) moveByDir(dx > 0 ? 'right' : 'left');
-    else         moveByDir(dy > 0 ? 'down' : 'up');
-    touchStart = null;
-  }, { passive: true });
-
-  Game.puzzle = {
-    ensure: function () {
-      if (!inited) {
-        timer = makeTimer('puzzle-time');
-        build();
-        reset();
-        inited = true;
+  preloadImage(img => {
+    const grid = $('#puzzle-grid');
+    grid.innerHTML = '';
+    const n = pState.size;
+    const total = n * n;
+    pState.tiles = Array.from({length: total}, (_, i) => i);
+    
+    // Shuffle ensuring solvability
+    do {
+      for (let i = total - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pState.tiles[i], pState.tiles[j]] = [pState.tiles[j], pState.tiles[i]];
       }
-    }
-  };
-})();
+    } while (!isPuzzleSolvable(pState.tiles, n) || isPuzzleSolved());
 
-/* ---------- Memory (flip-match) ---------- */
-(function () {
-  var pairs = 6, moves = 0, matches = 0, won = false;
-  var first = null, lock = false, timer = null, inited = false;
-  var gridEl = $('#memory-grid');
-  var movesEl = $('[data-stat="memory-moves"]');
-  var matchesEl = $('[data-stat="memory-matches"]');
+    pState.empty = pState.tiles.indexOf(total - 1);
+    renderPuzzleTiles();
+    setupPuzzleReveal(img);
+  });
+}
 
-  function build() {
-    gridEl.innerHTML = '';
-    var allSlices = 8;
-    var sliceIdx = [];
-    var pool = Array.from({ length: allSlices }, function (_, i) { return i; });
-    for (var i = 0; i < pairs; i++) {
-      var k = Math.floor(Math.random() * pool.length);
-      sliceIdx.push(pool[k], pool[k]);
-      pool.splice(k, 1);
-    }
-    for (i = sliceIdx.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = sliceIdx[i]; sliceIdx[i] = sliceIdx[j]; sliceIdx[j] = tmp;
-    }
-    matchesEl.textContent = '0/' + pairs;
-
-    for (var pos = 0; pos < sliceIdx.length; pos++) {
-      var s = sliceIdx[pos];
-      var R = Math.floor(s / 4), C = s % 4;
-      var card = document.createElement('div');
-      card.className = 'card'; card.dataset.slice = s;
-      card.innerHTML =
-        '<div class="card-inner">' +
-          '<div class="face face-front"></div>' +
-          '<div class="face face-back" style="background-image:url(\'' + IMG_URL + '\'); background-size:400% 400%; background-position:' + (C / 3 * 100) + '% ' + (R / 3 * 100) + '%"></div>' +
-        '</div>';
-      card.addEventListener('click', (function (c) { return function () { flip(c); }; })(card));
-      gridEl.appendChild(card);
+function isPuzzleSolvable(tiles, n) {
+  let inv = 0;
+  const total = n * n;
+  const emptyVal = total - 1;
+  const emptyRowFromBottom = n - Math.floor(tiles.indexOf(emptyVal) / n);
+  
+  for (let i = 0; i < total; i++) {
+    if (tiles[i] === emptyVal) continue;
+    for (let j = i + 1; j < total; j++) {
+      if (tiles[j] !== emptyVal && tiles[i] > tiles[j]) inv++;
     }
   }
+  if (n % 2 === 1) {
+    return inv % 2 === 0;
+  } else {
+    return (inv + emptyRowFromBottom) % 2 === 1;
+  }
+}
 
-  function flip(card) {
-    if (lock || won) return;
-    if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
-    card.classList.add('flipped');
-    moves++; movesEl.textContent = String(moves);
-    timer.start();
-    if (!first) { first = card; return; }
-    if (first.dataset.slice === card.dataset.slice) {
-      first.classList.add('matched'); card.classList.add('matched');
-      first = null; matches++;
-      matchesEl.textContent = matches + '/' + pairs;
-      if (matches === pairs) { won = true; timer.stop(); }
+function isPuzzleSolved() {
+  for (let i = 0; i < pState.tiles.length; i++) {
+    if (pState.tiles[i] !== i) return false;
+  }
+  return true;
+}
+
+function renderPuzzleTiles() {
+  const grid = $('#puzzle-grid');
+  grid.innerHTML = '';
+  const n = pState.size;
+  const pct = 100 / (n - 1);
+  
+  pState.tiles.forEach((val, idx) => {
+    if (val === n * n - 1) return; // empty
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    const r = Math.floor(idx / n), c = idx % n;
+    tile.style.width = `calc(100% / ${n} - 4px)`;
+    tile.style.height = `calc(100% / ${n} - 4px)`;
+    tile.style.left = `calc(${c} * 100% / ${n} + 2px)`;
+    tile.style.top = `calc(${r} * 100% / ${n} + 2px)`;
+
+    const origR = Math.floor(val / n), origC = val % n;
+    tile.style.backgroundImage = `url(${IMG_URL})`;
+    tile.style.backgroundSize = `${n * 100}% ${n * 100}%`;
+    tile.style.backgroundPosition = `${origC * pct}% ${origR * pct}%`;
+
+    const num = document.createElement('div');
+    num.className = 'num';
+    num.textContent = val + 1;
+    tile.appendChild(num);
+
+    tile.onclick = () => movePuzzleTile(idx);
+    grid.appendChild(tile);
+  });
+}
+
+function setupPuzzleReveal(img) {
+  $('#puzzle-reveal').style.backgroundImage = `url(${IMG_URL})`;
+}
+
+function movePuzzleTile(idx) {
+  if (pState.finished) return;
+  const n = pState.size;
+  const r = Math.floor(idx / n), c = idx % n;
+  const er = Math.floor(pState.empty / n), ec = Math.floor(pState.empty % n);
+
+  if (Math.abs(r - er) + Math.abs(c - ec) === 1) {
+    if (!pState.playing) startPuzzleTimer();
+    [pState.tiles[idx], pState.tiles[pState.empty]] = [pState.tiles[pState.empty], pState.tiles[idx]];
+    pState.empty = idx;
+    pState.moves++;
+    updatePuzzleStats();
+    renderPuzzleTiles();
+
+    if (isPuzzleSolved()) {
+      pState.finished = true;
+      stopAllTimers();
+      $('#puzzle-stage').classList.add('done');
+      $('#puzzle-winmeta').textContent = `用时 ${fmtTime(pState.time)} · 步数 ${pState.moves}`;
+    }
+  }
+}
+
+function startPuzzleTimer() {
+  pState.playing = true;
+  pState.timer = setInterval(() => { pState.time++; updatePuzzleStats(); }, 1000);
+}
+
+function updatePuzzleStats() {
+  $('[data-stat="puzzle-moves"]').textContent = pState.moves;
+  $('[data-stat="puzzle-time"]').textContent = fmtTime(pState.time);
+}
+
+/* ==================== 2. MEMORY ==================== */
+let mState = {
+  pairsCount: 6, cards: [], flipped: [], matchedCount: 0,
+  moves: 0, time: 0, timer: null, playing: false, locked: false
+};
+
+function initMemory() {
+  stopAllTimers();
+  mState.moves = 0; mState.time = 0; mState.playing = false; mState.matchedCount = 0;
+  mState.flipped = []; mState.locked = false;
+  updateMemoryStats();
+
+  preloadImage(img => {
+    const grid = $('#memory-grid');
+    grid.innerHTML = '';
+    const totalCards = mState.pairsCount * 2;
+    
+    // Slice canvas into pair templates
+    const canvas = document.createElement('canvas');
+    canvas.width = 400; canvas.height = 400;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, 400, 400);
+
+    let items = [];
+    for (let i = 0; i < mState.pairsCount; i++) {
+      // create distinct crops
+      items.push(i, i);
+    }
+    // shuffle
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [items[i], items[j]] = [items[j], items[i]];
+    }
+
+    mState.cards = items.map((id, idx) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="face face-front"></div>
+          <div class="face face-back"></div>
+        </div>
+      `;
+      
+      // render crop
+      const back = card.querySelector('.face-back');
+      const r = Math.floor(id / 3), c = id % 3;
+      back.style.backgroundImage = `url(${IMG_URL})`;
+      back.style.backgroundSize = `300% 300%`;
+      back.style.backgroundPosition = `${c * 50}% ${r * 50}%`;
+
+      card.onclick = () => flipMemoryCard(card, id);
+      grid.appendChild(card);
+      return { el: card, id, matched: false };
+    });
+  });
+}
+
+function flipMemoryCard(cardEl, id) {
+  if (mState.locked || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+  if (!mState.playing) {
+    mState.playing = true;
+    mState.timer = setInterval(() => { mState.time++; updateMemoryStats(); }, 1000);
+  }
+
+  cardEl.classList.add('flipped');
+  mState.flipped.push({ el: cardEl, id });
+
+  if (mState.flipped.length === 2) {
+    mState.moves++;
+    updateMemoryStats();
+    mState.locked = true;
+    const [c1, c2] = mState.flipped;
+    if (c1.id === c2.id) {
+      c1.el.classList.add('matched');
+      c2.el.classList.add('matched');
+      mState.matchedCount++;
+      mState.flipped = [];
+      mState.locked = false;
+      updateMemoryStats();
+
+      if (mState.matchedCount === mState.pairsCount) {
+        stopAllTimers();
+        setTimeout(() => alert(`恭喜全部配对成功！用时 ${fmtTime(mState.time)}，步数 ${mState.moves}`), 300);
+      }
     } else {
-      lock = true;
-      var f = first;
-      setTimeout(function () {
-        f.classList.remove('flipped'); card.classList.remove('flipped');
-        first = null; lock = false;
+      setTimeout(() => {
+        c1.el.classList.remove('flipped');
+        c2.el.classList.remove('flipped');
+        mState.flipped = [];
+        mState.locked = false;
       }, 700);
     }
   }
+}
 
-  function reset() {
-    moves = 0; matches = 0; won = false; first = null; lock = false;
-    movesEl.textContent = '0'; matchesEl.textContent = '0/' + pairs;
-    timer.reset(); build();
-  }
+function updateMemoryStats() {
+  $('[data-stat="memory-moves"]').textContent = mState.moves;
+  $('[data-stat="memory-matches"]').textContent = `${mState.matchedCount}/${mState.pairsCount}`;
+  $('[data-stat="memory-time"]').textContent = fmtTime(mState.time);
+}
 
-  $('[data-diff-for="memory"]').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-d]'); if (!b) return;
-    $all('button', e.currentTarget).forEach(function (x) { x.classList.remove('active'); });
-    b.classList.add('active'); pairs = +b.dataset.d; reset();
-  });
-  $('[data-act="memory-reset"]').addEventListener('click', reset);
+/* ==================== 3. JIGSAW ==================== */
+let jState = {
+  size: 4, tiles: [], selected: null, moves: 0, time: 0, timer: null, playing: false, finished: false
+};
 
-  Game.memory = {
-    ensure: function () {
-      if (!inited) { timer = makeTimer('memory-time'); build(); inited = true; }
-    }
-  };
-})();
+function initJigsaw() {
+  stopAllTimers();
+  jState.moves = 0; jState.time = 0; jState.playing = false; jState.finished = false;
+  jState.selected = null;
+  updateJigsawStats();
 
-/* ---------- Jigsaw (swap-to-restore) ---------- */
-(function () {
-  var N = 4, TOTAL = N * N;
-  var order = [], selected = null, moves = 0, won = false, peeking = false;
-  var timer = null, inited = false;
-  var gridEl = $('#jigsaw-grid');
-  var movesEl = $('[data-stat="jigsaw-moves"]');
+  preloadImage(img => {
+    const grid = $('#jigsaw-grid');
+    grid.innerHTML = '';
+    grid.style.gridTemplateColumns = `repeat(${jState.size}, 1fr)`;
+    const total = jState.size * jState.size;
+    jState.tiles = Array.from({length: total}, (_, i) => i);
 
-  function setN(n) {
-    N = n; TOTAL = N * N;
-    gridEl.style.gridTemplateColumns = 'repeat(' + N + ', 1fr)';
-  }
-
-  function build() {
-    gridEl.innerHTML = '';
-    for (var i = 0; i < TOTAL; i++) {
-      var el = document.createElement('div');
-      el.className = 'piece';
-      el.dataset.target = i;
-      var r = Math.floor(i / N), c = i % N;
-      el.style.backgroundImage = 'url("' + IMG_URL + '")';
-      el.style.backgroundSize = (N * 100) + '% ' + (N * 100) + '%';
-      el.style.backgroundPosition = N > 1 ? (c / (N - 1) * 100) + '% ' + (r / (N - 1) * 100) + '%' : '0 0';
-      el.addEventListener('click', (function (p) { return function () { clickPiece(p); }; })(i));
-      gridEl.appendChild(el);
-    }
-  }
-
-  function render() {
-    var cells = gridEl.children;
-    for (var pos = 0; pos < TOTAL; pos++) {
-      var tgt = order[pos];
-      var el = cells[pos];
-      var r = Math.floor(tgt / N), c = tgt % N;
-      el.style.backgroundPosition = N > 1 ? (c / (N - 1) * 100) + '% ' + (r / (N - 1) * 100) + '%' : '0 0';
-      el.classList.toggle('correct', tgt === pos);
-      el.classList.remove('selected');
-    }
-    if (selected !== null && cells[selected]) {
-      cells[selected].classList.add('selected');
-    }
-  }
-
-  function clickPiece(pos) {
-    if (won || peeking) return;
-    if (selected === null) { selected = pos; render(); return; }
-    if (selected === pos) { selected = null; render(); return; }
-    var tmp = order[selected]; order[selected] = order[pos]; order[pos] = tmp;
-    moves++; movesEl.textContent = String(moves);
-    selected = null; timer.start(); render(); checkWin();
-  }
-
-  function checkWin() {
-    for (var i = 0; i < TOTAL; i++) { if (order[i] !== i) return; }
-    won = true; timer.stop();
-  }
-
-  function shuffle() {
-    order = Array.from({ length: TOTAL }, function (_, i) { return i; });
     do {
-      for (var i = TOTAL - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+      for (let i = total - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [jState.tiles[i], jState.tiles[j]] = [jState.tiles[j], jState.tiles[i]];
       }
-    } while (order.every(function (v, i) { return v === i; }));
-  }
+    } while (isJigsawSolved());
 
-  function reset() {
-    won = false; peeking = false; selected = null; moves = 0;
-    movesEl.textContent = '0'; timer.reset();
-    shuffle(); render();
-  }
-
-  $('[data-diff-for="jigsaw"]').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-d]'); if (!b) return;
-    $all('button', e.currentTarget).forEach(function (x) { x.classList.remove('active'); });
-    b.classList.add('active'); setN(+b.dataset.d === 9 ? 3 : 4); build(); reset();
+    renderJigsawTiles();
   });
-  $('[data-act="jigsaw-reset"]').addEventListener('click', function () { build(); reset(); });
-  $('[data-act="jigsaw-peek"]').addEventListener('click', function () {
-    if (won) return;
-    peeking = !peeking;
-    if (peeking) {
-      gridEl.querySelectorAll('.piece').forEach(function (el, i) {
-        var r = Math.floor(i / N), c = i % N;
-        el.dataset._saved = el.style.backgroundPosition;
-        el.style.backgroundPosition = N > 1 ? (c / (N - 1) * 100) + '% ' + (r / (N - 1) * 100) + '%' : '0 0';
-        el.classList.add('correct');
-      });
-      this.textContent = '隐藏完整图';
-    } else {
-      render();
-      this.textContent = '看完整图';
-    }
+}
+
+function isJigsawSolved() {
+  for (let i = 0; i < jState.tiles.length; i++) {
+    if (jState.tiles[i] !== i) return false;
+  }
+  return true;
+}
+
+function renderJigsawTiles() {
+  const grid = $('#jigsaw-grid');
+  grid.innerHTML = '';
+  const n = jState.size;
+  const pct = 100 / (n - 1);
+
+  jState.tiles.forEach((val, idx) => {
+    const piece = document.createElement('div');
+    piece.className = 'piece';
+    if (val === idx) piece.classList.add('correct');
+    if (jState.selected === idx) piece.classList.add('selected');
+
+    const origR = Math.floor(val / n), origC = val % n;
+    piece.style.backgroundImage = `url(${IMG_URL})`;
+    piece.style.backgroundSize = `${n * 100}% ${n * 100}%`;
+    piece.style.backgroundPosition = `${origC * pct}% ${origR * pct}%`;
+
+    piece.onclick = () => clickJigsawPiece(idx);
+    grid.appendChild(piece);
   });
+}
 
-  Game.jigsaw = {
-    ensure: function () {
-      if (!inited) { timer = makeTimer('jigsaw-time'); build(); reset(); inited = true; }
-    }
-  };
-})();
-
-/* ---------- Spot-the-difference ---------- */
-(function () {
-  var diffs = 3, found = 0, won = false;
-  var timer = null, inited = false;
-  var alterations = [];
-  var leftPane = $('#spotdiff-left'), rightPane = $('#spotdiff-right');
-  var leftCanvas = leftPane.querySelector('canvas');
-  var rightCanvas = rightPane.querySelector('canvas');
-  var leftCtx = leftCanvas.getContext('2d');
-  var rightCtx = rightCanvas.getContext('2d');
-  var foundEl = $('[data-stat="spotdiff-found"]');
-
-  function setupCanvas(cv) { cv.width = 512; cv.height = 512; }
-
-  function drawBase(ctx) {
-    if (imgReady && IMG.naturalWidth) {
-      ctx.drawImage(IMG, 0, 0, ctx.canvas.width, ctx.canvas.height);
-    }
+function clickJigsawPiece(idx) {
+  if (jState.finished) return;
+  if (!jState.playing) {
+    jState.playing = true;
+    jState.timer = setInterval(() => { jState.time++; updateJigsawStats(); }, 1000);
   }
 
-  function pickAlterations(n) {
-    var arr = [];
-    var minDist = 0.16, tries = 0;
-    while (arr.length < n && tries < 500) {
-      tries++;
-      var r = 0.04 + Math.random() * 0.05;
-      var x = r + Math.random() * (1 - 2 * r);
-      var y = r + Math.random() * (1 - 2 * r);
-      var ok = arr.every(function (a) { return Math.hypot(a.x - x, a.y - y) > a.r + r + minDist; });
-      if (!ok) continue;
-      var types = ['tint', 'rotate', 'gray'];
-      var type = types[Math.floor(Math.random() * 3)];
-      var value;
-      if (type === 'tint') {
-        value = 'hsla(' + Math.floor(Math.random() * 360) + ', 70%, 50%, ' + (0.35 + Math.random() * 0.25) + ')';
-      } else if (type === 'gray') {
-        value = 1;
-      } else {
-        value = Math.random() < 0.5 ? 8 : -8;
+  if (jState.selected === null) {
+    jState.selected = idx;
+    renderJigsawTiles();
+  } else if (jState.selected === idx) {
+    jState.selected = null;
+    renderJigsawTiles();
+  } else {
+    // swap
+    [jState.tiles[jState.selected], jState.tiles[idx]] = [jState.tiles[idx], jState.tiles[jState.selected]];
+    jState.selected = null;
+    jState.moves++;
+    updateJigsawStats();
+    renderJigsawTiles();
+
+    if (isJigsawSolved()) {
+      jState.finished = true;
+      stopAllTimers();
+      setTimeout(() => alert(`拼图复原成功！用时 ${fmtTime(jState.time)}，步数 ${jState.moves}`), 200);
+    }
+  }
+}
+
+function updateJigsawStats() {
+  $('[data-stat="jigsaw-moves"]').textContent = jState.moves;
+  $('[data-stat="jigsaw-time"]').textContent = fmtTime(jState.time);
+}
+
+/* ==================== 4. SPOTDIFF ==================== */
+let sState = {
+  diffCount: 3, diffs: [], found: [], time: 0, timer: null, playing: false, finished: false
+};
+
+function initSpotdiff() {
+  stopAllTimers();
+  sState.found = []; sState.time = 0; sState.playing = false; sState.finished = false;
+  updateSpotdiffStats();
+
+  preloadImage(img => {
+    const leftPane = $('#spotdiff-left');
+    const rightPane = $('#spotdiff-right');
+    const canvasL = leftPane.querySelector('canvas');
+    const canvasR = rightPane.querySelector('canvas');
+    const size = 500;
+    canvasL.width = size; canvasL.height = size;
+    canvasR.width = size; canvasR.height = size;
+
+    const ctxL = canvasL.getContext('2d');
+    const ctxR = canvasR.getContext('2d');
+    ctxL.drawImage(img, 0, 0, size, size);
+    ctxR.drawImage(img, 0, 0, size, size);
+
+    // generate random diff circles on right pane
+    sState.diffs = [];
+    const radius = 28;
+    for (let i = 0; i < sState.diffCount; i++) {
+      let x, y, overlap;
+      do {
+        x = 60 + Math.random() * (size - 120);
+        y = 60 + Math.random() * (size - 120);
+        overlap = sState.diffs.some(d => Math.hypot(d.x - x, d.y - y) < radius * 2.5);
+      } while (overlap);
+
+      sState.diffs.push({ x, y, radius, found: false });
+      
+      // draw a subtle alteration on right canvas
+      ctxR.save();
+      ctxR.beginPath();
+      ctxR.arc(x, y, radius, 0, Math.PI * 2);
+      ctxR.clip();
+      ctxR.fillStyle = 'rgba(255, 100, 100, 0.35)';
+      ctxR.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+      ctxR.filter = 'invert(0.4) brightness(1.2)';
+      ctxR.drawImage(img, 0, 0, size, size);
+      ctxR.restore();
+    }
+
+    // click handler on right canvas
+    canvasR.onclick = (e) => {
+      if (sState.finished) return;
+      if (!sState.playing) {
+        sState.playing = true;
+        sState.timer = setInterval(() => { sState.time++; updateSpotdiffStats(); }, 1000);
       }
-      arr.push({ x: x, y: y, r: r, type: type, value: value, found: false });
-    }
-    return arr;
-  }
 
-  function applyAlteration(ctx, a) {
-    var S = ctx.canvas.width;
-    var x = a.x * S, y = a.y * S, r = a.r * S;
-    ctx.save();
-    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.clip();
+      const rect = canvasR.getBoundingClientRect();
+      const scale = size / rect.width;
+      const cx = (e.clientX - rect.left) * scale;
+      const cy = (e.clientY - rect.top) * scale;
 
-    if (a.type === 'tint') {
-      ctx.fillStyle = a.value;
-      ctx.fillRect(x - r, y - r, r * 2, r * 2);
-    } else if (a.type === 'gray') {
-      var tmp = document.createElement('canvas');
-      tmp.width = r * 2; tmp.height = r * 2;
-      var tctx = tmp.getContext('2d');
-      if (imgReady && IMG.naturalWidth) {
-        try {
-          tctx.drawImage(IMG, (a.x - a.r) * IMG.naturalWidth, (a.y - a.r) * IMG.naturalHeight,
-            2 * a.r * IMG.naturalWidth, 2 * a.r * IMG.naturalHeight, 0, 0, r * 2, r * 2);
-          var id = tctx.getImageData(0, 0, r * 2, r * 2);
-          var d = id.data;
-          for (var i = 0; i < d.length; i += 4) {
-            var g = d[i] * 0.3 + d[i + 1] * 0.59 + d[i + 2] * 0.11;
-            d[i] = g; d[i + 1] = g; d[i + 2] = g;
+      sState.diffs.forEach((d, idx) => {
+        if (!d.found && Math.hypot(d.x - cx, d.y - cy) <= d.radius * 1.4) {
+          d.found = true;
+          sState.found.push(d);
+          updateSpotdiffStats();
+
+          // mark on both panes
+          [leftPane, rightPane].forEach(pane => {
+            const mark = document.createElement('div');
+            mark.className = 'spotdiff-mark';
+            mark.style.left = `${(d.x / size) * 100}%`;
+            mark.style.top = `${(d.y / size) * 100}%`;
+            mark.style.width = `${d.radius * 2}px`;
+            mark.style.height = `${d.radius * 2}px`;
+            pane.appendChild(mark);
+          });
+
+          if (sState.found.length === sState.diffs.length) {
+            sState.finished = true;
+            stopAllTimers();
+            setTimeout(() => alert(`太棒了！全部找不同完成！用时 ${fmtTime(sState.time)}`), 300);
           }
-          tctx.putImageData(id, 0, 0);
-          ctx.drawImage(tmp, x - r, y - r);
-        } catch (e) { /* skip if off-image */ }
-      }
-    } else if (a.type === 'rotate') {
-      var tmp2 = document.createElement('canvas');
-      tmp2.width = r * 2; tmp2.height = r * 2;
-      var tctx2 = tmp2.getContext('2d');
-      tctx2.translate(r, r); tctx2.rotate(a.value * Math.PI / 180); tctx2.translate(-r, -r);
-      if (imgReady && IMG.naturalWidth) {
-        try {
-          tctx2.drawImage(IMG, (a.x - a.r) * IMG.naturalWidth, (a.y - a.r) * IMG.naturalHeight,
-            2 * a.r * IMG.naturalWidth, 2 * a.r * IMG.naturalHeight, 0, 0, r * 2, r * 2);
-          ctx.drawImage(tmp2, x - r, y - r);
-        } catch (e2) { /* skip */ }
-      }
-    }
-    ctx.restore();
-  }
-
-  function render() {
-    [leftCtx, rightCtx].forEach(function (ctx) {
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      drawBase(ctx);
-    });
-    alterations.forEach(function (a) { applyAlteration(rightCtx, a); });
-  }
-
-  function rebuild() {
-    setupCanvas(leftCanvas); setupCanvas(rightCanvas);
-    alterations = pickAlterations(diffs);
-    found = 0; won = false;
-    foundEl.textContent = '0/' + diffs;
-    if (imgReady) render();
-  }
-
-  function handleClick(e) {
-    if (won) return;
-    var rect = rightCanvas.getBoundingClientRect();
-    var cx = (e.clientX - rect.left) / rect.width;
-    var cy = (e.clientY - rect.top) / rect.height;
-    var hit = -1;
-    for (var i = 0; i < alterations.length; i++) {
-      var a = alterations[i];
-      if (a.found) continue;
-      if (Math.hypot(a.x - cx, a.y - cy) <= a.r + 0.03) { hit = i; break; }
-    }
-    if (hit < 0) return;
-    alterations[hit].found = true; found++;
-    foundEl.textContent = found + '/' + diffs;
-    [leftPane, rightPane].forEach(function (pane) {
-      var m = document.createElement('div');
-      m.className = 'spotdiff-mark';
-      m.style.left = (alterations[hit].x * 100) + '%';
-      m.style.top = (alterations[hit].y * 100) + '%';
-      m.style.width = (alterations[hit].r * 2 * 100) + '%';
-      m.style.height = (alterations[hit].r * 2 * 100) + '%';
-      pane.appendChild(m);
-    });
-    timer.start();
-    if (found === diffs) { won = true; timer.stop(); }
-  }
-
-  rightCanvas.addEventListener('click', handleClick);
-  rightCanvas.addEventListener('touchend', function (e) {
-    if (e.changedTouches.length) {
-      var t = e.changedTouches[0];
-      handleClick({ clientX: t.clientX, clientY: t.clientY });
-      e.preventDefault();
-    }
+        }
+      });
+    };
   });
+}
 
-  $('[data-diff-for="spotdiff"]').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-d]'); if (!b) return;
-    $all('button', e.currentTarget).forEach(function (x) { x.classList.remove('active'); });
-    b.classList.add('active'); diffs = +b.dataset.d;
-    rebuild(); timer.reset();
-  });
-  $('[data-act="spotdiff-reset"]').addEventListener('click', function () {
-    $all('.spotdiff-mark').forEach(function (m) { m.remove(); });
-    rebuild(); timer.reset();
-  });
-  $('[data-act="spotdiff-hint"]').addEventListener('click', function () {
-    var a = alterations.find(function (x) { return !x.found; }); if (!a) return;
-    var m = document.createElement('div');
-    m.className = 'spotdiff-mark';
-    m.style.borderColor = 'var(--accent)';
-    m.style.left = (a.x * 100) + '%'; m.style.top = (a.y * 100) + '%';
-    m.style.width = (a.r * 2 * 100) + '%'; m.style.height = (a.r * 2 * 100) + '%';
-    rightPane.appendChild(m);
-    setTimeout(function () { m.remove(); }, 1200);
-  });
+function updateSpotdiffStats() {
+  $('[data-stat="spotdiff-found"]').textContent = `${sState.found.length}/${sState.diffs.length}`;
+  $('[data-stat="spotdiff-time"]').textContent = fmtTime(sState.time);
+}
 
-  Game.spotdiff = {
-    ensure: function () {
-      if (!inited) {
-        timer = makeTimer('spotdiff-time');
-        if (imgReady) rebuild();
-        else IMG.addEventListener('load', function () { rebuild(); }, { once: true });
-        inited = true;
-      }
-    }
-  };
-})();
+/* ==================== Controls & Event Bindings ==================== */
+function stopAllTimers() {
+  clearInterval(pState.timer);
+  clearInterval(mState.timer);
+  clearInterval(jState.timer);
+  clearInterval(sState.timer);
+}
 
-/* ==================== boot ==================== */
-var params = new URLSearchParams(location.search);
-switchGame(params.get('game') || 'puzzle');
+// Difficulty buttons
+$all('.diff').forEach(group => {
+  const game = group.dataset.diffFor;
+  $all('button', group).forEach(btn => {
+    btn.onclick = () => {
+      $all('button', group).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const val = parseInt(btn.dataset.d);
+      if (game === 'puzzle') { pState.shuffleSteps = val; initPuzzle(); }
+      else if (game === 'memory') { mState.pairsCount = val; initMemory(); }
+      else if (game === 'jigsaw') { jState.size = Math.sqrt(val); initJigsaw(); }
+      else if (game === 'spotdiff') { sState.diffCount = val; initSpotdiff(); }
+    };
+  });
+});
+
+// Action buttons
+$('[data-act="puzzle-reset"]').onclick = initPuzzle;
+$('[data-act="puzzle-peek"]').onmousedown = () => $('#puzzle-stage').classList.add('peek');
+$('[data-act="puzzle-peek"]').onmouseup = () => $('#puzzle-stage').classList.remove('peek');
+$('[data-act="puzzle-peek"]').ontouchstart = () => $('#puzzle-stage').classList.add('peek');
+$('[data-act="puzzle-peek"]').ontouchend = () => $('#puzzle-stage').classList.remove('peek');
+
+$('[data-act="memory-reset"]').onclick = initMemory;
+
+$('[data-act="jigsaw-reset"]').onclick = initJigsaw;
+$('[data-act="jigsaw-peek"]').onmousedown = () => $('#jigsaw-grid').style.filter = 'brightness(1.2)';
+$('[data-act="jigsaw-peek"]').onmouseup = () => $('#jigsaw-grid').style.filter = 'none';
+
+$('[data-act="spotdiff-reset"]').onclick = initSpotdiff;
+$('[data-act="spotdiff-hint"]').onclick = () => {
+  const unfind = sState.diffs.find(d => !d.found);
+  if (unfind) {
+    alert(`提示：在坐标附近发现了不同！`);
+  }
+};
+
+// Keyboard controls for puzzle
+window.onkeydown = (e) => {
+  if (currentGame !== 'puzzle' || pState.finished) return;
+  const n = pState.size;
+  const er = Math.floor(pState.empty / n), ec = pState.empty % n;
+  let targetR = er, targetC = ec;
+  if (e.key === 'ArrowUp') targetR++;
+  else if (e.key === 'ArrowDown') targetR--;
+  else if (e.key === 'ArrowLeft') targetC++;
+  else if (e.key === 'ArrowRight') targetC--;
+  else return;
+
+  if (targetR >= 0 && targetR < n && targetC >= 0 && targetC < n) {
+    movePuzzleTile(targetR * n + targetC);
+  }
+};
+
+// Init on load from query param
+window.onload = () => {
+  const params = new URLSearchParams(location.search);
+  const g = params.get('game');
+  if (['puzzle', 'memory', 'jigsaw', 'spotdiff'].includes(g)) {
+    switchGame(g, false);
+  } else {
+    switchGame('puzzle', false);
+  }
+};
 </script>
 </body>
 </html>
