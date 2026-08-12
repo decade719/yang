@@ -1463,7 +1463,22 @@ function getDengPositions(level) {
       addGrid(layer, 3, 4, left, top, 22, 18, offsetX, offsetY);
     }
   }
-  return positions;
+  // 每层的位置随机打散，保留层级关系但避免每局路线固定。
+  const layerGroups = new Map();
+  positions.forEach(position => {
+    if (!layerGroups.has(position.layer)) layerGroups.set(position.layer, []);
+    layerGroups.get(position.layer).push(position);
+  });
+  const randomized = [];
+  [...layerGroups.keys()].sort((a, b) => a - b).forEach(layer => {
+    const group = layerGroups.get(layer);
+    for (let i = group.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [group[i], group[j]] = [group[j], group[i]];
+    }
+    randomized.push(...group);
+  });
+  return randomized;
 }
 
 function initDeng() {
@@ -1531,7 +1546,12 @@ function buildDengRoute(total) {
 }
 
 function dengOverlaps(a, b) {
-  return Math.abs(a.x - b.x) < 21 && Math.abs(a.y - b.y) < 21;
+  // 以当前小图块实际宽高估算，只有真正覆盖到中心区域才算遮挡。
+  const tilePercent = window.innerWidth <= 480 ? 11 : 12;
+  const halfTile = tilePercent * 0.5;
+  const overlapX = Math.max(0, halfTile * 2 - Math.abs(a.x - b.x));
+  const overlapY = Math.max(0, halfTile * 2 - Math.abs(a.y - b.y));
+  return overlapX > 2 && overlapY > 2;
 }
 
 function isDengAvailable(tile) {
