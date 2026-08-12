@@ -41,14 +41,13 @@
     background: rgba(11, 15, 25, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    padding-bottom: 8px;
     border-bottom: 1px solid var(--border);
-    margin: -12px -16px 12px -16px;
-    padding: 12px 16px 8px;
+    margin: -12px -16px 8px -16px;
+    padding: 8px 16px;
   }
   header.top {
     display: flex; align-items: center; gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 0;
   }
   .back {
     color: var(--muted); text-decoration: none;
@@ -116,7 +115,7 @@
   }
   .puzzle-stage {
     position: relative;
-    width: min(88vmin, 500px);
+    width: min(92vmin, 620px);
     aspect-ratio: 1 / 1;
     background: var(--panel); border: 1px solid var(--border);
     border-radius: 20px; padding: 8px;
@@ -170,7 +169,7 @@
   /* ===== memory ===== */
   .memory-stage {
     position: relative;
-    width: min(88vmin, 500px);
+    width: min(92vmin, 620px);
     aspect-ratio: 1 / 1;
     background: var(--panel); border: 1px solid var(--border);
     border-radius: 20px; padding: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
@@ -205,7 +204,7 @@
   /* ===== jigsaw ===== */
   .jigsaw-stage {
     position: relative;
-    width: min(88vmin, 500px);
+    width: min(92vmin, 620px);
     aspect-ratio: 1 / 1;
     background: var(--panel); border: 1px solid var(--border);
     border-radius: 20px; padding: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
@@ -258,7 +257,7 @@
 
   /* ===== 2048 ===== */
   .g2048-stage {
-    width: min(88vmin, 460px); aspect-ratio: 1 / 1;
+    width: min(92vmin, 560px); aspect-ratio: 1 / 1;
     background: var(--panel); border: 1px solid var(--border);
     border-radius: 12px; padding: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 8px;
@@ -320,7 +319,7 @@
     width: min(94vw, 620px); display: flex; flex-direction: column; gap: 12px;
   }
   .deng-board {
-    position: relative; width: 100%; aspect-ratio: 1.1 / 1; min-height: 310px;
+    position: relative; width: 100%; aspect-ratio: 1.03 / 1; min-height: 330px;
     background: radial-gradient(circle at 50% 20%, rgba(251,191,36,0.16), transparent 48%), linear-gradient(145deg, rgba(30,41,59,0.92), rgba(15,23,42,0.92));
     border: 1px solid rgba(251,191,36,0.28); border-radius: 24px; overflow: hidden;
     box-shadow: inset 0 0 50px rgba(245,158,11,0.08), 0 22px 50px rgba(0,0,0,0.48);
@@ -401,7 +400,7 @@
     .topbar { gap: 7px; margin-bottom: 7px; }
     .btn { min-height: 38px; padding: 7px 12px; }
     .deng-stage { width: 96vw; gap: 7px; }
-    .deng-board { min-height: 274px; border-radius: 19px; }
+    .deng-board { min-height: 300px; border-radius: 19px; }
     .deng-tile { width: 17%; border-radius: 10px; padding: 2px; }
     .deng-tray-wrap { padding: 15px 7px 11px; border-width: 2px; border-radius: 16px; box-shadow: inset 0 2px 0 rgba(255,226,165,0.45), inset 0 -6px 0 rgba(77,43,19,0.35), 0 7px 0 #4d2b16, 0 12px 18px rgba(0,0,0,0.3); }
     .deng-tray { gap: 4px; }
@@ -418,16 +417,6 @@
       <h1>照片小游戏乐园</h1>
     </header>
 
-    <div class="tabs" id="tabs">
-      <button class="tab" data-game="puzzle">数字滑块拼图</button>
-      <button class="tab" data-game="memory">翻牌配对</button>
-      <button class="tab" data-game="jigsaw">拼图复原</button>
-      <button class="tab" data-game="spotdiff">找不同</button>
-      <button class="tab" data-game="scratch">心动刮刮乐</button>
-      <button class="tab" data-game="2048">写真 2048</button>
-      <button class="tab" data-game="nonogram">数织解谜</button>
-      <button class="tab featured-tab" data-game="deng">蹬了个蹬</button>
-    </div>
   </div>
 
   <main>
@@ -1454,9 +1443,15 @@ function getDengPositions(level) {
   addGrid(1, 3, 4, 6, 28, 22, 20, 4, 0);
   addGrid(2, 3, 4, 4, 25, 22, 20, 0, 4);
   addGrid(3, 2, 4, 10, 35, 22, 22, 2, 0);
+  // 轻松局也保留一定纵深，避免开局直接平推。
+  addGrid(4, 3, 4, 5, 25, 22, 20, 4, 2);
   if (level === 2) {
-    addGrid(4, 3, 4, 5, 25, 22, 20, 4, 2);
+    // 挑战局共 10 层：上层牌更密，底层牌需要多次规划才能逐步露出。
     addGrid(5, 3, 4, 7, 30, 22, 20, 1, 5);
+    addGrid(6, 2, 4, 8, 22, 22, 20, 3, 3);
+    addGrid(7, 2, 4, 6, 31, 22, 20, 6, 1);
+    addGrid(8, 1, 4, 9, 41, 21, 0, 0, 0);
+    addGrid(9, 1, 4, 5, 24, 21, 0, 0, 0);
   }
   return positions;
 }
@@ -1464,8 +1459,9 @@ function getDengPositions(level) {
 function initDeng() {
   stopAllTimers();
   const positions = getDengPositions(dState.level);
-  const types = buildGuaranteedDengTypes(positions.length);
-  dState.solutionOrder = positions.map((_, index) => positions.length - 1 - index);
+  const plan = buildDengPlan(positions);
+  const types = plan.types;
+  dState.solutionOrder = plan.solutionOrder;
   dState.solutionCursor = 0;
   dState.tiles = positions.map((position, index) => ({
     ...position, index, type: types[index], removed: false
@@ -1480,29 +1476,52 @@ function initDeng() {
   renderDeng();
 }
 
-function buildGuaranteedDengTypes(total) {
+function buildDengPlan(positions) {
+  const total = positions.length;
   if (total % 3 !== 0) throw new Error('蹬了个蹬牌局数量必须是 3 的倍数');
-  const blockCount = total / 3;
-  const startType = Math.floor(Math.random() * DENG_ASSETS.length);
-  const blocks = Array.from({ length: blockCount }, (_, index) => {
-    const type = (startType + index) % DENG_ASSETS.length;
-    return [type, type, type];
-  });
-  for (let i = blocks.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [blocks[i], blocks[j]] = [blocks[j], blocks[i]];
-  }
-  // 反向对应棋盘数组：从最上层到最底层，始终按三张一组揭牌，确保存在通关路线。
-  const revealOrder = blocks.flat();
+  const solutionOrder = positions.map((_, index) => total - 1 - index);
+  const revealTypes = buildDengRoute(total);
   const types = Array(total);
-  revealOrder.forEach((type, revealIndex) => {
-    types[total - 1 - revealIndex] = type;
+  revealTypes.forEach((type, revealIndex) => {
+    types[solutionOrder[revealIndex]] = type;
   });
-  return types;
+  return { types, solutionOrder };
+}
+
+function pickDengTypes(count) {
+  const pool = Array.from({ length: DENG_ASSETS.length }, (_, index) => index);
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, count);
+}
+
+function buildDengRoute(total) {
+  if (total % 3 !== 0) throw new Error('蹬了个蹬路线数量必须是 3 的倍数');
+  const route = [];
+  let remaining = total;
+  while (remaining >= 12) {
+    const [a, b, c, d] = pickDengTypes(4);
+    // 四种照片交错出现，连续路线中最多保留 6 张，必须观察顺序才能稳妥过关。
+    route.push(a, b, c, a, b, d, c, d, a, b, c, d);
+    remaining -= 12;
+  }
+  if (remaining === 9) {
+    const [a, b, c] = pickDengTypes(3);
+    route.push(a, b, c, a, b, c, a, b, c);
+  } else if (remaining === 6) {
+    const [a, b] = pickDengTypes(2);
+    route.push(a, b, a, b, a, b);
+  } else if (remaining === 3) {
+    const [a] = pickDengTypes(1);
+    route.push(a, a, a);
+  }
+  return route;
 }
 
 function dengOverlaps(a, b) {
-  return Math.abs(a.x - b.x) < 18 && Math.abs(a.y - b.y) < 18;
+  return Math.abs(a.x - b.x) < 21 && Math.abs(a.y - b.y) < 21;
 }
 
 function isDengAvailable(tile) {
@@ -1690,16 +1709,13 @@ function openDengQuiz() {
 }
 
 function executeDengShuffle() {
-  const remainingTiles = dState.tiles.filter(t => !t.removed);
-  const types = remainingTiles.map(t => t.type);
-  for (let i = types.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [types[i], types[j]] = [types[j], types[i]];
-  }
-  remainingTiles.forEach((tile, index) => {
-    tile.type = types[index];
+  const remainingOrder = dState.solutionOrder.filter(index => !dState.tiles[index].removed);
+  const route = buildDengRoute(remainingOrder.length);
+  remainingOrder.forEach((tileIndex, index) => {
+    dState.tiles[tileIndex].type = route[index];
   });
-  setDengMessage('答题正确！棋盘已成功洗牌，快寻找新机会吧！', 'success');
+  dState.solutionOrder = remainingOrder;
+  setDengMessage('答题正确！棋盘已重新洗牌，但仍需要规划消除顺序。', 'success');
   renderDeng();
 }
 
