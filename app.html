@@ -367,6 +367,32 @@
   .deng-message.success { color: #6ee7b7; }
   .deng-message.danger { color: #fda4af; }
 
+  /* ===== deng quiz modal ===== */
+  .deng-modal {
+    position: fixed; inset: 0; background: rgba(11,15,25,0.82); backdrop-filter: blur(8px);
+    z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; pointer-events: none; transition: opacity .22s ease;
+  .deng-modal.active { opacity: 1; pointer-events: auto; }
+  }
+  .deng-modal-card {
+    width: min(92vw, 420px); background: linear-gradient(145deg, rgba(30,41,59,0.96), rgba(15,23,42,0.98));
+    border: 1px solid rgba(251,191,36,0.35); border-radius: 22px; padding: 24px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6); display: flex; flex-direction: column; gap: 16px;
+    transform: translateY(10px); transition: transform .22s ease;
+  }
+  .deng-modal.active .deng-modal-card { transform: translateY(0); }
+  .deng-modal-title { font-size: 17px; font-weight: 700; color: #fde68a; display: flex; align-items: center; gap: 8px; }
+  .deng-quiz-q { font-size: 15px; color: var(--text); line-height: 1.5; margin: 4px 0; }
+  .deng-options { display: flex; flex-direction: column; gap: 9px; }
+  .deng-option {
+    text-align: left; width: 100%; padding: 11px 16px; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
+    color: var(--text); font-size: 14px; cursor: pointer; transition: all .18s;
+  }
+  .deng-option:hover { border-color: var(--accent); background: rgba(56,189,248,0.12); color: var(--accent-hover); }
+  .deng-option.correct { background: rgba(16,185,129,0.25); border-color: #10b981; color: #6ee7b7; font-weight: 700; }
+  .deng-option.wrong { background: rgba(239,68,68,0.25); border-color: #ef4444; color: #fca5a5; }
+
   @media (max-width: 480px) {
     body { padding: 8px 12px 12px; }
     h1 { font-size: 15px; }
@@ -542,6 +568,7 @@
         </div>
         <button class="btn primary" data-act="deng-reset">重新开局</button>
         <button class="btn" data-act="deng-hint">找提示</button>
+        <button class="btn warn" data-act="deng-shuffle">答题洗牌</button>
       </div>
       <div class="stats">
         <div>关卡 <b data-stat="deng-level">1</b></div>
@@ -669,8 +696,7 @@ function initPuzzle() {
     const n = pState.size;
     const total = n * n;
     pState.tiles = Array.from({length: total}, (_, i) => i);
-    
-    // Shuffle ensuring solvability
+      // Shuffle ensuring solvability
     do {
       for (let i = total - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -689,7 +715,6 @@ function isPuzzleSolvable(tiles, n) {
   const total = n * n;
   const emptyVal = total - 1;
   const emptyRowFromBottom = n - Math.floor(tiles.indexOf(emptyVal) / n);
-  
   for (let i = 0; i < total; i++) {
     if (tiles[i] === emptyVal) continue;
     for (let j = i + 1; j < total; j++) {
@@ -715,7 +740,6 @@ function renderPuzzleTiles() {
   grid.innerHTML = '';
   const n = pState.size;
   const pct = 100 / (n - 1);
-  
   pState.tiles.forEach((val, idx) => {
     if (val === n * n - 1) return; // empty
     const tile = document.createElement('div');
@@ -794,8 +818,7 @@ function initMemory() {
     const grid = $('#memory-grid');
     grid.innerHTML = '';
     const totalCards = mState.pairsCount * 2;
-    
-    // Slice canvas into pair templates
+      // Slice canvas into pair templates
     const canvas = document.createElement('canvas');
     canvas.width = 400; canvas.height = 400;
     const ctx = canvas.getContext('2d');
@@ -821,8 +844,7 @@ function initMemory() {
           <div class="face face-back"></div>
         </div>
       `;
-      
-      // render crop
+          // render crop
       const back = card.querySelector('.face-back');
       const r = Math.floor(id / 3), c = id % 3;
       back.style.backgroundImage = `url(${IMG_URL})`;
@@ -1008,8 +1030,7 @@ function initSpotdiff() {
       } while (overlap);
 
       sState.diffs.push({ x, y, radius, found: false });
-      
-      // draw a subtle alteration on right canvas
+          // draw a subtle alteration on right canvas
       ctxR.save();
       ctxR.beginPath();
       ctxR.arc(x, y, radius, 0, Math.PI * 2);
@@ -1075,13 +1096,11 @@ function initScratch() {
   $('[data-stat="scratch-pct"]').textContent = '0%';
   $('#scratch-percent').textContent = '0%';
   $('#scratch-img').style.backgroundImage = `url(${IMG_URL})`;
-  
   const canvas = $('#scratch-canvas');
   const ctx = canvas.getContext('2d');
   const rect = canvas.parentNode.getBoundingClientRect();
   canvas.width = rect.width || 500;
   canvas.height = rect.height || 500;
-  
   ctx.fillStyle = '#b5b5b5';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   // Add some noise to make it look like silver scratch layer
@@ -1095,13 +1114,11 @@ function initScratch() {
     const r = canvas.getBoundingClientRect();
     const x = (e.clientX || e.touches[0].clientX) - r.left;
     const y = (e.clientY || e.touches[0].clientY) - r.top;
-    
-    ctx.globalCompositeOperation = 'destination-out';
+      ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
     ctx.arc(x, y, 25, 0, Math.PI * 2);
     ctx.fill();
-    
-    if (!scState.active) {
+      if (!scState.active) {
       scState.active = true;
       const checkInterval = setInterval(() => {
         if (scState.finished) { clearInterval(checkInterval); return; }
@@ -1127,7 +1144,6 @@ function calcScratchPercent() {
   scState.pct = pct;
   $('[data-stat="scratch-pct"]').textContent = pct + '%';
   $('#scratch-percent').textContent = pct + '%';
-  
   if (pct > 80 && !scState.finished) {
     scState.finished = true;
     canvas.style.transition = 'opacity 0.8s';
@@ -1170,8 +1186,7 @@ function render2048() {
       const r = Math.floor((val % 16) / 4), c = val % 4;
       img.style.backgroundPosition = `${c * 33}% ${r * 33}%`;
       tile.appendChild(img);
-      
-      const num = document.createElement('div');
+          const num = document.createElement('div');
       num.className = 'tile-num';
       num.textContent = val;
       tile.appendChild(num);
@@ -1188,7 +1203,6 @@ function render2048() {
 function move2048(dir) {
   if (g2State.finished) return;
   let moved = false;
-  
   const getRow = (i) => [g2State.board[i*4], g2State.board[i*4+1], g2State.board[i*4+2], g2State.board[i*4+3]];
   const getCol = (i) => [g2State.board[i], g2State.board[i+4], g2State.board[i+8], g2State.board[i+12]];
   const setRow = (i, row) => row.forEach((v, j) => g2State.board[i*4+j] = v);
@@ -1613,6 +1627,82 @@ function hintDeng() {
   setDengMessage('金色闪烁的是当前可以点击的照片');
 }
 
+/* ===== Deng Quiz & Shuffle Bank ===== */
+const DENG_QUIZ_BANK = [
+  {
+    q: "在经典消除游戏中，收集槽最多可以容纳几张未消除的照片？",
+    options: ["5 张", "7 张", "9 张", "10 张"],
+    answer: 1
+  },
+  {
+    q: "当场上照片被其他照片完全覆盖时，正确的做法是？",
+    options: ["直接点击被压在底下的照片", "先消除或移开上方遮挡的照片", "摇晃手机让它们掉落", "关闭网页重新下载"],
+    answer: 1
+  },
+  {
+    q: "凑齐几张相同的照片才可以触发自动消除？",
+    options: ["2 张", "3 张", "4 张", "5 张"],
+    answer: 1
+  },
+  {
+    q: "为了让手机端加载如飞，我们在项目中把大图转成了哪种现代图片格式？",
+    options: ["GIF", "BMP", "WebP", "TIFF"],
+    answer: 2
+  },
+  {
+    q: "如果游戏进入僵局，使用哪个功能可以通过回答问题来重新洗牌？",
+    options: ["重新开局", "找提示", "答题洗牌", "退出游戏"],
+    answer: 2
+  }
+];
+
+function openDengQuiz() {
+  if (dState.finished || dState.processing) return;
+  const modal = $('#deng-modal');
+  const qContainer = $('#deng-quiz-q');
+  const optContainer = $('#deng-options');
+  const quiz = DENG_QUIZ_BANK[Math.floor(Math.random() * DENG_QUIZ_BANK.length)];
+  qContainer.textContent = quiz.q;
+  optContainer.innerHTML = '';
+  quiz.options.forEach((optText, idx) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'deng-option';
+    btn.textContent = `${['A', 'B', 'C', 'D'][idx]}. ${optText}`;
+    btn.onclick = () => {
+      if (idx === quiz.answer) {
+        btn.classList.add('correct');
+        setTimeout(() => {
+          modal.classList.remove('active');
+          executeDengShuffle();
+        }, 380);
+      } else {
+        btn.classList.add('wrong');
+        setTimeout(() => {
+          modal.classList.remove('active');
+          setDengMessage('回答错误，洗牌未生效，请继续加油！', 'danger');
+        }, 380);
+      }
+    };
+    optContainer.appendChild(btn);
+  });
+  modal.classList.add('active');
+}
+
+function executeDengShuffle() {
+  const remainingTiles = dState.tiles.filter(t => !t.removed);
+  const types = remainingTiles.map(t => t.type);
+  for (let i = types.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [types[i], types[j]] = [types[j], types[i]];
+  }
+  remainingTiles.forEach((tile, index) => {
+    tile.type = types[index];
+  });
+  setDengMessage('答题正确！棋盘已成功洗牌，快寻找新机会吧！', 'success');
+  renderDeng();
+}
+
 /* ==================== Controls & Event Bindings ==================== */
 function stopAllTimers() {
   clearInterval(pState.timer);
@@ -1656,6 +1746,7 @@ $('[data-act="nonogram-reset"]').onclick = initNonogram;
 $('[data-act="nonogram-hint"]').onclick = giveNonogramHint;
 $('[data-act="deng-reset"]').onclick = initDeng;
 $('[data-act="deng-hint"]').onclick = hintDeng;
+$('[data-act="deng-shuffle"]').onclick = openDengQuiz;
 
 // 2048 Touch Support
 let touchStartX, touchStartY;
