@@ -381,6 +381,7 @@
     position: fixed; inset: 0; background: rgba(11,15,25,0.82); backdrop-filter: blur(8px);
     z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px;
     opacity: 0; pointer-events: none; transition: opacity .22s ease;
+  }
   .deng-modal.active { opacity: 1; pointer-events: auto; }
   }
   .deng-modal-card {
@@ -1886,7 +1887,7 @@ window.onkeydown = (e) => {
   }
 };
 
-// 支持普通页面加载与首页 SPA 动态注入两种启动方式。
+// 支持普通页面加载与首页内嵌 SPA 两种启动方式。
 function bootGamePage(initialGame) {
   const params = new URLSearchParams(location.search);
   const g = initialGame || params.get('game');
@@ -1894,10 +1895,12 @@ function bootGamePage(initialGame) {
   switchGame(validGames.includes(g) ? g : 'puzzle', false);
 }
 window.bootGamePage = bootGamePage;
-if (document.readyState === 'loading') {
-  window.addEventListener('DOMContentLoaded', () => bootGamePage());
-} else if (document.querySelector('.top-nav')) {
-  bootGamePage();
+if (!window.__SPA_INLINE_HOST__) {
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', () => bootGamePage());
+  } else if (document.querySelector('.top-nav')) {
+    bootGamePage();
+  }
 }
 </script>
 </body>
