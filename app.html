@@ -591,6 +591,20 @@
 /* ==================== shared helpers ==================== */
 const IMG_URL = 'images/2nd.webp';
 const DENG_ASSETS = Array.from({ length: 8 }, (_, i) => `images/deng/${i + 1}.webp`);
+const DENG_PNG_ASSETS = Array.from({ length: 8 }, (_, i) => `images/deng/${i + 1}.png`);
+
+function createDengImage(type) {
+  const image = document.createElement('img');
+  image.src = DENG_ASSETS[type];
+  image.alt = '';
+  image.draggable = false;
+  image.onerror = () => {
+    if (image.dataset.fallback === '1') { image.style.visibility = 'hidden'; return; }
+    image.dataset.fallback = '1';
+    image.src = DENG_PNG_ASSETS[type];
+  };
+  return image;
+}
 
 function $(s, r) { return (r || document).querySelector(s); }
 function $all(s, r) { return [...(r || document).querySelectorAll(s)]; }
@@ -1410,7 +1424,7 @@ function giveNonogramHint() {
 /* ==================== 6. DENG LE DENG ==================== */
 let dState = {
   level: 1, tiles: [], tray: [], mistakes: 0, removed: 0,
-  processing: false, finished: false, timer: null
+  solutionOrder: [], solutionCursor: 0, processing: false, finished: false, timer: null
 };
 
 function getDengPositions(level) {
@@ -1436,16 +1450,9 @@ function getDengPositions(level) {
 function initDeng() {
   stopAllTimers();
   const positions = getDengPositions(dState.level);
-  const total = positions.length;
-  const copies = total / DENG_ASSETS.length;
-  const types = [];
-  DENG_ASSETS.forEach((_, type) => {
-    for (let i = 0; i < copies; i++) types.push(type);
-  });
-  for (let i = types.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [types[i], types[j]] = [types[j], types[i]];
-  }
+  const types = buildGuaranteedDengTypes(positions.length);
+  dState.solutionOrder = positions.map((_, index) => positions.length - 1 - index);
+  dState.solutionCursor = 0;
   dState.tiles = positions.map((position, index) => ({
     ...position, index, type: types[index], removed: false
   }));
@@ -1457,6 +1464,27 @@ function initDeng() {
   updateDengStats();
   setDengMessage('点击没有被遮挡的照片');
   renderDeng();
+}
+
+function buildGuaranteedDengTypes(total) {
+  if (total % 3 !== 0) throw new Error('蹬了个蹬牌局数量必须是 3 的倍数');
+  const blockCount = total / 3;
+  const startType = Math.floor(Math.random() * DENG_ASSETS.length);
+  const blocks = Array.from({ length: blockCount }, (_, index) => {
+    const type = (startType + index) % DENG_ASSETS.length;
+    return [type, type, type];
+  });
+  for (let i = blocks.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [blocks[i], blocks[j]] = [blocks[j], blocks[i]];
+  }
+  // 反向对应棋盘数组：从最上层到最底层，始终按三张一组揭牌，确保存在通关路线。
+  const revealOrder = blocks.flat();
+  const types = Array(total);
+  revealOrder.forEach((type, revealIndex) => {
+    types[total - 1 - revealIndex] = type;
+  });
+  return types;
 }
 
 function dengOverlaps(a, b) {
@@ -1483,11 +1511,7 @@ function renderDeng() {
     tile.style.top = `${tileData.y}%`;
     tile.style.zIndex = String(tileData.layer + 2);
     tile.setAttribute('aria-label', `照片图块 ${tileData.type + 1}`);
-    const image = document.createElement('img');
-    image.src = DENG_ASSETS[tileData.type];
-    image.alt = '';
-    image.draggable = false;
-    tile.appendChild(image);
+    tile.appendChild(createDengImage(tileData.type));
     tile.onclick = () => selectDengTile(tileData.index);
     board.appendChild(tile);
   });
@@ -1495,10 +1519,7 @@ function renderDeng() {
   dState.tray.forEach(type => {
     const slot = document.createElement('div');
     slot.className = 'deng-slot';
-    const image = document.createElement('img');
-    image.src = DENG_ASSETS[type];
-    image.alt = '';
-    slot.appendChild(image);
+    slot.appendChild(createDengImage(type));
     tray.appendChild(slot);
   });
   for (let i = dState.tray.length; i < 7; i++) {
@@ -1577,7 +1598,11 @@ function updateDengStats() {
 
 function hintDeng() {
   if (dState.finished || dState.processing) return;
-  const available = dState.tiles.find(tile => !tile.removed && isDengAvailable(tile));
+  const targetIndex = dState.solutionOrder.find(index => {
+    const tile = dState.tiles[index];
+    return tile && !tile.removed && isDengAvailable(tile);
+  });
+  const available = dState.tiles[targetIndex];
   if (!available) return;
   const boardTiles = $all('.deng-tile');
   const target = boardTiles.find(tile => tile.getAttribute('aria-label') === `照片图块 ${available.type + 1}`);
