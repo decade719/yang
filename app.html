@@ -315,11 +315,16 @@
   .nonogram-tip { color: var(--muted); font-size: 12px; text-align: center; margin-top: 10px; }
 
   /* ===== deng-le-deng ===== */
+  .deng-controls { flex-wrap: nowrap; gap: 5px; margin-bottom: 5px; }
+  .deng-controls .diff { flex: 0 0 auto; }
+  .deng-controls .diff button { padding: 5px 8px; font-size: 11px; }
+  .deng-controls .btn { flex: 1 1 auto; min-width: 0; padding: 6px 8px; font-size: 11px; white-space: nowrap; }
+  .deng-stats { gap: 14px; margin-bottom: 5px; font-size: 12px; }
   .deng-stage {
-    width: min(94vw, 620px); display: flex; flex-direction: column; gap: 12px;
+    width: min(98vw, 760px); display: flex; flex-direction: column; gap: 8px;
   }
   .deng-board {
-    position: relative; width: 100%; aspect-ratio: 1.03 / 1; min-height: 330px;
+    position: relative; width: 100%; height: clamp(360px, 56svh, 650px);
     background: radial-gradient(circle at 50% 20%, rgba(251,191,36,0.16), transparent 48%), linear-gradient(145deg, rgba(30,41,59,0.92), rgba(15,23,42,0.92));
     border: 1px solid rgba(251,191,36,0.28); border-radius: 24px; overflow: hidden;
     box-shadow: inset 0 0 50px rgba(245,158,11,0.08), 0 22px 50px rgba(0,0,0,0.48);
@@ -331,7 +336,7 @@
     pointer-events: none; z-index: 1;
   }
   .deng-tile {
-    position: absolute; width: 18%; aspect-ratio: 1 / 1; padding: 2px; border: 2px solid rgba(255,255,255,0.35);
+    position: absolute; width: 12%; aspect-ratio: 1 / 1; padding: 1px; border: 2px solid rgba(255,255,255,0.35);
     border-radius: 15px; background: #f8fafc; cursor: pointer; overflow: hidden; z-index: 2;
     box-shadow: 0 7px 0 rgba(15,23,42,0.4), 0 12px 18px rgba(0,0,0,0.25);
     transition: filter .16s, transform .16s, opacity .18s;
@@ -399,9 +404,12 @@
     .tab { padding: 6px 12px; font-size: 12px; }
     .topbar { gap: 7px; margin-bottom: 7px; }
     .btn { min-height: 38px; padding: 7px 12px; }
-    .deng-stage { width: 96vw; gap: 7px; }
-    .deng-board { min-height: 300px; border-radius: 19px; }
-    .deng-tile { width: 17%; border-radius: 10px; padding: 2px; }
+    .deng-stage { width: 98vw; gap: 6px; }
+    .deng-controls { gap: 3px; }
+    .deng-controls .diff button { padding: 5px 6px; font-size: 10px; }
+    .deng-controls .btn { padding: 6px 5px; font-size: 10px; }
+    .deng-board { height: 56svh; min-height: 350px; border-radius: 19px; }
+    .deng-tile { width: 11%; border-radius: 8px; padding: 1px; }
     .deng-tray-wrap { padding: 15px 7px 11px; border-width: 2px; border-radius: 16px; box-shadow: inset 0 2px 0 rgba(255,226,165,0.45), inset 0 -6px 0 rgba(77,43,19,0.35), 0 7px 0 #4d2b16, 0 12px 18px rgba(0,0,0,0.3); }
     .deng-tray { gap: 4px; }
     .deng-slot { border-radius: 8px; }
@@ -550,7 +558,7 @@
 
     <!-- ===== DENG LE DENG ===== -->
     <section class="view" id="view-deng">
-      <div class="topbar">
+      <div class="topbar deng-controls">
         <div class="diff" data-diff-for="deng">
           <button data-d="1" class="active">轻松局</button>
           <button data-d="2">挑战局</button>
@@ -559,7 +567,7 @@
         <button class="btn" data-act="deng-hint">找提示</button>
         <button class="btn warn" data-act="deng-shuffle">答题洗牌</button>
       </div>
-      <div class="stats">
+      <div class="stats deng-stats">
         <div>关卡 <b data-stat="deng-level">1</b></div>
         <div>剩余 <b data-stat="deng-left">0</b></div>
         <div>失误 <b data-stat="deng-mistakes">0</b></div>
@@ -1443,15 +1451,17 @@ function getDengPositions(level) {
   addGrid(1, 3, 4, 6, 28, 22, 20, 4, 0);
   addGrid(2, 3, 4, 4, 25, 22, 20, 0, 4);
   addGrid(3, 2, 4, 10, 35, 22, 22, 2, 0);
-  // 轻松局也保留一定纵深，避免开局直接平推。
+  // 轻松局 5 层、60 张，适合先熟悉叠层关系。
   addGrid(4, 3, 4, 5, 25, 22, 20, 4, 2);
   if (level === 2) {
-    // 挑战局共 10 层：上层牌更密，底层牌需要多次规划才能逐步露出。
-    addGrid(5, 3, 4, 7, 30, 22, 20, 1, 5);
-    addGrid(6, 2, 4, 8, 22, 22, 20, 3, 3);
-    addGrid(7, 2, 4, 6, 31, 22, 20, 6, 1);
-    addGrid(8, 1, 4, 9, 41, 21, 0, 0, 0);
-    addGrid(9, 1, 4, 5, 24, 21, 0, 0, 0);
+    // 挑战局额外增加 10 层，每层 12 张，总计 15 层 / 180 张。
+    for (let layer = 5; layer < 15; layer++) {
+      const left = 4 + (layer % 4) * 2;
+      const top = 20 + (layer % 3) * 8;
+      const offsetX = (layer % 2) * 3;
+      const offsetY = (layer % 3) * 2;
+      addGrid(layer, 3, 4, left, top, 22, 18, offsetX, offsetY);
+    }
   }
   return positions;
 }
