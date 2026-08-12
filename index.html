@@ -126,10 +126,12 @@
   .footer span { display: inline-block; width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
 
   /* ===== seamless SPA navigation ===== */
-  #home-view { width: 100%; display: flex; flex-direction: column; align-items: center; opacity: 1; transform: translateY(0); transition: opacity .22s ease, transform .22s ease; }
-  #home-view.spa-hidden { opacity: 0; transform: translateY(-8px); pointer-events: none; }
-  #app-view { position: fixed; inset: 0; z-index: 20; display: none; flex-direction: column; width: 100%; height: 100svh; opacity: 0; transform: translateY(8px); transition: opacity .24s ease, transform .24s ease; overflow: hidden; }
-  #app-view.spa-active { display: flex; opacity: 1; transform: translateY(0); }
+  #home-view { width: 100%; display: flex; flex-direction: column; align-items: center; opacity: 1; transform: scale(1) translateY(0); transition: opacity .28s ease, transform .32s cubic-bezier(.2,.8,.2,1); }
+  #home-view.spa-hidden { opacity: 0; transform: scale(.985) translateY(-12px); pointer-events: none; }
+  #app-view { position: fixed; inset: 0; z-index: 20; display: flex; flex-direction: column; width: 100%; height: 100svh; visibility: hidden; pointer-events: none; opacity: 0; transform: scale(.985) translateY(12px); transform-origin: 50% 50%; transition: opacity .32s ease, transform .38s cubic-bezier(.2,.8,.2,1), visibility 0s linear .38s; overflow: hidden; }
+  #app-view.spa-active { visibility: visible; pointer-events: auto; opacity: 1; transform: scale(1) translateY(0); transition-delay: 0s; }
+  body.spa-switching #home-view, body.spa-switching #app-view { will-change: opacity, transform; }
+  body.spa-switching .spa-loader { opacity: 0; }
   body.spa-app-active { display: block; align-items: initial; padding: 0; min-height: 100svh; height: 100svh; overflow: hidden; }
   .spa-loader { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: rgba(11,15,25,.76); backdrop-filter: blur(7px); opacity: 0; pointer-events: none; transition: opacity .18s ease; }
   .spa-loader.active { opacity: 1; pointer-events: auto; }
@@ -246,11 +248,21 @@
       let appStyleText = '';
       let appLoaded = false;
       let appBooted = false;
+      let appTemplatePromise = null;
+      let loaderTimer = null;
 
       const validGames = ['puzzle', 'memory', 'jigsaw', 'spotdiff', 'scratch', '2048', 'nonogram', 'deng'];
       const getGame = () => new URLSearchParams(location.search).get('game');
 
-      function setLoader(active) { loader.classList.toggle('active', active); }
+      function setLoader(active) {
+        clearTimeout(loaderTimer);
+        if (active) {
+          // 只有极慢网络才显示兜底提示，正常点击不再出现“刷新中”遮罩。
+          loaderTimer = setTimeout(() => loader.classList.add('active'), 220);
+        } else {
+          loader.classList.remove('active');
+        }
+      }
       function mountAppStyle() {
         if (document.getElementById(appStyleId)) return;
         const style = document.createElement('style');
@@ -268,22 +280,39 @@
         script.remove();
         appBooted = true;
       }
-      async function loadAppTemplate() {
-        if (appLoaded) return;
-        const response = await fetch('app.html', { cache: 'no-store' });
-        if (!response.ok) throw new Error('无法加载游戏页');
-        const text = await response.text();
-        const parsed = new DOMParser().parseFromString(text, 'text/html');
-        appStyleText = parsed.querySelector('style')?.textContent || '';
-        const appScript = parsed.querySelector('script')?.textContent || '';
-        appView.innerHTML = parsed.body.innerHTML;
-        appView.querySelectorAll('script').forEach(script => script.remove());
-        appView.dataset.script = appScript;
-        appLoaded = true;
+      function loadAppTemplate() {
+        if (appLoaded) return Promise.resolve();
+        if (appTemplatePromise) return appTemplatePromise;
+        appTemplatePromise = fetch('app.html', { cache: 'force-cache' })
+          .then(response => {
+            if (!response.ok) throw new Error('无法加载游戏页');
+            return response.text();
+          })
+          .then(text => {
+            const parsed = new DOMParser().parseFromString(text, 'text/html');
+            appStyleText = parsed.querySelector('style')?.textContent || '';
+            const appScript = parsed.querySelector('script')?.textContent || '';
+            appView.innerHTML = parsed.body.innerHTML;
+            appView.querySelectorAll('script').forEach(script => script.remove());
+            appView.dataset.script = appScript;
+            appLoaded = true;
+          })
+          .catch(error => {
+            appTemplatePromise = null;
+            throw error;
+          });
+        return appTemplatePromise;
+      }
+      function prefetchGameAssets() {
+        const urls = ['images/2nd.webp', ...Array.from({ length: 15 }, (_, i) => `images/deng/${i + 1}.webp`)];
+        urls.forEach(url => { const image = new Image(); image.decoding = 'async'; image.src = url; });
+      }
+      function prefetchApp() {
+        loadAppTemplate().then(prefetchGameAssets).catch(() => {});
       }
       function bootGame(game) {
         mountAppStyle();
-        body.classList.add('spa-app-active');
+        body.classList.add('spa-app-active', 'spa-switching');
         homeView.classList.add('spa-hidden');
         appView.classList.add('spa-active');
         if (!appBooted) {
@@ -295,10 +324,14 @@
       function showHome(push = false) {
         if (push) history.pushState({}, '', 'index.html');
         if (typeof window.stopAllTimers === 'function') window.stopAllTimers();
+        body.classList.add('spa-switching');
         appView.classList.remove('spa-active');
         homeView.classList.remove('spa-hidden');
         body.classList.remove('spa-app-active');
-        setTimeout(removeAppStyle, 250);
+        setTimeout(() => {
+          body.classList.remove('spa-switching');
+          removeAppStyle();
+        }, 390);
       }
       async function openGame(game, push = true) {
         if (!validGames.includes(game)) return;
@@ -313,7 +346,10 @@
           console.error(error);
           showHome(false);
         } finally {
-          requestAnimationFrame(() => setLoader(false));
+          requestAnimationFrame(() => {
+            setLoader(false);
+            setTimeout(() => body.classList.remove('spa-switching'), 420);
+          });
         }
       }
       document.addEventListener('click', event => {
@@ -336,6 +372,7 @@
         else showHome(false);
       });
       const initialGame = getGame();
+      prefetchApp();
       if (validGames.includes(initialGame)) openGame(initialGame, false);
     })();
   </script>
