@@ -176,9 +176,65 @@
     0% { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
     100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
   }
+  /* ===== temporary disappearance overlay: original lab source remains below ===== */
+  .disappear-overlay {
+    position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center;
+    overflow: hidden; padding: 24px; color: #e2e8f0; background: #05060b;
+    font-family: 'Courier New', Courier, monospace; isolation: isolate;
+  }
+  .disappear-overlay::before {
+    content: ''; position: absolute; inset: 0; z-index: -2;
+    background: radial-gradient(circle at 50% 42%, rgba(56,189,248,.12), transparent 30%),
+                linear-gradient(120deg, rgba(168,85,247,.08), transparent 36%, rgba(34,211,238,.06));
+  }
+  .disappear-overlay::after {
+    content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .28;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 4px),
+                repeating-linear-gradient(90deg, rgba(56,189,248,.035) 0 1px, transparent 1px 7px);
+    mix-blend-mode: screen;
+  }
+  .disappear-card {
+    width: min(92vw, 620px); padding: clamp(28px, 8vw, 62px) clamp(22px, 6vw, 54px);
+    border: 1px solid rgba(56,189,248,.42); border-radius: 24px; text-align: center;
+    background: linear-gradient(145deg, rgba(15,23,42,.76), rgba(2,6,23,.9));
+    box-shadow: 0 0 0 1px rgba(168,85,247,.14), 0 24px 90px rgba(0,0,0,.66), inset 0 0 55px rgba(56,189,248,.05);
+    animation: disappear-card-in .6s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .disappear-code { color: #67e8f9; font-size: 11px; letter-spacing: 3px; opacity: .8; margin-bottom: 20px; }
+  .disappear-title {
+    display: inline-block; color: #f8fafc; cursor: pointer; user-select: none;
+    font-size: clamp(34px, 11vw, 76px); line-height: 1.05; font-weight: 900; letter-spacing: .08em;
+    text-shadow: 0 0 12px rgba(56,189,248,.85), 0 0 42px rgba(168,85,247,.6);
+    animation: disappear-glitch 3.2s steps(1,end) infinite;
+  }
+  .disappear-title span { color: #f0abfc; }
+  .disappear-status { margin-top: 22px; color: #94a3b8; font-size: 12px; letter-spacing: 1px; line-height: 1.8; }
+  .disappear-dots { display: inline-flex; gap: 7px; margin-top: 24px; }
+  .disappear-dots i { width: 7px; height: 7px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 12px #38bdf8; animation: disappear-dot 1.2s ease-in-out infinite; }
+  .disappear-dots i:nth-child(2) { animation-delay: .18s; background: #a855f7; box-shadow: 0 0 12px #a855f7; }
+  .disappear-dots i:nth-child(3) { animation-delay: .36s; background: #f0abfc; box-shadow: 0 0 12px #f0abfc; }
+  .disappear-overlay.reveal { animation: disappear-out .55s ease forwards; pointer-events: none; }
+  @keyframes disappear-card-in { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes disappear-glitch { 0%, 88%, 100% { transform: translateX(0); filter: none; } 90% { transform: translateX(-2px) skewX(-2deg); filter: hue-rotate(35deg); } 92% { transform: translateX(3px) skewX(3deg); filter: saturate(1.5); } 94% { transform: translateX(0); } }
+  @keyframes disappear-dot { 0%, 100% { opacity: .35; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
+  @keyframes disappear-out { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.04); visibility: hidden; } }
+  @media (max-width: 480px) {
+    .disappear-overlay { padding: 16px; }
+    .disappear-card { border-radius: 20px; }
+    .disappear-code { letter-spacing: 2px; }
+    .disappear-status { font-size: 11px; }
+  }
 </style>
 </head>
 <body id="body">
+  <div class="disappear-overlay" id="disappear-overlay" role="dialog" aria-label="哦莫哦莫不见了">
+    <div class="disappear-card">
+      <div class="disappear-code">// SIGNAL LOST · PAGE VANISHED · 404</div>
+      <h1 class="disappear-title" id="disappear-title" tabindex="0" aria-label="哦莫哦莫不见了">哦莫哦莫<br><span>不见了</span></h1>
+      <div class="disappear-status">TARGET STATUS: INVISIBLE<br>所有页面信号已暂时断开</div>
+      <div class="disappear-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+  </div>
   <canvas id="matrix"></canvas>
 
   <!-- 实时监控面板 -->
@@ -520,6 +576,29 @@
         }
       }, 50);
     }
+  </script>
+  <script>
+    // Hidden developer entrance: click the title five times to reveal the preserved lab.
+    (() => {
+      const overlay = document.getElementById('disappear-overlay');
+      const secret = document.getElementById('disappear-title');
+      let clicks = 0;
+      let resetTimer;
+      const reveal = () => {
+        overlay.classList.add('reveal');
+        setTimeout(() => { overlay.style.display = 'none'; }, 560);
+      };
+      const count = () => {
+        clicks += 1;
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => { clicks = 0; }, 4000);
+        if (clicks >= 5) reveal();
+      };
+      secret.addEventListener('click', count);
+      secret.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); count(); }
+      });
+    })();
   </script>
 </body>
 </html>
