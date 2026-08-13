@@ -17,7 +17,7 @@
     position: relative; z-index: 10; width: 100%; height: 100%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     padding: 20px; text-align: center;
-    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.9) 90%);
+    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.92) 90%);
   }
   .warning-badge {
     display: inline-block; padding: 6px 18px; border-radius: 20px;
@@ -116,9 +116,35 @@
   .footer-hint {
     margin-top: 25px; color: #64748b; font-size: 12px; letter-spacing: 2px;
   }
+
+  /* 屏幕震动特效类 */
+  .shake-screen {
+    animation: screenShake 0.4s infinite;
+  }
+  @keyframes screenShake {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    20% { transform: translate(-3px, 3px) rotate(-0.5deg); }
+    40% { transform: translate(3px, -2px) rotate(0.5deg); }
+    60% { transform: translate(-2px, -3px) rotate(-0.3deg); }
+    80% { transform: translate(2px, 2px) rotate(0.3deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  /* 浮动警告提示 */
+  .floating-popup {
+    position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
+    background: rgba(239, 68, 68, 0.9); border: 2px solid #fff; color: #fff;
+    padding: 10px 24px; border-radius: 8px; font-weight: bold; font-size: 15px;
+    z-index: 1000; box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+    pointer-events: none; animation: popIn 0.3s ease-out forwards;
+  }
+  @keyframes popIn {
+    0% { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
+    100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+  }
 </style>
 </head>
-<body>
+<body id="body">
   <canvas id="matrix"></canvas>
   <div class="container">
     <div class="warning-badge">🔒 SYSTEM ACCESS RESTRICTED</div>
@@ -152,7 +178,7 @@
   </div>
 
   <script>
-    // 矩阵数字雨背景特效
+    // 矩阵数字雨背景特效（动态融入猪猪表情）
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     function resizeCanvas() {
@@ -163,7 +189,8 @@
     resizeCanvas();
 
     let matrixColor = '#00ffcc';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*杨若璇阿巴阿巴🐷🐽';
+    let baseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*杨若璇阿巴阿巴';
+    let chars = baseChars;
     const fontSize = 16;
     const columns = Math.floor(canvas.width / fontSize);
     const drops = Array(columns).fill(1);
@@ -223,17 +250,32 @@
     }
     setInterval(updateGibberish, 1200);
 
-    // 丰富的变猪多阶段文案
+    // 超细化 20 个转化阶段文案
     const stages = [
-      { min: 0, max: 10, text: "正在连接杨若璇的脑电波..." },
-      { min: 11, max: 25, text: "扫描到极强防御，正在寻找抗拒漏洞..." },
-      { min: 26, max: 40, text: "正在绕过安全防火墙与傲娇防护网..." },
-      { min: 41, max: 55, text: "开始提取生物 DNA，注入粉红色猪猪基因..." },
-      { min: 56, max: 70, text: "正在调整圆滚滚的身材比例与面部萌化度..." },
-      { min: 71, max: 85, text: "正在安装哼哧哼哧音效模块与卷曲小尾巴..." },
-      { min: 86, max: 98, text: "最后校准：加载贪吃属性，即将大功告成..." },
-      { min: 99, max: 100, text: "转换 100% 完成！" }
+      { at: 3, text: "正在建立与杨若璇脑电波的秘密连接..." },
+      { at: 8, text: "检测到极强傲娇防御网，正在扫描弱点..." },
+      { at: 15, text: "正在绕过安全防火墙，尝试注入快乐因子..." },
+      { at: 22, text: "正在解析生物 DNA 序列，锁定核心基因..." },
+      { at: 30, text: "⚠️ 警告：宿主正在疯狂反抗，启动强力压制！" },
+      { at: 38, text: "正在悄悄剥离人类理智，切换萌系频道..." },
+      { at: 45, text: "开始大量注入粉红色猪猪基因代码..." },
+      { at: 52, text: "正在重写饮食偏好：由沙拉切换为疯狂干饭..." },
+      { at: 60, text: "正在调整圆滚滚的身材比例与面部萌化度..." },
+      { at: 68, text: "正在加装哼哧哼哧音效模块与立体大耳朵..." },
+      { at: 75, text: "正在生成萌力十足且会摇晃的卷曲小尾巴..." },
+      { at: 82, text: "正在清空高冷记忆，灌输‘今天吃什么’灵魂拷问..." },
+      { at: 90, text: "最终校验：贪吃属性与可爱暴击已同步 100%！" },
+      { at: 98, text: "倒计时：小猪若璇即将破壳而出..." },
+      { at: 100, text: "转换 100% 完成！" }
     ];
+
+    function showPopup(msg) {
+      const pop = document.createElement('div');
+      pop.className = 'floating-popup';
+      pop.textContent = msg;
+      document.body.appendChild(pop);
+      setTimeout(() => pop.remove(), 1600);
+    }
 
     function startTransform() {
       const btn = document.getElementById('transform-btn');
@@ -242,35 +284,52 @@
       const progressStatus = document.getElementById('progress-status');
       const progressPercent = document.getElementById('progress-percent');
       const resultBanner = document.getElementById('result-banner');
+      const bodyEl = document.getElementById('body');
 
       btn.disabled = true;
       progressBox.classList.add('active');
       resultBanner.style.display = 'none';
-      matrixColor = '#ec4899'; // 粉红色代码雨
+      matrixColor = '#ec4899';
+      chars = baseChars + '🐷🐽🐷🐽🤪🔥💥';
 
       let progress = 0;
       const interval = setInterval(() => {
-        // 速度放缓，让过程更丰富
-        progress += Math.random() < 0.3 ? 0 : (Math.floor(Math.random() * 2) + 1);
+        progress += 1; // 匀速细化推进
         if (progress > 100) progress = 100;
 
         progressFill.style.width = progress + "%";
         progressPercent.textContent = progress + "%";
 
-        // 匹配当前阶段文案
-        const currentStage = stages.find(s => progress >= s.min && progress <= s.max);
-        if (currentStage) {
-          progressStatus.textContent = currentStage.text;
+        // 匹配对应阶段文案
+        const matched = stages.filter(s => progress >= s.at);
+        if (matched.length > 0) {
+          progressStatus.textContent = matched[matched.length - 1].text;
+        }
+
+        // 关键节点触发浮动警告与震动
+        if (progress === 30) {
+          showPopup("🔥 触发防御机制：傲娇护盾开启！");
+          bodyEl.classList.add('shake-screen');
+          setTimeout(() => bodyEl.classList.remove('shake-screen'), 800);
+        }
+        if (progress === 65) {
+          showPopup("⚡ 基因重组中：圆润化处理加速！");
+        }
+        if (progress === 88) {
+          showPopup("💥 最终冲刺：小尾巴正在长出来！");
+          bodyEl.classList.add('shake-screen');
+          setTimeout(() => bodyEl.classList.remove('shake-screen'), 1000);
         }
 
         if (progress === 100) {
           clearInterval(interval);
           resultBanner.style.display = "block";
-          matrixColor = '#4ade80'; // 成功变绿色
+          matrixColor = '#4ade80';
+          chars = baseChars + '🐷🐽✨🎉💖';
           btn.disabled = false;
           btn.textContent = "🔄 再次逆转 (重置)";
         }
-      }, 120); // 间隔拉长，给足体验时间
+      }, 150); // 整体过程约 15 秒，极具仪式感
     }
   </script>
 </body>
