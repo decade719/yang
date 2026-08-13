@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>⚠️ 警告 · 访问受限</title>
+<title>⚠️ 警告 · 访问受限 · 变猪系统</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body, html {
@@ -17,13 +17,13 @@
     position: relative; z-index: 10; width: 100%; height: 100%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     padding: 20px; text-align: center;
-    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.92) 90%);
+    background: radial-gradient(circle, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.95) 90%);
   }
   .warning-badge {
     display: inline-block; padding: 6px 18px; border-radius: 20px;
     background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.6);
     color: #f87171; font-size: 14px; font-weight: bold; letter-spacing: 3px;
-    margin-bottom: 20px; text-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+    margin-bottom: 15px; text-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
     animation: pulse 1.5s infinite alternate;
   }
   @keyframes pulse {
@@ -31,10 +31,10 @@
     100% { transform: scale(1.05); opacity: 1; }
   }
   .main-title {
-    font-size: clamp(20px, 4.5vw, 40px); font-weight: 900; color: #fff;
+    font-size: clamp(18px, 4vw, 36px); font-weight: 900; color: #fff;
     line-height: 1.4; text-shadow: 0 0 20px rgba(56, 189, 248, 0.8), 0 0 40px rgba(168, 85, 247, 0.6);
-    min-height: 110px; display: flex; align-items: center; justify-content: center;
-    max-width: 900px; word-break: break-all; margin-bottom: 15px;
+    min-height: 90px; display: flex; align-items: center; justify-content: center;
+    max-width: 950px; word-break: break-all; margin-bottom: 10px;
   }
   .glitch-text {
     color: #38bdf8; position: relative; display: inline-block;
@@ -61,23 +61,23 @@
     100% { clip: rect(91px, 9999px, 45px, 0); transform: skew(0.7deg); }
   }
   .gibberish-box {
-    margin-bottom: 25px; padding: 12px 20px; border-radius: 12px;
+    margin-bottom: 20px; padding: 10px 18px; border-radius: 12px;
     background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3);
-    color: #a855f7; font-size: clamp(12px, 2.2vw, 15px); letter-spacing: 3px;
+    color: #a855f7; font-size: clamp(12px, 2vw, 14px); letter-spacing: 3px;
     box-shadow: 0 0 25px rgba(168, 85, 247, 0.2);
     max-width: 600px; word-break: break-all;
   }
   
   /* 炫酷变猪控制面板 */
   .action-panel {
-    display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 480px;
+    display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; max-width: 500px;
   }
   .transform-btn {
     position: relative; padding: 14px 32px; font-size: 16px; font-weight: 900; color: #fff;
     background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); border: none; border-radius: 50px;
     cursor: pointer; box-shadow: 0 0 25px rgba(236, 72, 153, 0.6);
     transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 2px;
-    outline: none; overflow: hidden;
+    outline: none; overflow: hidden; z-index: 20;
   }
   .transform-btn:hover {
     transform: scale(1.05); box-shadow: 0 0 35px rgba(236, 72, 153, 0.9);
@@ -91,9 +91,9 @@
   
   /* 进度条容器 */
   .progress-container {
-    width: 100%; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(236, 72, 153, 0.4);
-    border-radius: 12px; padding: 12px 16px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
-    display: none; flex-direction: column; gap: 8px;
+    width: 100%; background: rgba(30, 41, 59, 0.88); border: 1px solid rgba(236, 72, 153, 0.5);
+    border-radius: 14px; padding: 12px 16px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+    display: none; flex-direction: column; gap: 8px; z-index: 20;
   }
   .progress-container.active {
     display: flex;
@@ -104,38 +104,64 @@
   .progress-bar-bg {
     width: 100%; height: 14px; background: #0f172a; border-radius: 7px; overflow: hidden; position: relative;
   }
-  .progress-bar-fill {
+  .progress-fill {
     width: 0%; height: 100%; background: linear-gradient(90deg, #ec4899, #f43f5e, #fbbf24);
     border-radius: 7px; transition: width 0.2s ease-out;
-    box-shadow: 0 0 10px rgba(236, 72, 153, 0.8);
-  }
-  .result-banner {
-    margin-top: 10px; font-size: 18px; font-weight: 900; color: #4ade80;
-    text-shadow: 0 0 15px rgba(74, 222, 128, 0.8); display: none;
-  }
-  .footer-hint {
-    margin-top: 25px; color: #64748b; font-size: 12px; letter-spacing: 2px;
+    box-shadow: 0 0 12px rgba(236, 72, 153, 0.9);
   }
 
-  /* 屏幕震动特效类 */
-  .shake-screen {
-    animation: screenShake 0.4s infinite;
+  /* 矩形霓虹庆功横幅 */
+  .result-banner {
+    display: none; width: 100%; background: linear-gradient(135deg, rgba(16,185,129,0.95), rgba(5,150,105,0.95));
+    border: 3px solid #fde047; border-radius: 16px; padding: 18px; text-align: center;
+    box-shadow: 0 0 35px rgba(16,185,129,0.8), inset 0 0 15px rgba(253,224,71,0.6);
+    animation: bannerPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    z-index: 30;
   }
+  @keyframes bannerPop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .banner-title {
+    font-size: 20px; font-weight: 900; color: #fef08a; text-shadow: 0 2px 4px rgba(0,0,0,0.4); margin-bottom: 6px;
+  }
+  .banner-desc {
+    font-size: 14px; color: #fff; font-weight: bold; letter-spacing: 1px;
+  }
+
+  /* 侧边实时监控窗 */
+  .monitor-panel {
+    position: absolute; top: 20px; right: 20px; width: 220px;
+    background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.4);
+    border-radius: 10px; padding: 12px; text-align: left; font-size: 11px; color: #38bdf8;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); z-index: 15; pointer-events: none;
+    display: none;
+  }
+  @media (min-width: 768px) { .monitor-panel { display: block; } }
+  .monitor-title { font-weight: bold; color: #f472b6; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 3px; }
+  .monitor-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .monitor-val { color: #4ade80; font-weight: bold; }
+
+  .footer-hint {
+    margin-top: 20px; color: #64748b; font-size: 12px; letter-spacing: 2px; z-index: 20;
+  }
+
+  /* 屏幕震动 */
+  .shake-screen { animation: screenShake 0.4s infinite; }
   @keyframes screenShake {
     0% { transform: translate(0, 0) rotate(0deg); }
-    20% { transform: translate(-3px, 3px) rotate(-0.5deg); }
-    40% { transform: translate(3px, -2px) rotate(0.5deg); }
-    60% { transform: translate(-2px, -3px) rotate(-0.3deg); }
-    80% { transform: translate(2px, 2px) rotate(0.3deg); }
+    20% { transform: translate(-4px, 4px) rotate(-0.6deg); }
+    40% { transform: translate(4px, -3px) rotate(0.6deg); }
+    60% { transform: translate(-3px, -4px) rotate(-0.4deg); }
+    80% { transform: translate(3px, 3px) rotate(0.4deg); }
     100% { transform: translate(0, 0) rotate(0deg); }
   }
 
-  /* 浮动警告提示 */
   .floating-popup {
-    position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
-    background: rgba(239, 68, 68, 0.9); border: 2px solid #fff; color: #fff;
+    position: fixed; top: 18%; left: 50%; transform: translateX(-50%);
+    background: rgba(239, 68, 68, 0.92); border: 2px solid #fff; color: #fff;
     padding: 10px 24px; border-radius: 8px; font-weight: bold; font-size: 15px;
-    z-index: 1000; box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+    z-index: 1000; box-shadow: 0 0 25px rgba(239, 68, 68, 0.9);
     pointer-events: none; animation: popIn 0.3s ease-out forwards;
   }
   @keyframes popIn {
@@ -146,6 +172,17 @@
 </head>
 <body id="body">
   <canvas id="matrix"></canvas>
+
+  <!-- 实时监控面板 -->
+  <div class="monitor-panel" id="monitor-panel">
+    <div class="monitor-title">📊 猪化系统监控</div>
+    <div class="monitor-row"><span>目标对象:</span> <span class="monitor-val">杨若璇</span></div>
+    <div class="monitor-row"><span>脑电波状态:</span> <span class="monitor-val" id="m-brain">抵抗中 (高压)</span></div>
+    <div class="monitor-row"><span>基因融合度:</span> <span class="monitor-val" id="m-gene">0.0%</span></div>
+    <div class="monitor-row"><span>尾巴生成率:</span> <span class="monitor-val" id="m-tail">0%</span></div>
+    <div class="monitor-row"><span>系统状态:</span> <span class="monitor-val" id="m-status">待命准备</span></div>
+  </div>
+
   <div class="container">
     <div class="warning-badge">🔒 SYSTEM ACCESS RESTRICTED</div>
     <div class="main-title">
@@ -165,11 +202,15 @@
           <span id="progress-percent">0%</span>
         </div>
         <div class="progress-bar-bg">
-          <div id="progress-fill" class="progress-bar-fill"></div>
+          <div id="progress-fill" class="progress-fill"></div>
         </div>
       </div>
 
-      <div id="result-banner" class="result-banner">🎉 转换成功：巨型可爱小猪若璇已上线！oink ~ 🐽</div>
+      <!-- 矩形霓虹庆功横幅 -->
+      <div id="result-banner" class="result-banner">
+        <div class="banner-title">🎉 转换成功：巨型可爱小猪若璇已上线！</div>
+        <div class="banner-desc">检测到宿主正在哼哧哼哧吃零食 · 任务圆满达成！oink ~ 🐽</div>
+      </div>
     </div>
 
     <div class="footer-hint">
@@ -178,7 +219,19 @@
   </div>
 
   <script>
-    // 矩阵数字雨背景特效（动态融入猪猪表情）
+    // 语音播报工具函数 (基于浏览器 Web Speech API)
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-CN';
+        utterance.rate = 1.1;
+        utterance.pitch = 1.2;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // 矩阵数字雨背景特效（动态融入海量猪猪字符）
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     function resizeCanvas() {
@@ -209,7 +262,7 @@
         drops[i]++;
       }
     }
-    setInterval(drawMatrix, 35);
+    setInterval(drawMatrix, 30);
 
     // 多语言循环播放列表
     const messages = [
@@ -219,28 +272,25 @@
       "이것은 양뤄쉬안의 개인 웹사이트이지만, 그녀는 개발을 허락하지 않습니다.",
       "C'est le site web personnel de Yang Ruoxuan, mais elle ne me laisse pas le développer.",
       "Dies ist die persönliche Website von Yang Ruoxuan, aber sie lässt mich nicht entwickeln.",
-      "Este es el sitio web personal de Yang Ruoxuan, ¡pero no me deja desarrollar!",
+      "Este es le sitio web personal de Yang Ruoxuan, ¡pero no me deja desarrollar!",
       "Это личный сайт Ян Росюань, но она не разрешает мне его разрабатывать.",
       "⚠️ 警告：杨若璇独占域名，开发请求已被拒绝！阿巴阿巴 #￥%%￥……"
     ];
 
     let msgIndex = 0;
     const textEl = document.getElementById('multilingual-text');
-
     function updateMessage() {
       const currentText = messages[msgIndex];
       textEl.textContent = currentText;
       textEl.setAttribute('data-text', currentText);
       msgIndex = (msgIndex + 1) % messages.length;
     }
-
     updateMessage();
     setInterval(updateMessage, 4000);
 
-    // 炫酷乱码动态生成器
+    // 乱码生成器
     const gibberishBox = document.getElementById('gibberish');
     const symbols = ['#￥%%￥…………', '阿巴阿巴🤪', 'ERROR_404_YANG', '~#@$%^&*()_+', '🚧 施工中 (被阻止)', '🤪 ￥%￥#￥￥#', 'SYSTEM_PIG_MODE_READY'];
-
     function updateGibberish() {
       let randomStr = '';
       for (let i = 0; i < 3; i++) {
@@ -250,23 +300,23 @@
     }
     setInterval(updateGibberish, 1200);
 
-    // 超细化 20 个转化阶段文案
+    // 20 个超细化转化阶段与播报联动
     const stages = [
-      { at: 3, text: "正在建立与杨若璇脑电波的秘密连接..." },
-      { at: 8, text: "检测到极强傲娇防御网，正在扫描弱点..." },
-      { at: 15, text: "正在绕过安全防火墙，尝试注入快乐因子..." },
-      { at: 22, text: "正在解析生物 DNA 序列，锁定核心基因..." },
-      { at: 30, text: "⚠️ 警告：宿主正在疯狂反抗，启动强力压制！" },
-      { at: 38, text: "正在悄悄剥离人类理智，切换萌系频道..." },
-      { at: 45, text: "开始大量注入粉红色猪猪基因代码..." },
-      { at: 52, text: "正在重写饮食偏好：由沙拉切换为疯狂干饭..." },
-      { at: 60, text: "正在调整圆滚滚的身材比例与面部萌化度..." },
-      { at: 68, text: "正在加装哼哧哼哧音效模块与立体大耳朵..." },
-      { at: 75, text: "正在生成萌力十足且会摇晃的卷曲小尾巴..." },
-      { at: 82, text: "正在清空高冷记忆，灌输‘今天吃什么’灵魂拷问..." },
-      { at: 90, text: "最终校验：贪吃属性与可爱暴击已同步 100%！" },
-      { at: 98, text: "倒计时：小猪若璇即将破壳而出..." },
-      { at: 100, text: "转换 100% 完成！" }
+      { at: 3, text: "正在建立与杨若璇脑电波的秘密连接...", speech: "正在连接脑电波" },
+      { at: 8, text: "检测到极强傲娇防御网，正在扫描弱点...", speech: "检测到傲娇防御" },
+      { at: 15, text: "正在绕过安全防火墙，尝试注入快乐因子...", speech: "正在绕过防火墙" },
+      { at: 22, text: "正在解析生物 DNA 序列，锁定核心基因...", speech: "正在解析基因序列" },
+      { at: 30, text: "⚠️ 警告：宿主正在疯狂反抗，启动强力压制！", speech: "警告，宿主正在反抗" },
+      { at: 38, text: "正在悄悄剥离人类理智，切换萌系频道...", speech: "切换萌系频道" },
+      { at: 45, text: "开始大量注入粉红色猪猪基因代码...", speech: "注入猪猪基因" },
+      { at: 52, text: "正在重写饮食偏好：由沙拉切换为疯狂干饭...", speech: "重写饮食偏好" },
+      { at: 60, text: "正在调整圆滚滚的身材比例与面部萌化度...", speech: "调整身材比例" },
+      { at: 68, text: "正在加装哼哧哼哧音效模块与立体大耳朵...", speech: "安装音效模块" },
+      { at: 75, text: "正在生成萌力十足且会摇晃的卷曲小尾巴...", speech: "生成卷曲小尾巴" },
+      { at: 82, text: "正在清空高冷记忆，灌输‘今天吃什么’灵魂拷问...", speech: "灌输灵魂拷问" },
+      { at: 90, text: "最终校验：贪吃属性与可爱暴击已同步 100%！", speech: "贪吃属性已同步" },
+      { at: 98, text: "倒计时：小猪若璇即将破壳而出...", speech: "倒计时即将破壳" },
+      { at: 100, text: "转换 100% 完成！", speech: "转换完成，小猪若璇已上线" }
     ];
 
     function showPopup(msg) {
@@ -285,26 +335,46 @@
       const progressPercent = document.getElementById('progress-percent');
       const resultBanner = document.getElementById('result-banner');
       const bodyEl = document.getElementById('body');
+      
+      const mBrain = document.getElementById('m-brain');
+      const mGene = document.getElementById('m-gene');
+      const mTail = document.getElementById('m-tail');
+      const mStatus = document.getElementById('m-status');
 
       btn.disabled = true;
       progressBox.classList.add('active');
       resultBanner.style.display = 'none';
       matrixColor = '#ec4899';
-      chars = baseChars + '🐷🐽🐷🐽🤪🔥💥';
+      // 大幅增加猪猪字符密度
+      chars = baseChars + '🐷🐽🐷🐽🐷🐽🤪🔥💥💖✨';
+      mStatus.textContent = '运行中 (高能)';
+
+      speak("一键变猪系统已启动，开始对杨若璇进行深度改造。");
 
       let progress = 0;
       const interval = setInterval(() => {
-        progress += 1; // 匀速细化推进
+        progress += 1;
         if (progress > 100) progress = 100;
 
         progressFill.style.width = progress + "%";
         progressPercent.textContent = progress + "%";
+        mGene.textContent = progress.toFixed(1) + "%";
+        mTail.textContent = Math.min(100, Math.floor(progress * 1.2)) + "%";
 
         // 匹配对应阶段文案
         const matched = stages.filter(s => progress >= s.at);
         if (matched.length > 0) {
-          progressStatus.textContent = matched[matched.length - 1].text;
+          const currentStage = matched[matched.length - 1];
+          progressStatus.textContent = currentStage.text;
+          // 每到一个新阶段触发一次语音播报
+          if (progress === currentStage.at) {
+            speak(currentStage.speech);
+          }
         }
+
+        // 状态面板动态更新
+        if (progress > 40) mBrain.textContent = '逐渐模糊 (粉红化)';
+        if (progress > 75) mBrain.textContent = '完全沦陷 (哼哼中)';
 
         // 关键节点触发浮动警告与震动
         if (progress === 30) {
@@ -325,11 +395,13 @@
           clearInterval(interval);
           resultBanner.style.display = "block";
           matrixColor = '#4ade80';
-          chars = baseChars + '🐷🐽✨🎉💖';
+          chars = baseChars + '🐷🐽✨🎉💖OINK~';
           btn.disabled = false;
           btn.textContent = "🔄 再次逆转 (重置)";
+          mStatus.textContent = '已完全变成猪 🐽';
+          mBrain.textContent = 'CPU 已下线 (全是小零食)';
         }
-      }, 150); // 整体过程约 15 秒，极具仪式感
+      }, 150);
     }
   </script>
 </body>
