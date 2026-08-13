@@ -17,13 +17,13 @@
     position: relative; z-index: 10; width: 100%; height: 100%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     padding: 20px; text-align: center;
-    background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 90%);
+    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.9) 90%);
   }
   .warning-badge {
     display: inline-block; padding: 6px 18px; border-radius: 20px;
     background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.6);
     color: #f87171; font-size: 14px; font-weight: bold; letter-spacing: 3px;
-    margin-bottom: 24px; text-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+    margin-bottom: 20px; text-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
     animation: pulse 1.5s infinite alternate;
   }
   @keyframes pulse {
@@ -31,10 +31,10 @@
     100% { transform: scale(1.05); opacity: 1; }
   }
   .main-title {
-    font-size: clamp(22px, 5vw, 46px); font-weight: 900; color: #fff;
+    font-size: clamp(20px, 4.5vw, 40px); font-weight: 900; color: #fff;
     line-height: 1.4; text-shadow: 0 0 20px rgba(56, 189, 248, 0.8), 0 0 40px rgba(168, 85, 247, 0.6);
-    min-height: 140px; display: flex; align-items: center; justify-content: center;
-    max-width: 900px; word-break: break-all;
+    min-height: 110px; display: flex; align-items: center; justify-content: center;
+    max-width: 900px; word-break: break-all; margin-bottom: 15px;
   }
   .glitch-text {
     color: #38bdf8; position: relative; display: inline-block;
@@ -61,14 +61,60 @@
     100% { clip: rect(91px, 9999px, 45px, 0); transform: skew(0.7deg); }
   }
   .gibberish-box {
-    margin-top: 30px; padding: 15px 25px; border-radius: 12px;
+    margin-bottom: 25px; padding: 12px 20px; border-radius: 12px;
     background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3);
-    color: #a855f7; font-size: clamp(12px, 2.5vw, 16px); letter-spacing: 4px;
+    color: #a855f7; font-size: clamp(12px, 2.2vw, 15px); letter-spacing: 3px;
     box-shadow: 0 0 25px rgba(168, 85, 247, 0.2);
     max-width: 600px; word-break: break-all;
   }
+  
+  /* 炫酷变猪控制面板 */
+  .action-panel {
+    display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 450px;
+  }
+  .transform-btn {
+    position: relative; padding: 14px 32px; font-size: 16px; font-weight: 900; color: #fff;
+    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); border: none; border-radius: 50px;
+    cursor: pointer; box-shadow: 0 0 25px rgba(236, 72, 153, 0.6);
+    transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 2px;
+    outline: none; overflow: hidden;
+  }
+  .transform-btn:hover {
+    transform: scale(1.05); box-shadow: 0 0 35px rgba(236, 72, 153, 0.9);
+  }
+  .transform-btn:active {
+    transform: scale(0.96);
+  }
+  .transform-btn:disabled {
+    opacity: 0.6; cursor: not-allowed; transform: none;
+  }
+  
+  /* 进度条容器 */
+  .progress-container {
+    width: 100%; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(236, 72, 153, 0.4);
+    border-radius: 12px; padding: 10px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+    display: none; flex-direction: column; gap: 6px;
+  }
+  .progress-container.active {
+    display: flex;
+  }
+  .progress-info {
+    display: flex; justify-content: space-between; font-size: 13px; color: #f472b6; font-weight: bold;
+  }
+  .progress-bar-bg {
+    width: 100%; height: 14px; background: #0f172a; border-radius: 7px; overflow: hidden; position: relative;
+  }
+  .progress-bar-fill {
+    width: 0%; height: 100%; background: linear-gradient(90deg, #ec4899, #f43f5e, #fbbf24);
+    border-radius: 7px; transition: width 0.1s linear;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.8);
+  }
+  .result-banner {
+    margin-top: 10px; font-size: 18px; font-weight: 900; color: #4ade80;
+    text-shadow: 0 0 15px rgba(74, 222, 128, 0.8); display: none;
+  }
   .footer-hint {
-    margin-top: 40px; color: #64748b; font-size: 13px; letter-spacing: 2px;
+    margin-top: 25px; color: #64748b; font-size: 12px; letter-spacing: 2px;
   }
 </style>
 </head>
@@ -82,6 +128,24 @@
     <div class="gibberish-box" id="gibberish">
       #￥%%￥…………%%……￥%￥#￥￥# 阿巴阿巴 System Error 404... 🤪
     </div>
+
+    <!-- 变猪控制面板 -->
+    <div class="action-panel">
+      <button id="transform-btn" class="transform-btn" onclick="startTransform()">✨ 一键启动：把杨若璇变成猪 🐷</button>
+      
+      <div id="progress-box" class="progress-container">
+        <div class="progress-info">
+          <span id="progress-status">正在解析基因序列...</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="progress-fill" class="progress-bar-fill"></div>
+        </div>
+      </div>
+
+      <div id="result-banner" class="result-banner">🎉 转换成功：巨型可爱小猪若璇已上线！oink ~ 🐽</div>
+    </div>
+
     <div class="footer-hint">
       杨若璇专属安全防火墙 · 严禁未授权开发
     </div>
@@ -98,7 +162,8 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*杨若璇阿巴阿巴';
+    let matrixColor = '#00ffcc';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*杨若璇阿巴阿巴🐷🐽';
     const fontSize = 16;
     const columns = Math.floor(canvas.width / fontSize);
     const drops = Array(columns).fill(1);
@@ -106,7 +171,7 @@
     function drawMatrix() {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#00ffcc';
+      ctx.fillStyle = matrixColor;
       ctx.font = fontSize + 'px monospace';
       for (let i = 0; i < drops.length; i++) {
         const text = chars[Math.floor(Math.random() * chars.length)];
@@ -121,23 +186,14 @@
 
     // 多语言循环播放列表
     const messages = [
-      // 中文
       "这个是杨若璇的个人网站，但是她不让我开发",
-      // 英文
       "This is Yang Ruoxuan's personal website, but she won't let me develop it.",
-      // 日文
       "ここは楊若璇の個人ウェブサイトですが、彼女は開発させてくれません。",
-      // 韩文
       "이것은 양뤄쉬안의 개인 웹사이트이지만, 그녀는 개발을 허락하지 않습니다.",
-      // 法文
       "C'est le site web personnel de Yang Ruoxuan, mais elle ne me laisse pas le développer.",
-      // 德文
       "Dies ist die persönliche Website von Yang Ruoxuan, aber sie lässt mich nicht entwickeln.",
-      // 西班牙文
       "Este es el sitio web personal de Yang Ruoxuan, ¡pero no me deja desarrollar!",
-      // 俄文
       "Это личный сайт Ян Росюань, но она не разрешает мне его разрабатывать.",
-      // 意面文/趣味乱码组合
       "⚠️ 警告：杨若璇独占域名，开发请求已被拒绝！阿巴阿巴 #￥%%￥……"
     ];
 
@@ -156,7 +212,7 @@
 
     // 炫酷乱码动态生成器
     const gibberishBox = document.getElementById('gibberish');
-    const symbols = ['#￥%%￥…………', '阿巴阿巴🤪', 'ERROR_404_YANG', '~#@$%^&*()_+', '🚧 施工中 (被阻止)', '🤪 ￥%￥#￥￥#', '系统提示：主人拒绝授权'];
+    const symbols = ['#￥%%￥…………', '阿巴阿巴🤪', 'ERROR_404_YANG', '~#@$%^&*()_+', '🚧 施工中 (被阻止)', '🤪 ￥%￥#￥￥#', 'SYSTEM_PIG_MODE_READY'];
 
     function updateGibberish() {
       let randomStr = '';
@@ -165,8 +221,53 @@
       }
       gibberishBox.textContent = randomStr;
     }
-
     setInterval(updateGibberish, 1200);
+
+    // 变猪互动逻辑
+    const statuses = [
+      "正在连接杨若璇的脑电波...",
+      "正在解析生物 DNA 序列...",
+      "检测到强烈的抗拒防御，正在加压突破...",
+      "正在注入大量粉红色猪猪基因...",
+      "正在调整圆滚滚的身材比例...",
+      "正在安装哼哧哼哧音效模块...",
+      "转换即将完成，准备迎接小猪..."
+    ];
+
+    function startTransform() {
+      const btn = document.getElementById('transform-btn');
+      const progressBox = document.getElementById('progress-box');
+      const progressFill = document.getElementById('progress-fill');
+      const progressStatus = document.getElementById('progress-status');
+      const progressPercent = document.getElementById('progress-percent');
+      const resultBanner = document.getElementById('result-banner');
+
+      btn.disabled = true;
+      progressBox.classList.add('active');
+      resultBanner.style.display = 'none';
+      matrixColor = '#ec4899'; // 变成粉红色代码雨
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 3) + 1;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          progressStatus.textContent = "转化 100% 完成！";
+          progressPercent.textContent = "100%";
+          progressFill.style.width = "100%";
+          resultBanner.style.display = "block";
+          matrixColor = '#4ade80'; // 转换成功变绿色
+          btn.disabled = false;
+          btn.textContent = "🔄 再次变身 (重置)";
+        } else {
+          progressFill.style.width = progress + "%";
+          progressPercent.textContent = progress + "%";
+          const statusIdx = Math.floor((progress / 100) * statuses.length);
+          progressStatus.textContent = statuses[Math.min(statusIdx, statuses.length - 1)];
+        }
+      }, 50);
+    }
   </script>
 </body>
 </html>
