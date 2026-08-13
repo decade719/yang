@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>⚠️ 警告 · 访问受限 · 变猪系统</title>
+<title>⚠️ 警告 · 访问受限 · 基因重组实验</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body, html {
@@ -79,14 +79,22 @@
     transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 2px;
     outline: none; overflow: hidden; z-index: 20;
   }
+  .transform-btn.reverse-btn {
+    background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
+  }
+  .transform-btn.repair-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+  }
   .transform-btn:hover {
-    transform: scale(1.05); box-shadow: 0 0 35px rgba(236, 72, 153, 0.9);
+    transform: scale(1.05); filter: brightness(1.1);
   }
   .transform-btn:active {
     transform: scale(0.96);
   }
   .transform-btn:disabled {
-    opacity: 0.6; cursor: not-allowed; transform: none;
+    opacity: 0.6; cursor: not-allowed; transform: none; filter: none;
   }
   
   /* 进度条容器 */
@@ -106,7 +114,7 @@
   }
   .progress-fill {
     width: 0%; height: 100%; background: linear-gradient(90deg, #ec4899, #f43f5e, #fbbf24);
-    border-radius: 7px; transition: width 0.2s ease-out;
+    border-radius: 7px; transition: width 0.15s ease-out;
     box-shadow: 0 0 12px rgba(236, 72, 153, 0.9);
   }
 
@@ -115,21 +123,22 @@
     display: none; width: 100%; background: linear-gradient(135deg, rgba(16,185,129,0.95), rgba(5,150,105,0.95));
     border: 3px solid #fde047; border-radius: 16px; padding: 18px; text-align: center;
     box-shadow: 0 0 35px rgba(16,185,129,0.8), inset 0 0 15px rgba(253,224,71,0.6);
-    animation: bannerPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     z-index: 30;
   }
-  @keyframes bannerPop {
-    0% { transform: scale(0.7); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+  .result-banner.error-banner {
+    background: linear-gradient(135deg, rgba(239,68,68,0.95), rgba(185,28,28,0.95));
+    border-color: #fca5a5;
+    box-shadow: 0 0 35px rgba(239,68,68,0.8);
   }
   .banner-title {
-    font-size: 20px; font-weight: 900; color: #fef08a; text-shadow: 0 2px 4px rgba(0,0,0,0.4); margin-bottom: 6px;
+    font-size: 19px; font-weight: 900; color: #fef08a; text-shadow: 0 2px 4px rgba(0,0,0,0.4); margin-bottom: 6px;
   }
+  .result-banner.error-banner .banner-title { color: #fee2e2; }
   .banner-desc {
-    font-size: 14px; color: #fff; font-weight: bold; letter-spacing: 1px;
+    font-size: 13px; color: #fff; font-weight: bold; letter-spacing: 1px;
   }
 
-  /* 侧边实时监控窗 */
+  /* 实时监控侧边栏 */
   .monitor-panel {
     position: absolute; top: 20px; right: 20px; width: 220px;
     background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.4);
@@ -146,7 +155,6 @@
     margin-top: 20px; color: #64748b; font-size: 12px; letter-spacing: 2px; z-index: 20;
   }
 
-  /* 屏幕震动 */
   .shake-screen { animation: screenShake 0.4s infinite; }
   @keyframes screenShake {
     0% { transform: translate(0, 0) rotate(0deg); }
@@ -177,9 +185,9 @@
   <div class="monitor-panel" id="monitor-panel">
     <div class="monitor-title">📊 猪化系统监控</div>
     <div class="monitor-row"><span>目标对象:</span> <span class="monitor-val">杨若璇</span></div>
-    <div class="monitor-row"><span>脑电波状态:</span> <span class="monitor-val" id="m-brain">抵抗中 (高压)</span></div>
+    <div class="monitor-row"><span>当前形态:</span> <span class="monitor-val" id="m-form">标准人类</span></div>
     <div class="monitor-row"><span>基因融合度:</span> <span class="monitor-val" id="m-gene">0.0%</span></div>
-    <div class="monitor-row"><span>尾巴生成率:</span> <span class="monitor-val" id="m-tail">0%</span></div>
+    <div class="monitor-row"><span>尾巴状态:</span> <span class="monitor-val" id="m-tail">无</span></div>
     <div class="monitor-row"><span>系统状态:</span> <span class="monitor-val" id="m-status">待命准备</span></div>
   </div>
 
@@ -194,7 +202,7 @@
 
     <!-- 变猪控制面板 -->
     <div class="action-panel">
-      <button id="transform-btn" class="transform-btn" onclick="startTransform()">✨ 一键启动：把杨若璇变成猪 🐷</button>
+      <button id="transform-btn" class="transform-btn" onclick="handleMainAction()">✨ 一键启动：把杨若璇变成猪 🐷</button>
       
       <div id="progress-box" class="progress-container">
         <div class="progress-info">
@@ -206,10 +214,10 @@
         </div>
       </div>
 
-      <!-- 矩形霓虹庆功横幅 -->
+      <!-- 矩形横幅 -->
       <div id="result-banner" class="result-banner">
-        <div class="banner-title">🎉 转换成功：巨型可爱小猪若璇已上线！</div>
-        <div class="banner-desc">检测到宿主正在哼哧哼哧吃零食 · 任务圆满达成！oink ~ 🐽</div>
+        <div class="banner-title" id="banner-title">🎉 转换成功：巨型可爱小猪若璇已上线！</div>
+        <div class="banner-desc" id="banner-desc">检测到宿主正在哼哧哼哧吃零食 · 任务圆满达成！oink ~ 🐽</div>
       </div>
     </div>
 
@@ -219,7 +227,7 @@
   </div>
 
   <script>
-    // 语音播报工具函数 (基于浏览器 Web Speech API)
+    // 语音播报工具函数
     function speak(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -231,7 +239,7 @@
       }
     }
 
-    // 矩阵数字雨背景特效（动态融入海量猪猪字符）
+    // 矩阵数字雨背景特效
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     function resizeCanvas() {
@@ -272,7 +280,7 @@
       "이것은 양뤄쉬안의 개인 웹사이트이지만, 그녀는 개발을 허락하지 않습니다.",
       "C'est le site web personnel de Yang Ruoxuan, mais elle ne me laisse pas le développer.",
       "Dies ist die persönliche Website von Yang Ruoxuan, aber sie lässt mich nicht entwickeln.",
-      "Este es le sitio web personal de Yang Ruoxuan, ¡pero no me deja desarrollar!",
+      "Este es el sitio web personal de Yang Ruoxuan, ¡pero no me deja desarrollar!",
       "Это личный сайт Ян Росюань, но она не разрешает мне его разрабатывать.",
       "⚠️ 警告：杨若璇独占域名，开发请求已被拒绝！阿巴阿巴 #￥%%￥……"
     ];
@@ -300,25 +308,6 @@
     }
     setInterval(updateGibberish, 1200);
 
-    // 20 个超细化转化阶段与播报联动
-    const stages = [
-      { at: 3, text: "正在建立与杨若璇脑电波的秘密连接...", speech: "正在连接脑电波" },
-      { at: 8, text: "检测到极强傲娇防御网，正在扫描弱点...", speech: "检测到傲娇防御" },
-      { at: 15, text: "正在绕过安全防火墙，尝试注入快乐因子...", speech: "正在绕过防火墙" },
-      { at: 22, text: "正在解析生物 DNA 序列，锁定核心基因...", speech: "正在解析基因序列" },
-      { at: 30, text: "⚠️ 警告：宿主正在疯狂反抗，启动强力压制！", speech: "警告，宿主正在反抗" },
-      { at: 38, text: "正在悄悄剥离人类理智，切换萌系频道...", speech: "切换萌系频道" },
-      { at: 45, text: "开始大量注入粉红色猪猪基因代码...", speech: "注入猪猪基因" },
-      { at: 52, text: "正在重写饮食偏好：由沙拉切换为疯狂干饭...", speech: "重写饮食偏好" },
-      { at: 60, text: "正在调整圆滚滚的身材比例与面部萌化度...", speech: "调整身材比例" },
-      { at: 68, text: "正在加装哼哧哼哧音效模块与立体大耳朵...", speech: "安装音效模块" },
-      { at: 75, text: "正在生成萌力十足且会摇晃的卷曲小尾巴...", speech: "生成卷曲小尾巴" },
-      { at: 82, text: "正在清空高冷记忆，灌输‘今天吃什么’灵魂拷问...", speech: "灌输灵魂拷问" },
-      { at: 90, text: "最终校验：贪吃属性与可爱暴击已同步 100%！", speech: "贪吃属性已同步" },
-      { at: 98, text: "倒计时：小猪若璇即将破壳而出...", speech: "倒计时即将破壳" },
-      { at: 100, text: "转换 100% 完成！", speech: "转换完成，小猪若璇已上线" }
-    ];
-
     function showPopup(msg) {
       const pop = document.createElement('div');
       pop.className = 'floating-popup';
@@ -327,7 +316,33 @@
       setTimeout(() => pop.remove(), 1600);
     }
 
-    function startTransform() {
+    // 状态机：0 = 初始/可变猪, 1 = 变猪中, 2 = 已成猪/可逆转, 3 = 逆转崩溃(半猪半人), 4 = 修复中, 5 = 已修复
+    let appState = 0;
+
+    function handleMainAction() {
+      if (appState === 0) {
+        startTransformToPig();
+      } else if (appState === 2) {
+        startReverseToHuman();
+      } else if (appState === 3) {
+        startRepairHuman();
+      }
+    }
+
+    // 1. 变猪过程 (0 -> 2)
+    const pigStages = [
+      { at: 5, text: "正在连接杨若璇的脑电波...", speech: "正在连接脑电波" },
+      { at: 15, text: "检测到极强傲娇防御网，正在扫描弱点...", speech: "检测到傲娇防御" },
+      { at: 25, text: "正在绕过安全防火墙，注入粉红基因...", speech: "注入粉红基因" },
+      { at: 40, text: "正在重写饮食偏好：由沙拉切换为疯狂干饭...", speech: "重写饮食偏好" },
+      { at: 60, text: "正在调整圆滚滚的身材比例与面部萌化度...", speech: "调整身材比例" },
+      { at: 75, text: "正在生成萌力十足且会摇晃的卷曲小尾巴...", speech: "生成小尾巴" },
+      { at: 90, text: "最终校验：贪吃属性与可爱暴击已同步...", speech: "属性同步" },
+      { at: 100, text: "转换 100% 完成！", speech: "小猪若璇已上线" }
+    ];
+
+    function startTransformToPig() {
+      appState = 1;
       const btn = document.getElementById('transform-btn');
       const progressBox = document.getElementById('progress-box');
       const progressFill = document.getElementById('progress-fill');
@@ -336,7 +351,7 @@
       const resultBanner = document.getElementById('result-banner');
       const bodyEl = document.getElementById('body');
       
-      const mBrain = document.getElementById('m-brain');
+      const mForm = document.getElementById('m-form');
       const mGene = document.getElementById('m-gene');
       const mTail = document.getElementById('m-tail');
       const mStatus = document.getElementById('m-status');
@@ -345,9 +360,8 @@
       progressBox.classList.add('active');
       resultBanner.style.display = 'none';
       matrixColor = '#ec4899';
-      // 大幅增加猪猪字符密度
-      chars = baseChars + '🐷🐽🐷🐽🐷🐽🤪🔥💥💖✨';
-      mStatus.textContent = '运行中 (高能)';
+      chars = baseChars + '🐷🐽🐷🐽🐷🐽🤪🔥💥💖';
+      mStatus.textContent = '猪化进行中';
 
       speak("一键变猪系统已启动，开始对杨若璇进行深度改造。");
 
@@ -361,34 +375,18 @@
         mGene.textContent = progress.toFixed(1) + "%";
         mTail.textContent = Math.min(100, Math.floor(progress * 1.2)) + "%";
 
-        // 匹配对应阶段文案
-        const matched = stages.filter(s => progress >= s.at);
+        const matched = pigStages.filter(s => progress >= s.at);
         if (matched.length > 0) {
-          const currentStage = matched[matched.length - 1];
-          progressStatus.textContent = currentStage.text;
-          // 每到一个新阶段触发一次语音播报
-          if (progress === currentStage.at) {
-            speak(currentStage.speech);
-          }
+          const st = matched[matched.length - 1];
+          progressStatus.textContent = st.text;
+          if (progress === st.at) speak(st.speech);
         }
 
-        // 状态面板动态更新
-        if (progress > 40) mBrain.textContent = '逐渐模糊 (粉红化)';
-        if (progress > 75) mBrain.textContent = '完全沦陷 (哼哼中)';
+        if (progress > 50) mForm.textContent = '小猪形态 (萌化中)';
 
-        // 关键节点触发浮动警告与震动
-        if (progress === 30) {
-          showPopup("🔥 触发防御机制：傲娇护盾开启！");
+        if (progress === 35 || progress === 85) {
           bodyEl.classList.add('shake-screen');
           setTimeout(() => bodyEl.classList.remove('shake-screen'), 800);
-        }
-        if (progress === 65) {
-          showPopup("⚡ 基因重组中：圆润化处理加速！");
-        }
-        if (progress === 88) {
-          showPopup("💥 最终冲刺：小尾巴正在长出来！");
-          bodyEl.classList.add('shake-screen');
-          setTimeout(() => bodyEl.classList.remove('shake-screen'), 1000);
         }
 
         if (progress === 100) {
@@ -397,11 +395,130 @@
           matrixColor = '#4ade80';
           chars = baseChars + '🐷🐽✨🎉💖OINK~';
           btn.disabled = false;
-          btn.textContent = "🔄 再次逆转 (重置)";
+          btn.className = "transform-btn reverse-btn";
+          btn.textContent = "🧬 逆转成人：恢复理智";
           mStatus.textContent = '已完全变成猪 🐽';
-          mBrain.textContent = 'CPU 已下线 (全是小零食)';
+          mForm.textContent = '纯种可爱小猪 🐷';
+          appState = 2; // 进入可逆转状态
         }
-      }, 150);
+      }, 120);
+    }
+
+    // 2. 逆转成人报错过程 (2 -> 3)
+    function startReverseToHuman() {
+      appState = 3;
+      const btn = document.getElementById('transform-btn');
+      const progressBox = document.getElementById('progress-box');
+      const progressFill = document.getElementById('progress-fill');
+      const progressStatus = document.getElementById('progress-status');
+      const progressPercent = document.getElementById('progress-percent');
+      const resultBanner = document.getElementById('result-banner');
+      const bannerTitle = document.getElementById('banner-title');
+      const bannerDesc = document.getElementById('banner-desc');
+      const bodyEl = document.getElementById('body');
+      
+      const mForm = document.getElementById('m-form');
+      const mGene = document.getElementById('m-gene');
+      const mTail = document.getElementById('m-tail');
+      const mStatus = document.getElementById('m-status');
+
+      btn.disabled = true;
+      progressBox.classList.add('active');
+      resultBanner.style.display = 'none';
+      resultBanner.className = "result-banner error-banner";
+      matrixColor = '#ef4444'; // 红色报错雨
+      mStatus.textContent = '逆转冲突 (发生错误)';
+
+      speak("开始执行逆转程序，试图恢复人类形态。");
+
+      let progress = 100;
+      const interval = setInterval(() => {
+        progress -= 2; // 倒退
+        if (progress < 50) progress = 50; // 卡死在 50%
+
+        progressFill.style.width = progress + "%";
+        progressPercent.textContent = progress + "%";
+        mGene.textContent = progress.toFixed(1) + "%";
+        mTail.textContent = progress + "%";
+        progressStatus.textContent = `正在回退基因序列... 当前进度 ${progress}%`;
+
+        if (progress === 50) {
+          clearInterval(interval);
+          speak("警告！基因链发生剧烈冲突！程序崩溃！");
+          bodyEl.classList.add('shake-screen');
+          setTimeout(() => bodyEl.classList.remove('shake-screen'), 1200);
+
+          resultBanner.style.display = "block";
+          bannerTitle.textContent = "💥 致命错误：程序卡死！";
+          bannerDesc.textContent = "检测到人类理智与猪猪贪吃属性强行卡壳 · 当前触发【半猪半人形态】！🤪";
+
+          matrixColor = '#f59e0b'; // 橙色半猪半人雨
+          chars = baseChars + '🐷👨‍🦰🐽👩‍🦰⚡🔥';
+          mForm.textContent = '🧬 半猪半人怪兽形态';
+          mStatus.textContent = '系统崩溃 (无限报错)';
+
+          btn.disabled = false;
+          btn.className = "transform-btn repair-btn";
+          btn.textContent = "🧪 紧急修复：彻底净化猪猪基因";
+          appState = 3; // 保持在崩溃态，点击触发修复
+        }
+      }, 80);
+    }
+
+    // 3. 绿色按钮紧急修复 (3 -> 5)
+    function startRepairHuman() {
+      appState = 4;
+      const btn = document.getElementById('transform-btn');
+      const progressBox = document.getElementById('progress-box');
+      const progressFill = document.getElementById('progress-fill');
+      const progressStatus = document.getElementById('progress-status');
+      const progressPercent = document.getElementById('progress-percent');
+      const resultBanner = document.getElementById('result-banner');
+      const bannerTitle = document.getElementById('banner-title');
+      const bannerDesc = document.getElementById('banner-desc');
+      const bodyEl = document.getElementById('body');
+      
+      const mForm = document.getElementById('m-form');
+      const mGene = document.getElementById('m-gene');
+      const mTail = document.getElementById('m-tail');
+      const mStatus = document.getElementById('m-status');
+
+      btn.disabled = true;
+      resultBanner.style.display = 'none';
+      matrixColor = '#10b981'; // 绿色净化雨
+      mStatus.textContent = '紧急修复中';
+
+      speak("启动绿色安全协议，正在强制清除猪猪残留基因。");
+
+      let progress = 50;
+      const interval = setInterval(() => {
+        progress += 3;
+        if (progress > 100) progress = 100;
+
+        progressFill.style.width = progress + "%";
+        progressPercent.textContent = progress + "%";
+        mGene.textContent = (100 - progress).toFixed(1) + "% 猪基因";
+        mTail.textContent = Math.max(0, 100 - (progress - 50) * 2) + "%";
+        progressStatus.textContent = `正在强力清除残留猪基因... ${progress}%`;
+
+        if (progress === 100) {
+          clearInterval(interval);
+          resultBanner.style.display = "block";
+          resultBanner.className = "result-banner";
+          bannerTitle.textContent = "✨ 修复成功：杨若璇已安全回归人类！";
+          bannerDesc.textContent = "（警告：防火墙提示，下次随时可能再次变成小猪 🐷）";
+
+          matrixColor = '#38bdf8'; // 科技蓝
+          chars = baseChars;
+          btn.disabled = false;
+          btn.className = "transform-btn";
+          btn.textContent = "✨ 再次一键启动：把杨若璇变成猪 🐷";
+          mStatus.textContent = '安全运行 (人类形态)';
+          mForm.textContent = '标准人类 (暂时的)';
+          appState = 0; // 重置回初始状态
+          speak("基因净化完毕，杨若璇已成功恢复人类形态。");
+        }
+      }, 50);
     }
   </script>
 </body>
