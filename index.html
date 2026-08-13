@@ -13,17 +13,22 @@
   }
   canvas {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;
+    opacity: 0; transition: opacity .55s ease;
   }
+  canvas.rain-active { opacity: 1; }
   
   /* 多窗口赛博实验室整体布局 */
   .cyber-layout {
-    position: relative; z-index: 10; width: 100%; height: 100%;
-    display: grid; grid-template-columns: 280px 1fr 280px; grid-template-rows: 60px 1fr;
-    padding: 12px; gap: 12px; pointer-events: none;
+    position: relative; z-index: 10; width: min(100%, 1440px); height: 100%; min-height: 0;
+    margin: 0 auto; display: grid;
+    grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(220px, 250px);
+    grid-template-rows: 58px minmax(0, 1fr);
+    padding: 12px; gap: 12px; pointer-events: auto;
   }
   @media (max-width: 900px) {
-    .cyber-layout { grid-template-columns: 1fr; grid-template-rows: auto; overflow-y: auto; pointer-events: auto; }
+    .cyber-layout { width:100%; grid-template-columns: 1fr; grid-template-rows: 54px minmax(0, 1fr); overflow-y: auto; padding: 10px; gap: 10px; }
     .side-panel { display: none; }
+    .main-stage { min-height: calc(100svh - 74px); padding: 18px 14px; }
   }
 
   /* 顶部警告栏 */
@@ -39,9 +44,10 @@
 
   /* 侧边面板 */
   .side-panel {
-    background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.3);
-    border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 12px;
-    backdrop-filter: blur(8px); pointer-events: auto; overflow-y: auto; max-height: calc(100vh - 90px);
+    min-width: 0; min-height: 0; overflow-y: auto;
+    background: rgba(15, 23, 42, 0.78); border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px;
+    backdrop-filter: blur(8px); pointer-events: auto;
     box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
   }
   .panel-title { font-size: 13px; font-weight: bold; color: #f472b6; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
@@ -50,8 +56,9 @@
 
   /* 核心主舞台 */
   .main-stage {
-    background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(236, 72, 153, 0.4);
-    border-radius: 12px; padding: 20px; display: flex; flex-direction: column;
+    min-width: 0; min-height: 0;
+    background: rgba(15, 23, 42, 0.86); border: 1px solid rgba(236, 72, 153, 0.4);
+    border-radius: 14px; padding: 20px; display: flex; flex-direction: column;
     align-items: center; justify-content: center; text-align: center;
     backdrop-filter: blur(8px); pointer-events: auto; position: relative;
     box-shadow: 0 0 30px rgba(236, 72, 153, 0.2); overflow: hidden;
@@ -63,6 +70,7 @@
     max-width: 800px; word-break: break-all; margin-bottom: 8px;
   }
   .glitch-text { color: #38bdf8; position: relative; display: inline-block; }
+  .warning-badge { display:inline-flex; align-items:center; padding:5px 12px; border:1px solid rgba(239,68,68,.42); border-radius:999px; color:#fca5a5; background:rgba(127,29,29,.22); font-size:11px; font-weight:800; letter-spacing:1px; }
   .gibberish-box {
     margin-bottom: 15px; padding: 8px 16px; border-radius: 10px;
     background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(168, 85, 247, 0.4);
@@ -162,7 +170,7 @@
     </header>
 
     <!-- 左侧面板：系统监控 -->
-    aside class="side-panel">
+    <aside class="side-panel">
       <div class="panel-title">📊 实时参数监控</div>
       <div class="log-box">
         <div class="monitor-row"><span>目标:</span> <span style="color:#f472b6">杨若璇</span></div>
@@ -251,14 +259,14 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    let pigRainIntensity = 1; // 猪头雨密度倍数
+    let pigRainIntensity = 0; // 初始状态不下雨，只有剧情启动后才显示
     const particles = [];
     const symbols = ['🐷', '🐽', '💖', '✨', '🔥', '🤪', '阿巴', '￥%'];
 
     for (let i = 0; i < 60; i++) {
       particles.push({
         x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        y: -Math.random() * canvas.height - 40,
         size: Math.floor(Math.random() * 20) + 14,
         speed: Math.random() * 2 + 1,
         rot: Math.random() * 360,
@@ -268,6 +276,11 @@
     }
 
     function drawPigRain() {
+      if (pigRainIntensity <= 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        requestAnimationFrame(drawPigRain);
+        return;
+      }
       ctx.fillStyle = 'rgba(3, 7, 18, 0.15)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -292,6 +305,17 @@
       requestAnimationFrame(drawPigRain);
     }
     drawPigRain();
+
+    function beginPigRain(intensity) {
+      pigRainIntensity = intensity;
+      canvas.classList.add('rain-active');
+    }
+    function endPigRain() {
+      pigRainIntensity = 0;
+      canvas.classList.remove('rain-active');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.y = -Math.random() * canvas.height - 40; });
+    }
 
     // 多语言循环
     const messages = [
@@ -379,7 +403,7 @@
       btn.disabled = true;
       progressBox.classList.add('active');
       resultBanner.style.display = 'none';
-      pigRainIntensity = 4; // 猪头雨暴增
+      beginPigRain(0.45); // 变身启动后才出现稀疏猪头雨
       addLog("启动变猪协议");
       speak("一键变猪系统已启动。");
 
@@ -399,6 +423,8 @@
           if (progress === st.at) speak(st.speech);
         }
 
+        if (progress > 8) pigRainIntensity = 0.45 + progress / 22; // 随进度从小雨升级到暴雨
+
         if (progress === 40 || progress === 85) {
           bodyEl.classList.add('shake-screen');
           setTimeout(() => bodyEl.classList.remove('shake-screen'), 800);
@@ -411,7 +437,8 @@
           btn.className = "transform-btn reverse-btn";
           btn.textContent = "🧬 逆转成人：恢复理智";
           mForm.textContent = '纯种可爱小猪 🐷';
-          addLog("变猪成功：小猪上线");
+          pigRainIntensity = 5.2;
+          addLog("变猪成功：小猪上线 · 猪头暴雨开启");
           appState = 2;
         }
       }, 100);
@@ -436,7 +463,7 @@
       progressBox.classList.add('active');
       resultBanner.style.display = 'none';
       resultBanner.className = "result-banner error-banner";
-      pigRainIntensity = 6;
+      beginPigRain(7); // 逆转冲突时升级为故障暴雨
       bodyEl.classList.add('glitch-flash');
       setTimeout(() => bodyEl.classList.remove('glitch-flash'), 500);
       addLog("执行逆转程序 -> 发生异常");
@@ -490,8 +517,8 @@
 
       btn.disabled = true;
       resultBanner.style.display = 'none';
-      pigRainIntensity = 1;
-      addLog("启动绿色安全净化协议");
+      endPigRain();
+      addLog("启动绿色安全净化协议 · 猪头雨停止");
       speak("启动绿色安全协议，正在净化基因。");
 
       let progress = 50;
