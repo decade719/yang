@@ -70,7 +70,7 @@
   
   /* 炫酷变猪控制面板 */
   .action-panel {
-    display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 450px;
+    display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 480px;
   }
   .transform-btn {
     position: relative; padding: 14px 32px; font-size: 16px; font-weight: 900; color: #fff;
@@ -91,9 +91,9 @@
   
   /* 进度条容器 */
   .progress-container {
-    width: 100%; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(236, 72, 153, 0.4);
-    border-radius: 12px; padding: 10px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
-    display: none; flex-direction: column; gap: 6px;
+    width: 100%; background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(236, 72, 153, 0.4);
+    border-radius: 12px; padding: 12px 16px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+    display: none; flex-direction: column; gap: 8px;
   }
   .progress-container.active {
     display: flex;
@@ -106,7 +106,7 @@
   }
   .progress-bar-fill {
     width: 0%; height: 100%; background: linear-gradient(90deg, #ec4899, #f43f5e, #fbbf24);
-    border-radius: 7px; transition: width 0.1s linear;
+    border-radius: 7px; transition: width 0.2s ease-out;
     box-shadow: 0 0 10px rgba(236, 72, 153, 0.8);
   }
   .result-banner {
@@ -135,7 +135,7 @@
       
       <div id="progress-box" class="progress-container">
         <div class="progress-info">
-          <span id="progress-status">正在解析基因序列...</span>
+          <span id="progress-status">正在连接杨若璇的脑电波...</span>
           <span id="progress-percent">0%</span>
         </div>
         <div class="progress-bar-bg">
@@ -223,15 +223,16 @@
     }
     setInterval(updateGibberish, 1200);
 
-    // 变猪互动逻辑
-    const statuses = [
-      "正在连接杨若璇的脑电波...",
-      "正在解析生物 DNA 序列...",
-      "检测到强烈的抗拒防御，正在加压突破...",
-      "正在注入大量粉红色猪猪基因...",
-      "正在调整圆滚滚的身材比例...",
-      "正在安装哼哧哼哧音效模块...",
-      "转换即将完成，准备迎接小猪..."
+    // 丰富的变猪多阶段文案
+    const stages = [
+      { min: 0, max: 10, text: "正在连接杨若璇的脑电波..." },
+      { min: 11, max: 25, text: "扫描到极强防御，正在寻找抗拒漏洞..." },
+      { min: 26, max: 40, text: "正在绕过安全防火墙与傲娇防护网..." },
+      { min: 41, max: 55, text: "开始提取生物 DNA，注入粉红色猪猪基因..." },
+      { min: 56, max: 70, text: "正在调整圆滚滚的身材比例与面部萌化度..." },
+      { min: 71, max: 85, text: "正在安装哼哧哼哧音效模块与卷曲小尾巴..." },
+      { min: 86, max: 98, text: "最后校准：加载贪吃属性，即将大功告成..." },
+      { min: 99, max: 100, text: "转换 100% 完成！" }
     ];
 
     function startTransform() {
@@ -245,28 +246,31 @@
       btn.disabled = true;
       progressBox.classList.add('active');
       resultBanner.style.display = 'none';
-      matrixColor = '#ec4899'; // 变成粉红色代码雨
+      matrixColor = '#ec4899'; // 粉红色代码雨
 
       let progress = 0;
       const interval = setInterval(() => {
-        progress += Math.floor(Math.random() * 3) + 1;
-        if (progress >= 100) {
-          progress = 100;
-          clearInterval(interval);
-          progressStatus.textContent = "转化 100% 完成！";
-          progressPercent.textContent = "100%";
-          progressFill.style.width = "100%";
-          resultBanner.style.display = "block";
-          matrixColor = '#4ade80'; // 转换成功变绿色
-          btn.disabled = false;
-          btn.textContent = "🔄 再次变身 (重置)";
-        } else {
-          progressFill.style.width = progress + "%";
-          progressPercent.textContent = progress + "%";
-          const statusIdx = Math.floor((progress / 100) * statuses.length);
-          progressStatus.textContent = statuses[Math.min(statusIdx, statuses.length - 1)];
+        // 速度放缓，让过程更丰富
+        progress += Math.random() < 0.3 ? 0 : (Math.floor(Math.random() * 2) + 1);
+        if (progress > 100) progress = 100;
+
+        progressFill.style.width = progress + "%";
+        progressPercent.textContent = progress + "%";
+
+        // 匹配当前阶段文案
+        const currentStage = stages.find(s => progress >= s.min && progress <= s.max);
+        if (currentStage) {
+          progressStatus.textContent = currentStage.text;
         }
-      }, 50);
+
+        if (progress === 100) {
+          clearInterval(interval);
+          resultBanner.style.display = "block";
+          matrixColor = '#4ade80'; // 成功变绿色
+          btn.disabled = false;
+          btn.textContent = "🔄 再次逆转 (重置)";
+        }
+      }, 120); // 间隔拉长，给足体验时间
     }
   </script>
 </body>
