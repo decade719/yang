@@ -16,7 +16,7 @@
 
 排除了词条标注 “please verify” 或 “script needed” 的条目（整条排除，宁缺毋滥）、手语记号、纯粹构造的辅助语。数据仍是社区词典资料，未声称逐一由母语者审定。
 
-本数据含古代/历史语言（如 Ancient Greek、Egyptian、Latin、Old English、Old French、Old Norse、Old Tupi）、濒危或已灭绝语言，以及来源明确标注的语言分支；不能把它描述成相同数量的现代独立国家官方语言。Phuthi 的来源内部标识 `bnt-phu` 不直接当作标准 BCP47，使用 `und`，语言名称仍保留 Phuthi。Hokkien 使用标准大类代码 `nan`，Northern Mansi 使用 `mns`，没有把词条内部的子类标签直接用作浏览器语言标记。
+本数据含古代/历史语言（如 Ancient Greek、Egyptian、Latin、Old English、Old French、Old Norse、Old Tupi）、濒危或已灭绝语言，以及来源明确标注的语言分支；不能把它描述成相同数量的现代独立国家官方语言。Phuthi 的来源内部标识 `bnt-phu` 不直接当作标准 BCP47，使用 `und`，语言名称仍保留 Phuthi。Northern Mansi 使用 `mns`，没有把词条内部的子类标签直接用作浏览器语言标记。
 
 ## 人称与形式选择
 
@@ -28,7 +28,7 @@ Amharic 的浪漫义表中“to a man/to a woman”标注存在可见互换问�
 
 `name`、`nameDirection`、`nameForm` 是本项目追加的姓名展示数据，不是从 Wiktionary 的翻译表取得。姓名以普通话 **Yáng Ruòxuán** 为依据音译，不按“杨、若、璇”的字义翻译。
 
-使用拉丁字母的语言，以及暂未核对可靠当地姓名写法的条目，保留 `Yang Ruoxuan`。其他条目采用以下展示形式；它们不是本人登记或使用过的官方外文姓名，也不声称221条语言各有互不相同的译名。
+使用拉丁字母的语言，以及暂未核对可靠当地姓名写法的条目，保留 `Yang Ruoxuan`。其他条目采用以下展示形式；它们不是本人登记或使用过的官方外文姓名，也不声称所有语种各有互不相同的译名。
 
 | 文字/语言 | 展示形式 | 类型 |
 | --- | --- | --- |
@@ -55,7 +55,7 @@ Amharic 的浪漫义表中“to a man/to a woman”标注存在可见互换问�
 
 ## 条目与选用义项
 
-共 **221** 个语言及明确分支条目；其中含历史语言与明确的语言分支。网页不需要展示这个数量。
+共 **220** 个语言及明确分支条目；其中含历史语言与明确的语言分支。网页不需要展示这个数量。
 
 | 语言标签 | 代码 | 采用的义项 |
 | --- | --- | --- |
@@ -94,7 +94,6 @@ Amharic 的浪漫义表中“to a man/to a woman”标注存在可见互换问�
 | Cantonese | `yue` | affirmation of romantic feeling |
 | Dungan | `dng` | affirmation of romantic feeling |
 | Hakka | `hak` | affirmation of romantic feeling |
-| Hokkien | `nan` | affirmation of romantic feeling |
 | Mandarin | `cmn` | affirmation of romantic feeling |
 | Wu | `wuu` | affirmation of romantic feeling |
 | Chittagonian | `ctg` | affirmation of romantic feeling |
