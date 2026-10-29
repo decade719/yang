@@ -11,14 +11,14 @@
   function setTheme(dark) {
     document.documentElement.dataset.theme = dark ? 'dark' : 'light';
     themeButton.setAttribute('aria-pressed', String(dark));
-    themeButton.setAttribute('aria-label', dark ? '切换到浅色外观' : '切换到深色外观');
-    $('meta[name="theme-color"]').content = dark ? '#18231d' : '#f5f5ee';
+    themeButton.setAttribute('aria-label', dark ? '切换到深空星夜' : '切换到蓝调星空');
+    $('meta[name="theme-color"]').content = dark ? '#0a1221' : '#050912';
   }
-  try { setTheme(localStorage.getItem('guestbook-theme') === 'dark'); } catch { setTheme(false); }
+  try { setTheme(localStorage.getItem('guestbook-sky-theme') === 'blue'); } catch { setTheme(false); }
   themeButton.addEventListener('click', () => {
     const dark = document.documentElement.dataset.theme !== 'dark';
     setTheme(dark);
-    try { localStorage.setItem('guestbook-theme', dark ? 'dark' : 'light'); } catch { /* Preferences are optional. */ }
+    try { localStorage.setItem('guestbook-sky-theme', dark ? 'blue' : 'deep'); } catch { /* Preferences are optional. */ }
   });
   function status(text, success = false) {
     const node = $('#form-status'); node.textContent = text; node.hidden = !text;

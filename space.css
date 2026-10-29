@@ -1,0 +1,70 @@
+/* Midnight sky skin. Layout and accessible form geometry live in styles.css. */
+:root {
+  --bg: #050912;
+  --surface: rgba(12, 20, 35, .92);
+  --ink: #e7edf8;
+  --muted: #9caec5;
+  --line: rgba(139, 173, 211, .20);
+  --green: #c0d9ef;
+  --light: rgba(17, 29, 47, .90);
+  --lime: #96d9e8;
+  --error: #f4b6ac;
+  color-scheme: dark;
+}
+html[data-theme=dark] {
+  --bg: #0a1221;
+  --surface: rgba(17, 30, 49, .92);
+  --ink: #edf2fa;
+  --muted: #b0bed1;
+  --line: rgba(155, 191, 225, .25);
+  --green: #d2e9ff;
+  --light: rgba(23, 40, 62, .90);
+  --lime: #a6e2ee;
+  --error: #f4b6ac;
+  color-scheme: dark;
+}
+body { isolation: isolate; }
+::selection { background: #9acbdc; color: #081321; }
+.space-backdrop { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; background: var(--bg); transition: background .5s; }
+#constellation-canvas { display: block; width: 100%; height: 100%; pointer-events: none; }
+.nebula-haze { position: absolute; inset: -8%; pointer-events: none; opacity: .9; background: radial-gradient(ellipse at 18% 16%, #24457936, transparent 44%), radial-gradient(ellipse at 82% 48%, #1b505e29, transparent 42%), radial-gradient(ellipse at 46% 94%, #28335429, transparent 48%); }
+html[data-theme=dark] .nebula-haze { opacity: 1; background: radial-gradient(ellipse at 18% 16%, #375e983c, transparent 46%), radial-gradient(ellipse at 82% 48%, #1b68773c, transparent 42%), radial-gradient(ellipse at 46% 94%, #353e7233, transparent 48%); }
+.page-grain { opacity: .025; }
+.site-header { border-color: rgba(139, 173, 211, .18); }
+.wordmark > span, .name-period { color: #88c4e1; }
+.nav-link:hover, .back-top:hover { color: #a2e3f1; }
+.icon-button { background: rgba(13, 24, 42, .55); border-color: rgba(154, 192, 226, .25); }
+.icon-button:hover { background: rgba(31, 53, 78, .80); box-shadow: 0 0 22px #75b9e81a; }
+.stage-grid { display: none; }
+.name-center:before { background: radial-gradient(ellipse, var(--bg) 12%, transparent 72%); opacity: .52; }
+.name-center h1 { color: #e5edfb; text-shadow: 0 0 45px #9bc3f13b, 0 2px 20px #050912b3; }
+.name-roman { color: #aebed4; text-shadow: 0 0 16px #85c2fa40; }
+.name-period { text-shadow: 0 0 25px #81ccf780; }
+.marquee-field { z-index: 1; }
+.marquee-phrase { color: #c3d8ef; text-shadow: 0 0 18px #8ac6f01c; }
+.marquee-name { color: #aebed4; }
+.marquee-separator { color: #85bdd5; }
+.marquee-row:nth-child(1), .marquee-row:nth-child(6) { opacity: .35; }
+.marquee-row:nth-child(2), .marquee-row:nth-child(5) { opacity: .58; }
+.stage-down { z-index: 3; color: #c3d7ee; border-color: rgba(139, 179, 213, .32); background: rgba(8, 18, 32, .65); }
+.stage-down:hover { box-shadow: 0 0 26px #80c6f026; }
+.guestbook-grid { border-color: rgba(139, 173, 211, .22); }
+.message-card { border-radius: 8px; box-shadow: 0 10px 28px #00000019, inset 0 1px #d7e9ff04; }
+.message-card:hover { border-color: #709cc17d; box-shadow: 0 12px 32px #00000025, 0 0 22px #78bcf00c; }
+.message-card:after { display: none; }
+.empty-card { background: rgba(10, 20, 35, .68); border-color: #7f9cbf45; border-radius: 8px; }
+.compose-card { border-radius: 10px; border-color: rgba(139, 173, 211, .24); box-shadow: 0 16px 55px #00000026, inset 0 1px #d7e9ff08; }
+input, textarea { border: 1px solid rgba(142, 177, 216, .14); background: rgba(5, 12, 23, .65); }
+input:focus, textarea:focus { border-color: #88bed8; box-shadow: 0 0 0 3px #88bed811; }
+.submit-button { background: #c3d9ea; color: #0a1829; box-shadow: 0 2px 14px #9dc8ed0a; }
+.submit-button:hover { background: #d4e9f7; box-shadow: 0 5px 23px #91c4eb20; }
+.new-message { border-color: #86c2d8; }
+.list-notice, .form-status { border-radius: 5px; }
+.toast { background: #c5dceb; color: #0a1829; box-shadow: 0 10px 50px #0005; }
+.site-footer { border-color: rgba(139, 173, 211, .18); }
+@media (max-width:760px) {
+  .nebula-haze { opacity: .65; }
+  .message-card { background: rgba(12, 20, 35, .96); }
+  .compose-card { background: rgba(17, 29, 47, .96); }
+  .name-center h1 { text-shadow: 0 0 30px #9bc3f130, 0 2px 15px #050912a6; }
+}

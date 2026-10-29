@@ -9,7 +9,7 @@
     field.classList.toggle('is-paused', paused);
     button.setAttribute('aria-pressed', String(paused));
     button.disabled = reducedMotion.matches;
-    const title = paused ? '播放弹幕' : '暂停弹幕';
+    const title = paused ? '播放动效' : '暂停动效';
     button.setAttribute('aria-label', title); button.title = title;
     button.firstElementChild.textContent = paused ? '▷' : 'Ⅱ';
   }

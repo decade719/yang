@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f5f5ee">
+  <meta name="theme-color" content="#050912">
   <meta name="description" content="杨若璇。">
   <meta property="og:title" content="杨若璇">
   <meta property="og:description" content="杨若璇的留言簿">
@@ -11,18 +11,21 @@
   <title>杨若璇</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/space.css">
   <script src="/marquee.js" defer></script>
   <script src="/guestbook.js" defer></script>
+  <script src="/constellation.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#messages">跳到留言</a>
+  <div class="space-backdrop" aria-hidden="true"><div class="nebula-haze"></div><canvas id="constellation-canvas"></canvas></div>
   <div class="page-grain" aria-hidden="true"></div>
   <header class="site-header site-shell">
     <a class="wordmark" href="#page-title" aria-label="杨若璇首页">RUOXUAN<span>·</span></a>
     <nav aria-label="主导航">
       <a class="nav-link" href="#messages">读</a><a class="nav-link" href="#compose">写</a>
-      <button class="motion-toggle icon-button" type="button" aria-label="暂停弹幕" aria-pressed="false" title="暂停弹幕"><span aria-hidden="true">Ⅱ</span></button>
-      <button class="theme-toggle icon-button" type="button" aria-label="切换到深色外观" aria-pressed="false"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M20 14.1A8.3 8.3 0 0 1 9.9 4 8.4 8.4 0 1 0 20 14.1Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+      <button class="motion-toggle icon-button" type="button" aria-label="暂停动效" aria-pressed="false" title="暂停动效"><span aria-hidden="true">Ⅱ</span></button>
+      <button class="theme-toggle icon-button" type="button" aria-label="切换到蓝调星空" aria-pressed="false"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M20 14.1A8.3 8.3 0 0 1 9.9 4 8.4 8.4 0 1 0 20 14.1Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
     </nav>
   </header>
   <main>

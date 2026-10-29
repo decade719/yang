@@ -24,7 +24,7 @@ before(async () => {
 });
 
 test('built Worker serves its actual HTML, CSS, JavaScript and icon', async () => {
-  for (const [route, type] of [['/', 'text/html'], ['/index.html', 'text/html'], ['/styles.css', 'text/css'], ['/guestbook.js', 'text/javascript'], ['/marquee.js', 'text/javascript'], ['/languages.json', 'application/json'], ['/favicon.svg', 'image/svg+xml']]) {
+  for (const [route, type] of [['/', 'text/html'], ['/index.html', 'text/html'], ['/styles.css', 'text/css'], ['/space.css', 'text/css'], ['/guestbook.js', 'text/javascript'], ['/marquee.js', 'text/javascript'], ['/constellation.js', 'text/javascript'], ['/languages.json', 'application/json'], ['/favicon.svg', 'image/svg+xml']]) {
     const response = await worker.fetch(new Request(origin + route), {});
     assert.equal(response.status, 200, route);
     assert.equal(response.headers.get('Content-Type').split(';')[0], type);
