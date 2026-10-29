@@ -18,6 +18,17 @@ for (const [file, route, type] of [
   ['languages.json', '/languages.json', 'application/json; charset=utf-8'],
   ['favicon.svg', '/favicon.svg', 'image/svg+xml']
 ]) assets[route] = { body: await readFile(path.join(root, file), 'utf8'), type };
+// Each deployed page references the exact script/style content it was built with.
+// Keep the old paths for already-open pages, but new pages never reuse their URLs.
+for (const [route, asset] of Object.entries(assets)) {
+  if (!/\.(?:js|css)$/.test(route)) continue;
+  const hash = createHash('sha256').update(asset.body).digest('hex').slice(0, 12);
+  const versioned = '/assets' + route.replace(/(\.[^.]+)$/, `.${hash}$1`);
+  asset.cache = 'no-store';
+  assets[versioned] = { ...asset, cache: 'public, max-age=31536000, immutable' };
+  assets['/'].body = assets['/'].body.replaceAll(`src="${route}"`, `src="${versioned}"`).replaceAll(`href="${route}"`, `href="${versioned}"`);
+}
+assets['/'].cache = 'no-store';
 const photos = JSON.parse(assets['/photos.json'].body);
 if (!Array.isArray(photos) || photos.length !== 6) throw new Error('Expected the six selected photos.');
 for (const photo of photos) for (const route of [photo.src, photo.thumbnail]) {

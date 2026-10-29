@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
+import { createHash } from 'node:crypto';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const origin = 'https://guestbook.example';
@@ -33,6 +34,33 @@ test('built Worker serves its actual HTML, CSS, JavaScript and icon', async () =
   assert.match(html, /<title>杨若璇<\/title>/);
   assert.match(html, /id="page-title">杨若璇/);
   assert.equal(await (await worker.fetch(new Request(origin + '/index.html'), {})).text(), html);
+});
+
+test('deployed HTML requests content-versioned scripts and styles instead of stale asset URLs', async () => {
+  const response = await worker.fetch(new Request(origin + '/'), {});
+  assert.equal(response.headers.get('Cache-Control'), 'no-store');
+  const references = [...html.matchAll(/(?:src|href)="(\/assets\/[^" ]+\.(?:js|css))"/g)].map(match => match[1]);
+  assert.equal(references.length, 7);
+  assert.equal(new Set(references).size, 7);
+  assert.doesNotMatch(html, /(?:src|href)="\/(?:guestbook|marquee|constellation|gallery)\.js"/);
+  for (const route of references) {
+    const match = route.match(/^\/assets\/(.+)\.([a-f0-9]{12})\.(js|css)$/);
+    assert.ok(match, route);
+    const asset = await worker.fetch(new Request(origin + route), {});
+    assert.equal(asset.status, 200);
+    assert.match(asset.headers.get('Cache-Control'), /immutable/);
+    const bytes = Buffer.from(await asset.arrayBuffer());
+    assert.equal(createHash('sha256').update(bytes).digest('hex').slice(0, 12), match[2]);
+    const original = await readFile(new URL(`../${match[1]}.${match[3]}`, import.meta.url));
+    assert.deepEqual(bytes, original);
+    const legacy = await worker.fetch(new Request(origin + `/${match[1]}.${match[3]}`), {});
+    assert.equal(legacy.headers.get('Cache-Control'), 'no-store');
+    assert.deepEqual(Buffer.from(await legacy.arrayBuffer()), bytes);
+  }
+  const nonexistent = await worker.fetch(new Request(origin + '/assets/guestbook.000000000000.js'), {});
+  assert.equal(nonexistent.status, 404);
+  const index = await worker.fetch(new Request(origin + '/index.html'), {});
+  assert.equal(index.headers.get('Cache-Control'), 'no-store');
 });
 
 test('six full-frame photos and previews survive binary packaging with immutable hashed URLs', async () => {
