@@ -22,7 +22,36 @@
 
 语境是男生对女生。对有明确标注的条目，优先保留女性收件人或男性说话者的形式：Arabic 使用 أُحِبُّكِ；Chechen、Corsican、Kabyle 使用指向女性的形式；Hebrew、Khmer 使用男对女形式；Hindi、Punjabi、Thai 使用男性说话者形式；Vietnamese 使用 anh yêu em。Japanese 使用 愛してる，Korean 使用 사랑해요，Russian 采用亲近的 ты 形式。
 
-Amharic 的浪漫义表中“to a man/to a woman”标注存在可见互换问题，因此改选同一词条第一张表明确标为 to a female 的 አፈቅርሻለሁ。没有自行翻译或生成姓名的其他文字写法；前端可把固定中文姓名“杨若璇”与这些短语并置。
+Amharic 的浪漫义表中“to a man/to a woman”标注存在可见互换问题，因此改选同一词条第一张表明确标为 to a female 的 አፈቅርሻለሁ。
+
+## 姓名的跨文字展示
+
+`name`、`nameDirection`、`nameForm` 是本项目追加的姓名展示数据，不是从 Wiktionary 的翻译表取得。姓名以普通话 **Yáng Ruòxuán** 为依据音译，不按“杨、若、璇”的字义翻译。
+
+使用拉丁字母的语言，以及暂未核对可靠当地姓名写法的条目，保留 `Yang Ruoxuan`。其他条目采用以下展示形式；它们不是本人登记或使用过的官方外文姓名，也不声称221条语言各有互不相同的译名。
+
+| 文字/语言 | 展示形式 | 类型 |
+| --- | --- | --- |
+| 普通话/简体 | 杨若璇 | 原名 |
+| 繁体中文条目 | 楊若璇 | 对应字形 |
+| 拉丁字母 | Yang Ruoxuan | 汉语拼音 |
+| 日文 | ヤン・ルオシュエン | 按拼音对照表推导的音译 |
+| 韩文 | 양뤄쉬안 | 按普通话读音推导的音译，不使用汉字的韩国音读 |
+| 俄文 | Ян Жосюань | 按帕拉第体系推导的音译 |
+| 阿拉伯文及其已列分支 | يانغ روه شيوان | 展示用人工近似拟音 |
+| 希伯来文 | יאנג רואו שואן | 展示用人工近似拟音 |
+| 现代希腊文 | Γιανγκ Ρουοσουέν | 展示用人工近似拟音 |
+| 印地语、马拉地语、尼泊尔语的天城文 | यांग रुओश्वेन | 展示用人工近似拟音 |
+| 泰文 | หยาง รั่วเสวียน | 展示用人工近似拟音 |
+
+`nameForm: approximate` 明确区分近似拟音与按已知规则推导的 `transcription`；后续有本人偏好的写法时，应优先采用本人写法。数据中“我爱你”的原译文保持原有来源与归属。
+
+核对资料：
+
+- [美国国会图书馆中文拼音与姓名书写说明](https://www.loc.gov/catdir/pinyin/rom1.html)。
+- [Casio 官方日中辞典拼音对照表](https://support.casio.jp/pdf/003/XD-SX_SV_series_full_JA.pdf)：yang → ヤン、ruo → ルオ、xuan → シュエン。
+- [韩国国立国语院外来语表记规范研究](https://www.korean.go.kr/common/download.do%3Bfront%3D1903023FA3A0466669D88C37B0D596FF?c_file_name=4c70b234-e349-44c7-bf96-0c63ae692848_0.pdf&file_path=reportData&o_file_name=%EC%99%B8%EB%9E%98%EC%96%B4+%ED%91%9C%EA%B8%B0+%EA%B7%9C%EB%B2%94+%EC%98%81%ED%96%A5+%ED%8F%89%EA%B0%80.pdf)及[韩国官方贸易资料](https://fta.motir.go.kr/webmodule/_PSD_FTA/cn/1/kor/Schedule_of_Concessions_cn_kor.pdf)：ruo 对应 뤄，xuan 对应 쉬안。
+- [FAO 俄文资料所列拼音转写](https://openknowledge.fao.org/3/cb8081ru/cb8081ru.pdf)及[帕拉第对照表](https://cidian.ru/palladius)：ruo → жо、xuan → сюань。
 
 ## 条目与选用义项
 

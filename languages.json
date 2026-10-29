@@ -3,1326 +3,1989 @@
     "language": "English",
     "code": "en",
     "text": "I love you",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Adangme",
     "code": "ada",
     "text": "i suɔ mo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Afrikaans",
     "code": "af",
     "text": "ek het jou lief",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Akan",
     "code": "ak",
     "text": "mo dow",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Albanian",
     "code": "sq",
     "text": "të dua",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Southern Altai",
     "code": "alt",
     "text": "мен сени сӱӱп јадым",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Alutiiq",
     "code": "ems",
     "text": "qunukamken",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Amharic",
     "code": "am",
     "text": "አፈቅርሻለሁ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Arabic",
     "code": "ar",
     "text": "أُحِبُّكِ",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "يانغ روه شيوان",
+    "nameForm": "approximate",
+    "nameDirection": "rtl"
   },
   {
     "language": "Egyptian Arabic",
     "code": "arz",
     "text": "بحبك",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "يانغ روه شيوان",
+    "nameForm": "approximate",
+    "nameDirection": "rtl"
   },
   {
     "language": "Moroccan Arabic",
     "code": "ary",
     "text": "كنبغيك",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "يانغ روه شيوان",
+    "nameForm": "approximate",
+    "nameDirection": "rtl"
   },
   {
     "language": "Aragonese",
     "code": "an",
     "text": "te quiero",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Armenian",
     "code": "hy",
     "text": "ես քեզ սիրում եմ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Assamese",
     "code": "as",
     "text": "মই তোমাক ভাল পাওঁ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Asturian",
     "code": "ast",
     "text": "te quiero",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Azerbaijani",
     "code": "az",
     "text": "səni sevirəm",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Bashkir",
     "code": "ba",
     "text": "мин һине яратам",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Basque",
     "code": "eu",
     "text": "maite zaitut",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Belarusian",
     "code": "be",
     "text": "я цябе́ каха́ю",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Bengali",
     "code": "bn",
     "text": "আমি তোমাকে ভালোবাসি",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Central Bikol",
     "code": "bcl",
     "text": "padaba taka",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Breton",
     "code": "br",
     "text": "me da gar",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Bulgarian",
     "code": "bg",
     "text": "оби́чам те",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Burmese",
     "code": "my",
     "text": "ခင်ဗျားချစ်တယ်",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Buryat",
     "code": "bua",
     "text": "би шамдаа дуратайб",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Caló",
     "code": "rmq",
     "text": "te camelo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Catalan",
     "code": "ca",
     "text": "t'estimo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Cebuano",
     "code": "ceb",
     "text": "gihigugma ko ikaw",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Chechen",
     "code": "ce",
     "text": "суна хьо еза",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Cherokee",
     "code": "chr",
     "text": "ᎬᎨᏳᎯ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Chichewa",
     "code": "ny",
     "text": "ndimakukonda",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Chickasaw",
     "code": "cic",
     "text": "chiholloli",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Cantonese",
     "code": "yue",
     "text": "我愛你",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "楊若璇",
+    "nameForm": "original",
+    "nameDirection": "ltr"
   },
   {
     "language": "Dungan",
     "code": "dng",
     "text": "вә нэ ни",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Hakka",
     "code": "hak",
     "text": "𠊎愛你",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "楊若璇",
+    "nameForm": "original",
+    "nameDirection": "ltr"
   },
   {
     "language": "Hokkien",
     "code": "nan",
     "text": "我疼汝",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "楊若璇",
+    "nameForm": "original",
+    "nameDirection": "ltr"
   },
   {
     "language": "Mandarin",
     "code": "cmn",
     "text": "我愛你",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "杨若璇",
+    "nameForm": "original",
+    "nameDirection": "ltr"
   },
   {
     "language": "Wu",
     "code": "wuu",
     "text": "我愛儂",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "楊若璇",
+    "nameForm": "original",
+    "nameDirection": "ltr"
   },
   {
     "language": "Chittagonian",
     "code": "ctg",
     "text": "আঁই তুয়ানরে বেশি গোম লাগে",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Chukchi",
     "code": "ckt",
     "text": "гымнан гыт ы’ԓгу тыԓгыркынигыт",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Chuvash",
     "code": "cv",
     "text": "эпӗ сана юрататӑп",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Cia-Cia",
     "code": "cia",
     "text": "indau pe'elu iso'o",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "East Circassian",
     "code": "kbd",
     "text": "фӏыуэ узолъагъу",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Cornish",
     "code": "kw",
     "text": "My a'th kar",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Corsican",
     "code": "co",
     "text": "ti tengu cara",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Czech",
     "code": "cs",
     "text": "miluji tě",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Danish",
     "code": "da",
     "text": "jeg elsker dig",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Dolgan",
     "code": "dlg",
     "text": "мин энигин таптыыбын",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Egyptian",
     "code": "egy",
     "text": "mr.j ṯn",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Erzya",
     "code": "myv",
     "text": "вечктян",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Estonian",
     "code": "et",
     "text": "mina armastan sind",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Ewondo",
     "code": "ewo",
     "text": "ma ding wa",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Faroese",
     "code": "fo",
     "text": "eg elski teg",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Finnish",
     "code": "fi",
     "text": "minä rakastan sinua",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Franco-Provençal",
     "code": "frp",
     "text": "jo t'amo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "French",
     "code": "fr",
     "text": "je t'aime",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Old French",
     "code": "fro",
     "text": "je t'aim",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "West Frisian",
     "code": "fy",
     "text": "ik hâld fan dy",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Galician",
     "code": "gl",
     "text": "ámote",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "German",
     "code": "de",
     "text": "ich liebe dich",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Alemannic German",
     "code": "gsw",
     "text": "ich lieb dich",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Greek",
     "code": "el",
     "text": "σε αγαπώ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Γιανγκ Ρουοσουέν",
+    "nameForm": "approximate",
+    "nameDirection": "ltr"
   },
   {
     "language": "Ancient Greek",
     "code": "grc",
     "text": "σὲ φιλῶ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Greenlandic",
     "code": "kl",
     "text": "asavakkit",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Haitian Creole",
     "code": "ht",
     "text": "mwen renmen ou",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Hausa",
     "code": "ha",
     "text": "ina sonki",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Hawaiian",
     "code": "haw",
     "text": "aloha wau iāʻoe",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Hebrew",
     "code": "he",
     "text": "אֲנִי אוֹהֵב אוֹתָךְ",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "יאנג רואו שואן",
+    "nameForm": "approximate",
+    "nameDirection": "rtl"
   },
   {
     "language": "Hiligaynon",
     "code": "hil",
     "text": "ginahigugma ko ikaw",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Hindi",
     "code": "hi",
     "text": "मैं तुमसे प्यार करता हूँ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "यांग रुओश्वेन",
+    "nameForm": "approximate",
+    "nameDirection": "ltr"
   },
   {
     "language": "White Hmong",
     "code": "mww",
     "text": "kuv hlub koj",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Hopi",
     "code": "hop",
     "text": "nu’ umi unangwa’ta",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Hungarian",
     "code": "hu",
     "text": "szeretlek",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Ibaloi",
     "code": "ibl",
     "text": "pipiyam taka",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Icelandic",
     "code": "is",
     "text": "ég elska þig",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Igbo",
     "code": "ig",
     "text": "afulu m gi na anya",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Indonesian",
     "code": "id",
     "text": "aku cinta kamu",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Inuktitut",
     "code": "iu",
     "text": "ᓇᒡᓕᒋᕙᒋᑦ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Irish",
     "code": "ga",
     "text": "tá grá agam duit",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Italian",
     "code": "it",
     "text": "ti amo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Jamaican Creole",
     "code": "jam",
     "text": "mi love yuh",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Japanese",
     "code": "ja",
     "text": "愛してる",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "ヤン・ルオシュエン",
+    "nameForm": "transcription",
+    "nameDirection": "ltr"
   },
   {
     "language": "Javanese",
     "code": "jv",
     "text": "kula tresna sampeyan",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Jingpho",
     "code": "kac",
     "text": "nang hpe ngai tsaw ra ai",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kabyle",
     "code": "kab",
     "text": "Hamlaγkem",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kalmyk",
     "code": "xal",
     "text": "би чамд дуртав",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kankanaey",
     "code": "kne",
     "text": "laylaydek sik-a",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kannada",
     "code": "kn",
     "text": "ನಾನು ನಿನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತೇನೆ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kapampangan",
     "code": "pam",
     "text": "kaluguran daka",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Karachay-Balkar",
     "code": "krc",
     "text": "мен сени сюеме",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Karelian",
     "code": "krl",
     "text": "minä armastan sindai",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kashmiri",
     "code": "ks",
     "text": "مےٚ چھِ چٲنؠ ماے",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kazakh",
     "code": "kk",
     "text": "мен сені сүйемін",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Khakas",
     "code": "kjh",
     "text": "мин сағаа хынчам",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Khmer",
     "code": "km",
     "text": "បងស្រឡាញ់អូន",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Komi-Zyrian",
     "code": "kpv",
     "text": "ме тэнӧ радейта",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Korean",
     "code": "ko",
     "text": "사랑해요",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "양뤄쉬안",
+    "nameForm": "transcription",
+    "nameDirection": "ltr"
   },
   {
     "language": "Koryak",
     "code": "kpy",
     "text": "гымнан гыччи ылӈу тыкулӈыги",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kristang",
     "code": "mcm",
     "text": "Em t' amo'b",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kumyk",
     "code": "kum",
     "text": "мен сени сюемен",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Central Kurdish",
     "code": "ckb",
     "text": "من عاشقی تۆم",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Northern Kurdish",
     "code": "kmr",
     "text": "ez ji te hez dikim",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Kyrgyz",
     "code": "ky",
     "text": "мен сени сүйөм",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Lao",
     "code": "lo",
     "text": "ຂ້ອຍຮັກເຈົ້າ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Latin",
     "code": "la",
     "text": "te amo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Latvian",
     "code": "lv",
     "text": "es mīlu tevi",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Lezgi",
     "code": "lez",
     "text": "заз вун кӏанзава",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Lingala",
     "code": "ln",
     "text": "nalingí yɔ̌",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Lithuanian",
     "code": "lt",
     "text": "aš tave myliu",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Louisiana Creole",
     "code": "lou",
     "text": "mo laime toi",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Low German",
     "code": "nds",
     "text": "ik leev di",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Luo",
     "code": "luo",
     "text": "aheri",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Lushootseed",
     "code": "lut",
     "text": "ʔəsx̌aƛ̕tubicid čəd",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Luxembourgish",
     "code": "lb",
     "text": "Ech hunn dech gär",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Macedonian",
     "code": "mk",
     "text": "те сакам",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Malay",
     "code": "ms",
     "text": "saya cintakan mu",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Malayalam",
     "code": "ml",
     "text": "ഞാൻ നിന്നെ പ്രേമിക്കുന്നു",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Maltese",
     "code": "mt",
     "text": "inħobbok",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Manx",
     "code": "gv",
     "text": "ta graih aym ort",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Māori",
     "code": "mi",
     "text": "kei te aroha au i a koe",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Marathi",
     "code": "mr",
     "text": "माझं तुझ्यावर प्रेम आहे",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "यांग रुओश्वेन",
+    "nameForm": "approximate",
+    "nameDirection": "ltr"
   },
   {
     "language": "Eastern Mari",
     "code": "mhr",
     "text": "мый тыйым йӧратем",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Mohawk",
     "code": "moh",
     "text": "konoronhkwa",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Moksha",
     "code": "mdf",
     "text": "келькте",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Mongolian",
     "code": "mn",
     "text": "би чамд хайртай",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Moore",
     "code": "mos",
     "text": "mam nonga fo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Navajo",
     "code": "nv",
     "text": "ayóóʼánííníshʼní",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Neapolitan",
     "code": "nap",
     "text": "ti amo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Nepali",
     "code": "ne",
     "text": "म तिमीलाई माया गर्छु।",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "यांग रुओश्वेन",
+    "nameForm": "approximate",
+    "nameDirection": "ltr"
   },
   {
     "language": "Norwegian (Bokmål)",
     "code": "nb",
     "text": "jeg elsker deg",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Occitan",
     "code": "oc",
     "text": "t'aimi",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Odia",
     "code": "or",
     "text": "ମୁଁ ତୁମକୁ ଭଲପାଏ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Ojibwe",
     "code": "oj",
     "text": "gizaagi'in",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Old English",
     "code": "ang",
     "text": "iċ lufiġe þē",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Old Tupi",
     "code": "tpw",
     "text": "oroaûsub",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Oneida",
     "code": "one",
     "text": "kunolúkhwaʼ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Pangasinan",
     "code": "pag",
     "text": "inaro taka",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Papiamentu",
     "code": "pap",
     "text": "mi stima bo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Pashto",
     "code": "ps",
     "text": "تا سره مينه کوم",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Persian (Iranian)",
     "code": "fa",
     "text": "عاشِقِتَم",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Phuthi",
     "code": "und",
     "text": "Giyakutshadza",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Pipil",
     "code": "ppl",
     "text": "nimetztasujta",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Polish",
     "code": "pl",
     "text": "kocham cię",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Portuguese",
     "code": "pt",
     "text": "amo-te",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Punjabi",
     "code": "pa",
     "text": "ਮੈਂ ਤੈਨੂੰ ਪਿਆਰ ਕਰਦਾ ਹਾਂ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Quechua",
     "code": "qu",
     "text": "qanta munani",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Romanian",
     "code": "ro",
     "text": "te iubesc",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Romansh",
     "code": "rm",
     "text": "jau hai tai gument",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Russian",
     "code": "ru",
     "text": "я люблю тебя",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Ян Жосюань",
+    "nameForm": "transcription",
+    "nameDirection": "ltr"
   },
   {
     "language": "Inari Sami",
     "code": "smn",
     "text": "mun rähistâm tuu",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Northern Sami",
     "code": "se",
     "text": "mun ráhkistan du",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Skolt Sami",
     "code": "sms",
     "text": "mon rääʹǩǩstam tuu",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Sanskrit",
     "code": "sa",
     "text": "त्वयि स्निह्यामि",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Scots",
     "code": "sco",
     "text": "A luive ye",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Scottish Gaelic",
     "code": "gd",
     "text": "tha gràdh agam dhut",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Serbo-Croatian",
     "code": "sh",
     "text": "во̏лӣм те",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Shona",
     "code": "sn",
     "text": "Ndinokuda",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Shor",
     "code": "cjs",
     "text": "мен саға кӧленчам",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Sinhalese",
     "code": "si",
     "text": "මම ඔයාට ආදරෙයි",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Slovak",
     "code": "sk",
     "text": "ľúbim ťa",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Slovene",
     "code": "sl",
     "text": "ljubim te",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Somali",
     "code": "so",
     "text": "Waan ku jeclahay",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Sotho",
     "code": "st",
     "text": "ke a go rata",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Spanish",
     "code": "es",
     "text": "te quiero",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Sundanese",
     "code": "su",
     "text": "Abdi bogoh ka anjeun",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Swahili",
     "code": "sw",
     "text": "nakupenda",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Swedish",
     "code": "sv",
     "text": "jag älskar dig",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Sylheti",
     "code": "syl",
     "text": "ꠝꠥꠁ ꠔꠥꠝꠣꠞꠦ ꠜꠣꠟꠣ ꠙꠣꠁ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Tabasaran",
     "code": "tab",
     "text": "узуз уву ккунжазуз",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Tagalog",
     "code": "tl",
     "text": "mahal kita",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Tahitian",
     "code": "ty",
     "text": "ua here vau ia oe",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Tajik",
     "code": "tg",
     "text": "ман туро дӯст медорам",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Tamil",
     "code": "ta",
     "text": "நான் உன்னைக் காதலிக்கிறேன்",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Tatar",
     "code": "tt",
     "text": "мин сине яратам",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Telugu",
     "code": "te",
     "text": "నేను నిన్ను ప్రేమిస్తున్నాను",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Thai",
     "code": "th",
     "text": "ผมรักคุณ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "หยาง รั่วเสวียน",
+    "nameForm": "approximate",
+    "nameDirection": "ltr"
   },
   {
     "language": "Tok Pisin",
     "code": "tpi",
     "text": "mi lavim yu",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Tswana",
     "code": "tn",
     "text": "ke a go rata",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Tumbuka",
     "code": "tum",
     "text": "nkhukutemwa",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Turkish",
     "code": "tr",
     "text": "seni seviyorum",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Turkmen",
     "code": "tk",
     "text": "men seni söýýärin",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Udmurt",
     "code": "udm",
     "text": "мон тонэ яратӥсько",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Ukrainian",
     "code": "uk",
     "text": "я тебе́ коха́ю",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Urdu",
     "code": "ur",
     "text": "مُجھے تُم سے پْیار ہَے",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Uzbek",
     "code": "uz",
     "text": "men seni sevaman",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Venetan",
     "code": "vec",
     "text": "te amo",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Vietnamese",
     "code": "vi",
     "text": "anh yêu em",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Welsh",
     "code": "cy",
     "text": "'Rwy'n dy garu di",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Xhosa",
     "code": "xh",
     "text": "ndiyakuthanda",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Yakut",
     "code": "sah",
     "text": "мин эйиги́н тапты́ыбын",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Yiddish",
     "code": "yi",
     "text": "איך ליבע דיך",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Yoruba",
     "code": "yo",
     "text": "mo nífẹ̀ẹ́ rẹ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Yup'ik",
     "code": "esu",
     "text": "kenkamken",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Zazaki",
     "code": "zza",
     "text": "ez to sinena",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Zulu",
     "code": "zu",
     "text": "ngiyakuthanda",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Gulf Arabic",
     "code": "afb",
     "text": "اَحِبِّچْ",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "يانغ روه شيوان",
+    "nameForm": "approximate",
+    "nameDirection": "rtl"
   },
   {
     "language": "Hijazi Arabic",
     "code": "acw",
     "text": "أحبك",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "يانغ روه شيوان",
+    "nameForm": "approximate",
+    "nameDirection": "rtl"
   },
   {
     "language": "Karo Batak",
     "code": "btx",
     "text": "keleng ateku kam",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Simalungun Batak",
     "code": "bts",
     "text": "holong do uhurhu bamu",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Toba Batak",
     "code": "bbc",
     "text": "holong do rohangku tu ho",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Dutch",
     "code": "nl",
     "text": "ik hou van je",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Georgian",
     "code": "ka",
     "text": "მე შენ მიყვარხარ",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Gujarati",
     "code": "gu",
     "text": "હું તને પ્રેમ કરું છું",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Ingrian",
     "code": "izh",
     "text": "miä suvvaan sinnua",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Dzubukuá",
     "code": "kzw",
     "text": "dzuka ado",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Lombard",
     "code": "lmo",
     "text": "te vòj ben",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Lower Tanana",
     "code": "taa",
     "text": "nek'a dest'a",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Mandan",
     "code": "mhq",
     "text": "minikíkiirasxte'sh",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Northern Mansi",
     "code": "mns",
     "text": "ам наӈын э̄руптылум",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Mi'kmaq",
     "code": "mic",
     "text": "kesalul",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Nahuatl",
     "code": "nah",
     "text": "nimitztlazohtla",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Nheengatu",
     "code": "yrl",
     "text": "asaisú indé",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Nǀuu",
     "code": "ngh",
     "text": "na ǁʻâa a",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Old Norse",
     "code": "non",
     "text": "ek elska þik",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Romani",
     "code": "rom",
     "text": "kamav tut",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Samoan",
     "code": "sm",
     "text": "ʻou te alofa iate ʻoe",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Sranan Tongo",
     "code": "srn",
     "text": "mi lobi yu",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Swazi",
     "code": "ss",
     "text": "ngiyakutsandza",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Traveller Norwegian",
     "code": "rmg",
     "text": "miro asjar låsjano an diro",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Unami",
     "code": "unm",
     "text": "ktaholël",
-    "direction": "ltr"
+    "direction": "ltr",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   },
   {
     "language": "Uyghur",
     "code": "ug",
     "text": "مەن سئىزنئى سئۆيئىمەن",
-    "direction": "rtl"
+    "direction": "rtl",
+    "name": "Yang Ruoxuan",
+    "nameForm": "pinyin",
+    "nameDirection": "ltr"
   }
 ]
