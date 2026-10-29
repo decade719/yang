@@ -24,7 +24,7 @@ before(async () => {
 });
 
 test('built Worker serves its actual HTML, CSS, JavaScript and icon', async () => {
-  for (const [route, type] of [['/', 'text/html'], ['/index.html', 'text/html'], ['/styles.css', 'text/css'], ['/space.css', 'text/css'], ['/guestbook.js', 'text/javascript'], ['/marquee.js', 'text/javascript'], ['/constellation.js', 'text/javascript'], ['/languages.json', 'application/json'], ['/favicon.svg', 'image/svg+xml']]) {
+  for (const [route, type] of [['/', 'text/html'], ['/index.html', 'text/html'], ['/styles.css', 'text/css'], ['/space.css', 'text/css'], ['/gallery.css', 'text/css'], ['/guestbook.js', 'text/javascript'], ['/marquee.js', 'text/javascript'], ['/constellation.js', 'text/javascript'], ['/gallery.js', 'text/javascript'], ['/photos.json', 'application/json'], ['/languages.json', 'application/json'], ['/favicon.svg', 'image/svg+xml']]) {
     const response = await worker.fetch(new Request(origin + route), {});
     assert.equal(response.status, 200, route);
     assert.equal(response.headers.get('Content-Type').split(';')[0], type);
@@ -33,6 +33,32 @@ test('built Worker serves its actual HTML, CSS, JavaScript and icon', async () =
   assert.match(html, /<title>杨若璇<\/title>/);
   assert.match(html, /id="page-title">杨若璇/);
   assert.equal(await (await worker.fetch(new Request(origin + '/index.html'), {})).text(), html);
+});
+
+test('six full-frame photos and previews survive binary packaging with immutable hashed URLs', async () => {
+  const photos = await (await worker.fetch(new Request(origin + '/photos.json'), {})).json();
+  assert.equal(photos.length, 6);
+  let total = 0;
+  for (const photo of photos) {
+    assert.ok(photo.width > 0 && photo.height > 0 && photo.alt);
+    for (const route of [photo.src, photo.thumbnail]) {
+      const response = await worker.fetch(new Request(origin + route), {});
+      assert.equal(response.status, 200);
+      assert.equal(response.headers.get('Content-Type'), 'image/webp');
+      assert.match(response.headers.get('Cache-Control'), /immutable/);
+      const data = Buffer.from(await response.arrayBuffer());
+      const source = await readFile(new URL('..' + route, import.meta.url));
+      assert.deepEqual(data, source);
+      assert.equal(data.subarray(0,4).toString(), 'RIFF');
+      assert.equal(data.subarray(8,12).toString(), 'WEBP');
+      total += data.length;
+      const head = await worker.fetch(new Request(origin + route, { method: 'HEAD' }), {});
+      assert.equal(head.status, 200); assert.equal((await head.arrayBuffer()).byteLength, 0);
+    }
+  }
+  assert.ok(total < 1024 * 1024, 'photo payload budget');
+  assert.ok(html.indexOf('id="page-title"') < html.indexOf('id="moments"'));
+  assert.ok(html.indexOf('id="moments"') < html.indexOf('id="messages"'));
 });
 
 test('static resources reject writes and HEAD returns metadata without body', async () => {

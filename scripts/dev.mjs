@@ -15,6 +15,12 @@ if (!sqlite.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name=
 const db = { prepare(sql) { return { bind(...values) { const stmt = sqlite.prepare(sql); return { first: async () => stmt.get(...values) || null, all: async () => ({ results: stmt.all(...values) }), run: async () => stmt.run(...values) }; }, first: async () => sqlite.prepare(sql).get() || null, all: async () => ({ results: sqlite.prepare(sql).all() }) }; } };
 const env = { DB: db, SIGNING_SECRET: process.env.SIGNING_SECRET || randomBytes(32).toString('hex') };
 const files = { '/': ['index.html','text/html'], '/index.html': ['index.html','text/html'], '/styles.css': ['styles.css','text/css'], '/space.css': ['space.css','text/css'], '/guestbook.js': ['guestbook.js','text/javascript'], '/marquee.js': ['marquee.js','text/javascript'], '/constellation.js': ['constellation.js','text/javascript'], '/languages.json': ['languages.json','application/json'], '/favicon.svg': ['favicon.svg','image/svg+xml'] };
+Object.assign(files, { '/gallery.css': ['gallery.css','text/css'], '/gallery.js': ['gallery.js','text/javascript'], '/photos.json': ['photos.json','application/json'] });
+const photos = JSON.parse(await readFile(path.join(root, 'photos.json'), 'utf8'));
+for (const photo of photos) for (const route of [photo.src, photo.thumbnail]) {
+  if (!/^\/photos\/(?:moment|thumb)-\d{2}-[a-f0-9]{10}\.webp$/.test(route)) throw new Error('Unexpected photo path.');
+  files[route] = [route.slice(1), 'image/webp'];
+}
 const port = Number(process.env.PORT) || 4173;
 const server = http.createServer(async (req, res) => {
   try {
@@ -32,7 +38,7 @@ const server = http.createServer(async (req, res) => {
     if (!['GET', 'HEAD'].includes(req.method)) { res.writeHead(405); res.end(); return; }
     const file = files[url.pathname];
     if (!file) { res.writeHead(404); res.end('Not found'); return; }
-    res.writeHead(200, { ...securityHeaders, 'Content-Type': file[1] + '; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.writeHead(200, { ...securityHeaders, 'Content-Type': file[1] + (file[1].startsWith('image/') ? '' : '; charset=utf-8'), 'Cache-Control': 'no-store' });
     res.end(req.method === 'HEAD' ? undefined : await readFile(path.join(root, file[0])));
   } catch (error) { console.error(error.message); res.writeHead(500); res.end('Temporary error'); }
 });

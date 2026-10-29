@@ -9,6 +9,16 @@ export const securityHeaders = {
 
 // Replaced by the build script; there are no filesystem reads in production.
 const ASSETS = /*__STATIC_ASSETS__*/ {};
+const decodedAssets = new Map();
+function assetBody(path, asset) {
+  if (asset.encoding !== 'base64') return asset.body;
+  if (!decodedAssets.has(path)) {
+    const binary = atob(asset.body), bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    decodedAssets.set(path, bytes);
+  }
+  return decodedAssets.get(path);
+}
 
 export default {
   async fetch(request, env) {
@@ -23,6 +33,6 @@ export default {
     if (!['GET', 'HEAD'].includes(request.method)) return new Response('Method not allowed', { status: 405, headers: { ...securityHeaders, Allow: 'GET, HEAD' } });
     const asset = ASSETS[path === '/index.html' ? '/' : path];
     if (!asset) return new Response('这一页还没有写下。', { status: 404, headers: { ...securityHeaders, 'Content-Type': 'text/plain; charset=utf-8' } });
-    return new Response(request.method === 'HEAD' ? null : asset.body, { headers: { ...securityHeaders, 'Content-Type': asset.type, 'Cache-Control': 'public, max-age=0, must-revalidate' } });
+    return new Response(request.method === 'HEAD' ? null : assetBody(path, asset), { headers: { ...securityHeaders, 'Content-Type': asset.type, 'Cache-Control': asset.cache || 'public, max-age=0, must-revalidate' } });
   }
 };

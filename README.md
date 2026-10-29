@@ -6,6 +6,8 @@
 
 弹幕姓名会采用相应语言的字形/音译，未核对到可靠当地写法时使用 `Yang Ruoxuan`。部分文字形式为展示用近似拟音，并在数据的 `nameForm` 和来源说明中标明；中央姓名仍是中文原名。
 
+名字下方、留言区上方加入六张用户提供的图片，采用完整画面居中、同图模糊衬底的淡入轮播，默认每6.5秒切换。支持左右按钮、缩略图、键盘和手机横向滑动；指针悬停、键盘焦点、离屏、后台、全局暂停或减少动态效果偏好都会停止自动切换。未给照片添加虚构的时间或故事文案。
+
 ## 项目结构
 
 原仓库是纯静态 HTML 网站，本次继续使用原生 HTML、CSS 和 JavaScript，没有引入前端框架。在此基础上补充 Cloudflare Worker API 和 D1 数据库存储。
@@ -15,6 +17,7 @@
 | `index.html`、`styles.css`、`guestbook.js` | 留言簿界面与交互 |
 | `marquee.js`、`languages.json`、`LANGUAGE_SOURCES.md` | 多语言弹幕、数据及来源归属 |
 | `constellation.js`、`space.css` | Canvas星空、指针交互和深空/蓝调配色 |
+| `gallery.js`、`gallery.css`、`photos.json`、`photos/` | 六张照片轮播、缩略图和经过压缩的WebP图片 |
 | `worker/index.js` | 页面、静态资源路由和安全响应头 |
 | `worker/guestbook.js` | 共享留言 API、签名表单令牌和防刷校验 |
 | `db/`、`drizzle.config.ts` | 生产数据库结构与迁移生成配置 |
@@ -23,7 +26,7 @@
 | `tests/` | 真实 SQLite API 测试、构建产物与静态规则检查 |
 | `.openai/hosting.json` | Sites 项目标识和 D1 逻辑绑定，不存放密钥 |
 
-原有 `app.html`、`images/` 和 `audio/` 保留在源码中。本次留言簿 Worker **不发布旧小游戏及其素材路由**，构建仅包含留言簿所需的八个静态资源。
+原有 `app.html`、`images/` 和 `audio/` 保留在源码中。本次留言簿 Worker **不发布旧小游戏及其素材路由**。构建仅包含留言簿资源与相册，图片以二进制响应提供，使用内容哈希文件名和长期缓存。六张主图与缩略图总计约835KiB，没有把原始PNG大图直接带给访客。
 
 ## 本地运行
 
