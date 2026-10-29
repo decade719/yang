@@ -223,6 +223,17 @@ async function postMessage(request, env) {
       session.client, contentHash, now - 24 * 60 * 60 * 1000, session.nonce)
     .first();
   if (!row) {
+    // The first write may have succeeded while its response was lost. A still-
+    // valid token can recover only that exact request, including after a race
+    // with another submission of the same token. Never expose another client's
+    // row or treat an edited nickname/message as a successful retry.
+    const saved = await env.DB.prepare('SELECT id, nickname, content, created_at FROM messages WHERE session_nonce = ? AND client_hash = ? AND nickname = ? AND content = ? LIMIT 1')
+      .bind(session.nonce, session.client, nickname, content).first();
+    if (saved) return json({
+      message: present(saved),
+      cooldownSeconds: Math.max(0, Math.ceil((Number(saved.created_at) + COOLDOWN_MS - now) / 1000)),
+      replayed: true,
+    });
     const duplicate = await env.DB.prepare('SELECT id FROM messages WHERE client_hash = ? AND content_hash = ? AND created_at > ? LIMIT 1')
       .bind(session.client, contentHash, now - 24 * 60 * 60 * 1000).first();
     if (duplicate) fail(409, 'DUPLICATE_MESSAGE', '这句话已经留下过了，换一句再来吧。');

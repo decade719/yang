@@ -144,7 +144,7 @@ test('minimum dwell time, expiry, signature and IP binding are enforced', async 
   assert.equal((await post(env, token)).status, 403);
 });
 
-test('atomic SQLite guards prevent parallel spam, duplicates and token replay', async t => {
+test('atomic SQLite guards prevent parallel spam, new-token duplicates and edited token replay', async t => {
   const { env, advance } = environment(t);
   const tokenOne = await session(env);
   const tokenTwo = await session(env);
@@ -158,6 +158,79 @@ test('atomic SQLite guards prevent parallel spam, duplicates and token replay', 
   assert.equal((await post(env, next, '第一句留言')).status, 409);
   assert.equal((await post(env, next, '不一样的下一句话')).status, 201);
   assert.equal(env.DB.sqlite.prepare('SELECT COUNT(*) AS n FROM messages').get().n, 2);
+});
+
+test('an identical valid-token retry recovers the original write with the remaining cooldown', async t => {
+  const { env, advance } = environment(t);
+  const token = await session(env);
+  advance(2100);
+  const original = await post(env, token, '原来的留言。', { nickname: '小杨' });
+  assert.equal(original.status, 201);
+  const first = await original.json();
+  assert.equal(first.replayed, undefined);
+  assert.equal(first.cooldownSeconds, 45);
+  advance(12_300);
+  const recovered = await post(env, token, '  原来的留言。  ', { nickname: ' 小杨 ' });
+  assert.equal(recovered.status, 200);
+  assert.deepEqual(await recovered.json(), { message: first.message, cooldownSeconds: 33, replayed: true });
+  advance(33_000);
+  const afterCooldown = await post(env, token, '原来的留言。', { nickname: '小杨' });
+  assert.equal(afterCooldown.status, 200);
+  assert.deepEqual(await afterCooldown.json(), { message: first.message, cooldownSeconds: 0, replayed: true });
+  assert.equal(env.DB.sqlite.prepare('SELECT COUNT(*) AS n FROM messages').get().n, 1);
+  advance(15 * 60 * 1000);
+  const expired = await post(env, token, '原来的留言。', { nickname: '小杨' });
+  assert.equal(expired.status, 403);
+  assert.deepEqual(await expired.json(), { error: '表单已过期，请刷新后重试。', code: 'INVALID_SESSION' });
+});
+
+test('parallel identical requests return the same stored message and insert only once', async t => {
+  const { env, advance } = environment(t);
+  const token = await session(env);
+  advance(2100);
+  const responses = await Promise.all([post(env, token, '同一条留言。'), post(env, token, '同一条留言。')]);
+  assert.deepEqual(responses.map(response => response.status).sort(), [200, 201]);
+  const results = await Promise.all(responses.map(response => response.json()));
+  assert.deepEqual(results[0].message, results[1].message);
+  assert.equal(results.filter(result => result.replayed === true).length, 1);
+  assert.ok(results.every(result => result.cooldownSeconds === 45));
+  assert.equal(env.DB.sqlite.prepare('SELECT COUNT(*) AS n FROM messages').get().n, 1);
+});
+
+test('retry recovery rejects changed bodies, changed authors and a different client', async t => {
+  const { env, advance } = environment(t);
+  const token = await session(env);
+  advance(2100);
+  assert.equal((await post(env, token, '已经留下的内容。')).status, 201);
+  const changedContent = await post(env, token, '另一个内容。');
+  assert.equal(changedContent.status, 429);
+  assert.equal((await changedContent.json()).message, undefined);
+  const changedNickname = await post(env, token, '已经留下的内容。', { nickname: '另一位作者' });
+  assert.equal(changedNickname.status, 409);
+  assert.equal((await changedNickname.json()).message, undefined);
+  const otherClient = await post(env, token, '已经留下的内容。', {}, { 'CF-Connecting-IP': '192.0.2.2' });
+  assert.equal(otherClient.status, 403);
+  assert.deepEqual(await otherClient.json(), { error: '表单已过期，请刷新后重试。', code: 'INVALID_SESSION' });
+  advance(46_000);
+  assert.equal((await post(env, token, '过了冷却也不能修改旧请求。')).status, 429);
+  assert.equal(env.DB.sqlite.prepare('SELECT COUNT(*) AS n FROM messages').get().n, 1);
+});
+
+test('a valid token cannot recover a nonce row owned by another client', async t => {
+  const { env, advance } = environment(t);
+  const token = await session(env);
+  const payload = JSON.parse(Buffer.from(token.split('.')[0], 'base64url').toString('utf8'));
+  const foreignId = '00000000-0000-4000-8000-000000000001';
+  env.DB.sqlite.prepare('INSERT INTO messages VALUES (?, ?, ?, ?, ?, ?, ?)').run(
+    foreignId, '来访者', '相同文字。', Date.now(), 'another-client-hash', 'another-content-hash', payload.nonce,
+  );
+  advance(2100);
+  const response = await post(env, token, '相同文字。');
+  assert.equal(response.status, 429);
+  const body = await response.text();
+  assert.equal(body.includes(foreignId), false);
+  assert.equal(JSON.parse(body).message, undefined);
+  assert.equal(env.DB.sqlite.prepare('SELECT COUNT(*) AS n FROM messages').get().n, 1);
 });
 
 test('hourly limit is enforced independently of the short cooldown', async t => {
