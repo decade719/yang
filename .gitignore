@@ -4,3 +4,12 @@ desktop.ini
 .DS_Store
 *.tmp
 .vscode/
+node_modules/
+dist/
+.data/
+.env
+.env.*
+!.env.example
+.sites-local/
+*.tar.gz
+*.log

@@ -1,604 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>⚠️ 警告 · 访问受限 · 基因重组实验</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body, html {
-    width: 100%; height: 100%; overflow: hidden;
-    background: #000; font-family: 'Courier New', Courier, monospace, sans-serif;
-  }
-  canvas {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;
-  }
-  .container {
-    position: relative; z-index: 10; width: 100%; height: 100%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 20px; text-align: center;
-    background: radial-gradient(circle, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.95) 90%);
-  }
-  .warning-badge {
-    display: inline-block; padding: 6px 18px; border-radius: 20px;
-    background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.6);
-    color: #f87171; font-size: 14px; font-weight: bold; letter-spacing: 3px;
-    margin-bottom: 15px; text-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
-    animation: pulse 1.5s infinite alternate;
-  }
-  @keyframes pulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.05); opacity: 1; }
-  }
-  .main-title {
-    font-size: clamp(18px, 4vw, 36px); font-weight: 900; color: #fff;
-    line-height: 1.4; text-shadow: 0 0 20px rgba(56, 189, 248, 0.8), 0 0 40px rgba(168, 85, 247, 0.6);
-    min-height: 90px; display: flex; align-items: center; justify-content: center;
-    max-width: 950px; word-break: break-all; margin-bottom: 10px;
-  }
-  .glitch-text {
-    color: #38bdf8; position: relative; display: inline-block;
-  }
-  .glitch-text::before, .glitch-text::after {
-    content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  }
-  .glitch-text::before {
-    left: 2px; text-shadow: -2px 0 #ff00c1; clip: rect(24px, 550px, 90px, 0);
-    animation: glitch-anim 3s infinite linear alternate-reverse;
-  }
-  .glitch-text::after {
-    left: -2px; text-shadow: -2px 0 #00fff9, 0 2px #ff00c1; clip: rect(85px, 550px, 140px, 0);
-    animation: glitch-anim2 2.5s infinite linear alternate-reverse;
-  }
-  @keyframes glitch-anim {
-    0% { clip: rect(12px, 9999px, 44px, 0); transform: skew(0.3deg); }
-    50% { clip: rect(68px, 9999px, 12px, 0); transform: skew(0.8deg); }
-    100% { clip: rect(33px, 9999px, 89px, 0); transform: skew(0.1deg); }
-  }
-  @keyframes glitch-anim2 {
-    0% { clip: rect(54px, 9999px, 10px, 0); transform: skew(0.5deg); }
-    50% { clip: rect(2px, 9999px, 78px, 0); transform: skew(0.2deg); }
-    100% { clip: rect(91px, 9999px, 45px, 0); transform: skew(0.7deg); }
-  }
-  .gibberish-box {
-    margin-bottom: 20px; padding: 10px 18px; border-radius: 12px;
-    background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3);
-    color: #a855f7; font-size: clamp(12px, 2vw, 14px); letter-spacing: 3px;
-    box-shadow: 0 0 25px rgba(168, 85, 247, 0.2);
-    max-width: 600px; word-break: break-all;
-  }
-  
-  /* 炫酷变猪控制面板 */
-  .action-panel {
-    display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; max-width: 500px;
-  }
-  .transform-btn {
-    position: relative; padding: 14px 32px; font-size: 16px; font-weight: 900; color: #fff;
-    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); border: none; border-radius: 50px;
-    cursor: pointer; box-shadow: 0 0 25px rgba(236, 72, 153, 0.6);
-    transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 2px;
-    outline: none; overflow: hidden; z-index: 20;
-  }
-  .transform-btn.reverse-btn {
-    background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
-    box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
-  }
-  .transform-btn.repair-btn {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
-  }
-  .transform-btn:hover {
-    transform: scale(1.05); filter: brightness(1.1);
-  }
-  .transform-btn:active {
-    transform: scale(0.96);
-  }
-  .transform-btn:disabled {
-    opacity: 0.6; cursor: not-allowed; transform: none; filter: none;
-  }
-  
-  /* 进度条容器 */
-  .progress-container {
-    width: 100%; background: rgba(30, 41, 59, 0.88); border: 1px solid rgba(236, 72, 153, 0.5);
-    border-radius: 14px; padding: 12px 16px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
-    display: none; flex-direction: column; gap: 8px; z-index: 20;
-  }
-  .progress-container.active {
-    display: flex;
-  }
-  .progress-info {
-    display: flex; justify-content: space-between; font-size: 13px; color: #f472b6; font-weight: bold;
-  }
-  .progress-bar-bg {
-    width: 100%; height: 14px; background: #0f172a; border-radius: 7px; overflow: hidden; position: relative;
-  }
-  .progress-fill {
-    width: 0%; height: 100%; background: linear-gradient(90deg, #ec4899, #f43f5e, #fbbf24);
-    border-radius: 7px; transition: width 0.15s ease-out;
-    box-shadow: 0 0 12px rgba(236, 72, 153, 0.9);
-  }
-
-  /* 矩形霓虹庆功横幅 */
-  .result-banner {
-    display: none; width: 100%; background: linear-gradient(135deg, rgba(16,185,129,0.95), rgba(5,150,105,0.95));
-    border: 3px solid #fde047; border-radius: 16px; padding: 18px; text-align: center;
-    box-shadow: 0 0 35px rgba(16,185,129,0.8), inset 0 0 15px rgba(253,224,71,0.6);
-    z-index: 30;
-  }
-  .result-banner.error-banner {
-    background: linear-gradient(135deg, rgba(239,68,68,0.95), rgba(185,28,28,0.95));
-    border-color: #fca5a5;
-    box-shadow: 0 0 35px rgba(239,68,68,0.8);
-  }
-  .banner-title {
-    font-size: 19px; font-weight: 900; color: #fef08a; text-shadow: 0 2px 4px rgba(0,0,0,0.4); margin-bottom: 6px;
-  }
-  .result-banner.error-banner .banner-title { color: #fee2e2; }
-  .banner-desc {
-    font-size: 13px; color: #fff; font-weight: bold; letter-spacing: 1px;
-  }
-
-  /* 实时监控侧边栏 */
-  .monitor-panel {
-    position: absolute; top: 20px; right: 20px; width: 220px;
-    background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.4);
-    border-radius: 10px; padding: 12px; text-align: left; font-size: 11px; color: #38bdf8;
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); z-index: 15; pointer-events: none;
-    display: none;
-  }
-  @media (min-width: 768px) { .monitor-panel { display: block; } }
-  .monitor-title { font-weight: bold; color: #f472b6; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 3px; }
-  .monitor-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
-  .monitor-val { color: #4ade80; font-weight: bold; }
-
-  .footer-hint {
-    margin-top: 20px; color: #64748b; font-size: 12px; letter-spacing: 2px; z-index: 20;
-  }
-
-  .shake-screen { animation: screenShake 0.4s infinite; }
-  @keyframes screenShake {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    20% { transform: translate(-4px, 4px) rotate(-0.6deg); }
-    40% { transform: translate(4px, -3px) rotate(0.6deg); }
-    60% { transform: translate(-3px, -4px) rotate(-0.4deg); }
-    80% { transform: translate(3px, 3px) rotate(0.4deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
-  }
-
-  .floating-popup {
-    position: fixed; top: 18%; left: 50%; transform: translateX(-50%);
-    background: rgba(239, 68, 68, 0.92); border: 2px solid #fff; color: #fff;
-    padding: 10px 24px; border-radius: 8px; font-weight: bold; font-size: 15px;
-    z-index: 1000; box-shadow: 0 0 25px rgba(239, 68, 68, 0.9);
-    pointer-events: none; animation: popIn 0.3s ease-out forwards;
-  }
-  @keyframes popIn {
-    0% { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
-    100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
-  }
-  /* ===== temporary disappearance overlay: original lab source remains below ===== */
-  .disappear-overlay {
-    position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center;
-    overflow: hidden; padding: 24px; color: #e2e8f0; background: #05060b;
-    font-family: 'Courier New', Courier, monospace; isolation: isolate;
-  }
-  .disappear-overlay::before {
-    content: ''; position: absolute; inset: 0; z-index: -2;
-    background: radial-gradient(circle at 50% 42%, rgba(56,189,248,.12), transparent 30%),
-                linear-gradient(120deg, rgba(168,85,247,.08), transparent 36%, rgba(34,211,238,.06));
-  }
-  .disappear-overlay::after {
-    content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .28;
-    background: repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 4px),
-                repeating-linear-gradient(90deg, rgba(56,189,248,.035) 0 1px, transparent 1px 7px);
-    mix-blend-mode: screen;
-  }
-  .disappear-card {
-    width: min(92vw, 620px); padding: clamp(28px, 8vw, 62px) clamp(22px, 6vw, 54px);
-    border: 1px solid rgba(56,189,248,.42); border-radius: 24px; text-align: center;
-    background: linear-gradient(145deg, rgba(15,23,42,.76), rgba(2,6,23,.9));
-    box-shadow: 0 0 0 1px rgba(168,85,247,.14), 0 24px 90px rgba(0,0,0,.66), inset 0 0 55px rgba(56,189,248,.05);
-    animation: disappear-card-in .6s cubic-bezier(.2,.8,.2,1) both;
-  }
-  .disappear-code { color: #67e8f9; font-size: 11px; letter-spacing: 3px; opacity: .8; margin-bottom: 20px; }
-  .disappear-title {
-    display: inline-block; color: #f8fafc; cursor: pointer; user-select: none;
-    font-size: clamp(34px, 11vw, 76px); line-height: 1.05; font-weight: 900; letter-spacing: .08em;
-    text-shadow: 0 0 12px rgba(56,189,248,.85), 0 0 42px rgba(168,85,247,.6);
-    animation: disappear-glitch 3.2s steps(1,end) infinite;
-  }
-  .disappear-title span { color: #f0abfc; }
-  .disappear-status { margin-top: 22px; color: #94a3b8; font-size: 12px; letter-spacing: 1px; line-height: 1.8; }
-  .disappear-dots { display: inline-flex; gap: 7px; margin-top: 24px; }
-  .disappear-dots i { width: 7px; height: 7px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 12px #38bdf8; animation: disappear-dot 1.2s ease-in-out infinite; }
-  .disappear-dots i:nth-child(2) { animation-delay: .18s; background: #a855f7; box-shadow: 0 0 12px #a855f7; }
-  .disappear-dots i:nth-child(3) { animation-delay: .36s; background: #f0abfc; box-shadow: 0 0 12px #f0abfc; }
-  .disappear-overlay.reveal { animation: disappear-out .55s ease forwards; pointer-events: none; }
-  @keyframes disappear-card-in { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  @keyframes disappear-glitch { 0%, 88%, 100% { transform: translateX(0); filter: none; } 90% { transform: translateX(-2px) skewX(-2deg); filter: hue-rotate(35deg); } 92% { transform: translateX(3px) skewX(3deg); filter: saturate(1.5); } 94% { transform: translateX(0); } }
-  @keyframes disappear-dot { 0%, 100% { opacity: .35; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
-  @keyframes disappear-out { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.04); visibility: hidden; } }
-  @media (max-width: 480px) {
-    .disappear-overlay { padding: 16px; }
-    .disappear-card { border-radius: 20px; }
-    .disappear-code { letter-spacing: 2px; }
-    .disappear-status { font-size: 11px; }
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f5ee">
+  <meta name="description" content="给杨若璇的留言簿。留下一些想说的话，让日常的片刻在这里停一停。">
+  <meta property="og:title" content="给杨若璇的留言簿">
+  <meta property="og:description" content="留下一些想说的话。">
+  <meta property="og:type" content="website">
+  <title>给杨若璇的留言簿 · A place for words</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/guestbook.js" defer></script>
 </head>
-<body id="body">
-  <div class="disappear-overlay" id="disappear-overlay" role="dialog" aria-label="不见了">
-    <div class="disappear-card">
-      <div class="disappear-code">// SIGNAL LOST · PAGE VANISHED · 404</div>
-      <h1 class="disappear-title" id="disappear-title" tabindex="0" aria-label="不见了">不见了</h1>
-      <div class="disappear-status">TARGET STATUS: INVISIBLE<br>所有页面信号已暂时断开</div>
-      <div class="disappear-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-    </div>
-  </div>
-  <canvas id="matrix"></canvas>
-
-  <!-- 实时监控面板 -->
-  <div class="monitor-panel" id="monitor-panel">
-    <div class="monitor-title">📊 猪化系统监控</div>
-    <div class="monitor-row"><span>目标对象:</span> <span class="monitor-val">杨若璇</span></div>
-    <div class="monitor-row"><span>当前形态:</span> <span class="monitor-val" id="m-form">标准人类</span></div>
-    <div class="monitor-row"><span>基因融合度:</span> <span class="monitor-val" id="m-gene">0.0%</span></div>
-    <div class="monitor-row"><span>尾巴状态:</span> <span class="monitor-val" id="m-tail">无</span></div>
-    <div class="monitor-row"><span>系统状态:</span> <span class="monitor-val" id="m-status">待命准备</span></div>
-  </div>
-
-  <div class="container">
-    <div class="warning-badge">🔒 SYSTEM ACCESS RESTRICTED</div>
-    <div class="main-title">
-      <span id="multilingual-text" class="glitch-text" data-text="">加载中...</span>
-    </div>
-    <div class="gibberish-box" id="gibberish">
-      #￥%%￥…………%%……￥%￥#￥￥# 阿巴阿巴 System Error 404... 🤪
-    </div>
-
-    <!-- 变猪控制面板 -->
-    <div class="action-panel">
-      <button id="transform-btn" class="transform-btn" onclick="handleMainAction()">✨ 一键启动：把杨若璇变成猪 🐷</button>
-      
-      <div id="progress-box" class="progress-container">
-        <div class="progress-info">
-          <span id="progress-status">正在连接杨若璇的脑电波...</span>
-          <span id="progress-percent">0%</span>
+<body>
+  <a class="skip-link" href="#messages">跳到留言</a>
+  <div class="page-grain" aria-hidden="true"></div>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="wordmark" href="#" aria-label="留言簿首页"><span class="monogram">R<span>·</span></span><span>若璇的留言簿<small>A PERSONAL GUESTBOOK</small></span></a>
+      <nav aria-label="主导航"><a class="nav-link" href="#messages">读留言 <span>↙</span></a><a class="nav-link write-nav" href="#compose">写几句 <span>↗</span></a><button class="theme-toggle" type="button" aria-label="切换到深色外观" aria-pressed="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.1A8.3 8.3 0 0 1 9.9 4 8.4 8.4 0 1 0 20 14.1Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></nav>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="live-dot"></span> A SMALL PLACE FOR YOUR WORDS</p>
+          <h1 id="page-title">给杨若璇的<br><span class="title-line">留言簿<span class="title-dot">.</span><svg class="title-scribble" viewBox="0 0 250 20" aria-hidden="true"><path d="M3 13C68 0 170 2 243 11M13 18C89 9 175 8 229 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></h1>
+          <p class="hero-subtitle">留下一些想说的话。</p>
+          <p class="hero-description">一句问候、一点近况，或是偶然想到的小事。<br class="desktop-break">不用郑重其事，写下来就好。</p>
+          <a class="hero-cta" href="#compose"><span>翻开新的一页</span><span class="circle-arrow" aria-hidden="true">↗</span></a>
+          <div class="hero-footnote"><span class="tiny-cross" aria-hidden="true">✳</span><span>慢慢写。这里一直留着位置。</span></div>
         </div>
-        <div class="progress-bar-bg">
-          <div id="progress-fill" class="progress-fill"></div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-grid"></div><span class="art-coordinate coordinate-top">FIG. 01 — WORDS, KEPT.</span>
+          <div class="orbital orbital-one"></div><div class="orbital orbital-two"></div><div class="orbital-point"></div>
+          <div class="paper-sculpture"><div class="paper-back"></div><div class="paper-middle"></div><div class="paper-front"><div class="paper-top"><span>THE LITTLE THINGS</span><span>↗</span></div><div class="paper-main">有些话，<br>值得被留下<span>。</span></div><div class="paper-rule"></div><div class="paper-bottom"><span>To. 杨若璇</span><span class="paper-flower">✳</span></div></div><div class="paper-tab">OPEN / 随时欢迎</div></div>
+          <div class="art-label"><span class="label-dot"></span> 一页一页，收好日常。</div><span class="art-coordinate coordinate-bottom">NOTES / NO RUSH</span>
         </div>
-      </div>
-
-      <!-- 矩形横幅 -->
-      <div id="result-banner" class="result-banner">
-        <div class="banner-title" id="banner-title">🎉 转换成功：巨型可爱小猪若璇已上线！</div>
-        <div class="banner-desc" id="banner-desc">检测到宿主正在哼哧哼哧吃零食 · 任务圆满达成！oink ~ 🐽</div>
-      </div>
-    </div>
-
-    <div class="footer-hint">
-      杨若璇专属安全防火墙 · 严禁未授权开发
-    </div>
+      </section>
+      <div class="section-divider"><span>THE GUESTBOOK</span><span>平凡的字句，也有它的分量。</span><span aria-hidden="true">↓</span></div>
+      <section class="guestbook-grid" aria-label="留言簿">
+        <div class="messages-column" id="messages">
+          <div class="section-heading"><div><p class="eyebrow section-eyebrow">WORDS LEFT HERE</p><h2>字里行间<span class="message-count" aria-label="留言总数">—</span></h2></div><button class="refresh-button" type="button" aria-label="刷新留言"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6.1 7a7 7 0 0 1 11.5-1l2.4 3M4 15l2.4 3A7 7 0 0 0 18 17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>刷新</span></button></div>
+          <div class="list-caption"><span>最新的留言，放在最前面。</span><span class="list-line" aria-hidden="true"></span><span class="list-status">正在翻页</span></div>
+          <div class="list-notice" id="list-notice" role="status" hidden></div>
+          <div class="message-list" id="message-list" aria-live="polite" aria-busy="true"><div class="loading-card"><span class="loading-dot"></span> 正在打开留言簿…</div></div>
+          <button class="load-more" type="button" hidden>再读一些 <span aria-hidden="true">↓</span></button>
+          <div class="endnote"><span aria-hidden="true">✳</span><p>每一条留言，都是来过的痕迹。</p></div>
+        </div>
+        <aside class="compose-column" id="compose" aria-labelledby="compose-title">
+          <div class="compose-card"><div class="compose-topline"><span>YOUR TURN</span><span aria-hidden="true">↗</span></div><h2 id="compose-title">写在这一页</h2><p class="compose-intro">想到什么，就写什么。</p>
+            <form id="message-form" novalidate>
+              <div class="field"><label for="nickname">怎么称呼你 <span>01</span></label><input id="nickname" name="nickname" type="text" maxlength="48" autocomplete="nickname" placeholder="留下一个昵称" required aria-describedby="nickname-error"><p class="field-error" id="nickname-error" hidden></p></div>
+              <div class="field"><label for="message">想说的话 <span>02</span></label><textarea id="message" name="message" rows="5" maxlength="1000" placeholder="今天有什么想分享的小事吗？" required aria-describedby="message-error character-count"></textarea><div class="textarea-footer"><span>认真读，也认真收藏。</span><span id="character-count">0 / 500</span></div><p class="field-error" id="message-error" hidden></p></div>
+              <div class="honey-field" aria-hidden="true"><label for="website">请保持此项为空</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+              <p class="form-status" id="form-status" role="status" hidden></p>
+              <button class="submit-button" type="submit"><span class="submit-label">把这句话留下</span><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <p class="public-note">无需注册 · 留言将公开展示<br>请把联系方式等个人信息留在别处。</p>
+            </form>
+          </div>
+          <div class="margin-note"><span aria-hidden="true">↳</span><p>不必写得漂亮。<br>你的表达，本来就有自己的样子。</p></div>
+        </aside>
+      </section>
+    </main>
+    <footer class="site-footer"><a class="footer-mark" href="#" aria-label="回到顶部">R<span>·</span></a><div><p>给杨若璇的留言簿</p><span>A little space, for everyday words.</span></div><a href="#page-title" class="back-top">回到开头 <span aria-hidden="true">↑</span></a></footer>
   </div>
-
-  <script>
-    // 语音播报工具函数
-    function speak(text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-CN';
-        utterance.rate = 1.1;
-        utterance.pitch = 1.2;
-        window.speechSynthesis.speak(utterance);
-      }
-    }
-
-    // 矩阵数字雨背景特效
-    const canvas = document.getElementById('matrix');
-    const ctx = canvas.getContext('2d');
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    let matrixColor = '#00ffcc';
-    let baseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*杨若璇阿巴阿巴';
-    let chars = baseChars;
-    const fontSize = 16;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(1);
-
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = matrixColor;
-      ctx.font = fontSize + 'px monospace';
-      for (let i = 0; i < drops.length; i++) {
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-    }
-    setInterval(drawMatrix, 30);
-
-    // 多语言循环播放列表
-    const messages = [
-      "这个是杨若璇的个人网站，但是她不让我开发",
-      "This is Yang Ruoxuan's personal website, but she won't let me develop it.",
-      "ここは楊若璇の個人ウェブサイトですが、彼女は開発させてくれません。",
-      "이것은 양뤄쉬안의 개인 웹사이트이지만, 그녀는 개발을 허락하지 않습니다.",
-      "C'est le site web personnel de Yang Ruoxuan, mais elle ne me laisse pas le développer.",
-      "Dies ist die persönliche Website von Yang Ruoxuan, aber sie lässt mich nicht entwickeln.",
-      "Este es el sitio web personal de Yang Ruoxuan, ¡pero no me deja desarrollar!",
-      "Это личный сайт Ян Росюань, но она не разрешает мне его разрабатывать.",
-      "⚠️ 警告：杨若璇独占域名，开发请求已被拒绝！阿巴阿巴 #￥%%￥……"
-    ];
-
-    let msgIndex = 0;
-    const textEl = document.getElementById('multilingual-text');
-    function updateMessage() {
-      const currentText = messages[msgIndex];
-      textEl.textContent = currentText;
-      textEl.setAttribute('data-text', currentText);
-      msgIndex = (msgIndex + 1) % messages.length;
-    }
-    updateMessage();
-    setInterval(updateMessage, 4000);
-
-    // 乱码生成器
-    const gibberishBox = document.getElementById('gibberish');
-    const symbols = ['#￥%%￥…………', '阿巴阿巴🤪', 'ERROR_404_YANG', '~#@$%^&*()_+', '🚧 施工中 (被阻止)', '🤪 ￥%￥#￥￥#', 'SYSTEM_PIG_MODE_READY'];
-    function updateGibberish() {
-      let randomStr = '';
-      for (let i = 0; i < 3; i++) {
-        randomStr += symbols[Math.floor(Math.random() * symbols.length)] + ' ';
-      }
-      gibberishBox.textContent = randomStr;
-    }
-    setInterval(updateGibberish, 1200);
-
-    function showPopup(msg) {
-      const pop = document.createElement('div');
-      pop.className = 'floating-popup';
-      pop.textContent = msg;
-      document.body.appendChild(pop);
-      setTimeout(() => pop.remove(), 1600);
-    }
-
-    // 状态机：0 = 初始/可变猪, 1 = 变猪中, 2 = 已成猪/可逆转, 3 = 逆转崩溃(半猪半人), 4 = 修复中, 5 = 已修复
-    let appState = 0;
-
-    function handleMainAction() {
-      if (appState === 0) {
-        startTransformToPig();
-      } else if (appState === 2) {
-        startReverseToHuman();
-      } else if (appState === 3) {
-        startRepairHuman();
-      }
-    }
-
-    // 1. 变猪过程 (0 -> 2)
-    const pigStages = [
-      { at: 5, text: "正在连接杨若璇的脑电波...", speech: "正在连接脑电波" },
-      { at: 15, text: "检测到极强傲娇防御网，正在扫描弱点...", speech: "检测到傲娇防御" },
-      { at: 25, text: "正在绕过安全防火墙，注入粉红基因...", speech: "注入粉红基因" },
-      { at: 40, text: "正在重写饮食偏好：由沙拉切换为疯狂干饭...", speech: "重写饮食偏好" },
-      { at: 60, text: "正在调整圆滚滚的身材比例与面部萌化度...", speech: "调整身材比例" },
-      { at: 75, text: "正在生成萌力十足且会摇晃的卷曲小尾巴...", speech: "生成小尾巴" },
-      { at: 90, text: "最终校验：贪吃属性与可爱暴击已同步...", speech: "属性同步" },
-      { at: 100, text: "转换 100% 完成！", speech: "小猪若璇已上线" }
-    ];
-
-    function startTransformToPig() {
-      appState = 1;
-      const btn = document.getElementById('transform-btn');
-      const progressBox = document.getElementById('progress-box');
-      const progressFill = document.getElementById('progress-fill');
-      const progressStatus = document.getElementById('progress-status');
-      const progressPercent = document.getElementById('progress-percent');
-      const resultBanner = document.getElementById('result-banner');
-      const bodyEl = document.getElementById('body');
-      
-      const mForm = document.getElementById('m-form');
-      const mGene = document.getElementById('m-gene');
-      const mTail = document.getElementById('m-tail');
-      const mStatus = document.getElementById('m-status');
-
-      btn.disabled = true;
-      progressBox.classList.add('active');
-      resultBanner.style.display = 'none';
-      matrixColor = '#ec4899';
-      chars = baseChars + '🐷🐽🐷🐽🐷🐽🤪🔥💥💖';
-      mStatus.textContent = '猪化进行中';
-
-      speak("一键变猪系统已启动，开始对杨若璇进行深度改造。");
-
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 1;
-        if (progress > 100) progress = 100;
-
-        progressFill.style.width = progress + "%";
-        progressPercent.textContent = progress + "%";
-        mGene.textContent = progress.toFixed(1) + "%";
-        mTail.textContent = Math.min(100, Math.floor(progress * 1.2)) + "%";
-
-        const matched = pigStages.filter(s => progress >= s.at);
-        if (matched.length > 0) {
-          const st = matched[matched.length - 1];
-          progressStatus.textContent = st.text;
-          if (progress === st.at) speak(st.speech);
-        }
-
-        if (progress > 50) mForm.textContent = '小猪形态 (萌化中)';
-
-        if (progress === 35 || progress === 85) {
-          bodyEl.classList.add('shake-screen');
-          setTimeout(() => bodyEl.classList.remove('shake-screen'), 800);
-        }
-
-        if (progress === 100) {
-          clearInterval(interval);
-          resultBanner.style.display = "block";
-          matrixColor = '#4ade80';
-          chars = baseChars + '🐷🐽✨🎉💖OINK~';
-          btn.disabled = false;
-          btn.className = "transform-btn reverse-btn";
-          btn.textContent = "🧬 逆转成人：恢复理智";
-          mStatus.textContent = '已完全变成猪 🐽';
-          mForm.textContent = '纯种可爱小猪 🐷';
-          appState = 2; // 进入可逆转状态
-        }
-      }, 120);
-    }
-
-    // 2. 逆转成人报错过程 (2 -> 3)
-    function startReverseToHuman() {
-      appState = 3;
-      const btn = document.getElementById('transform-btn');
-      const progressBox = document.getElementById('progress-box');
-      const progressFill = document.getElementById('progress-fill');
-      const progressStatus = document.getElementById('progress-status');
-      const progressPercent = document.getElementById('progress-percent');
-      const resultBanner = document.getElementById('result-banner');
-      const bannerTitle = document.getElementById('banner-title');
-      const bannerDesc = document.getElementById('banner-desc');
-      const bodyEl = document.getElementById('body');
-      
-      const mForm = document.getElementById('m-form');
-      const mGene = document.getElementById('m-gene');
-      const mTail = document.getElementById('m-tail');
-      const mStatus = document.getElementById('m-status');
-
-      btn.disabled = true;
-      progressBox.classList.add('active');
-      resultBanner.style.display = 'none';
-      resultBanner.className = "result-banner error-banner";
-      matrixColor = '#ef4444'; // 红色报错雨
-      mStatus.textContent = '逆转冲突 (发生错误)';
-
-      speak("开始执行逆转程序，试图恢复人类形态。");
-
-      let progress = 100;
-      const interval = setInterval(() => {
-        progress -= 2; // 倒退
-        if (progress < 50) progress = 50; // 卡死在 50%
-
-        progressFill.style.width = progress + "%";
-        progressPercent.textContent = progress + "%";
-        mGene.textContent = progress.toFixed(1) + "%";
-        mTail.textContent = progress + "%";
-        progressStatus.textContent = `正在回退基因序列... 当前进度 ${progress}%`;
-
-        if (progress === 50) {
-          clearInterval(interval);
-          speak("警告！基因链发生剧烈冲突！程序崩溃！");
-          bodyEl.classList.add('shake-screen');
-          setTimeout(() => bodyEl.classList.remove('shake-screen'), 1200);
-
-          resultBanner.style.display = "block";
-          bannerTitle.textContent = "💥 致命错误：程序卡死！";
-          bannerDesc.textContent = "检测到人类理智与猪猪贪吃属性强行卡壳 · 当前触发【半猪半人形态】！🤪";
-
-          matrixColor = '#f59e0b'; // 橙色半猪半人雨
-          chars = baseChars + '🐷👨‍🦰🐽👩‍🦰⚡🔥';
-          mForm.textContent = '🧬 半猪半人怪兽形态';
-          mStatus.textContent = '系统崩溃 (无限报错)';
-
-          btn.disabled = false;
-          btn.className = "transform-btn repair-btn";
-          btn.textContent = "🧪 紧急修复：彻底净化猪猪基因";
-          appState = 3; // 保持在崩溃态，点击触发修复
-        }
-      }, 80);
-    }
-
-    // 3. 绿色按钮紧急修复 (3 -> 5)
-    function startRepairHuman() {
-      appState = 4;
-      const btn = document.getElementById('transform-btn');
-      const progressBox = document.getElementById('progress-box');
-      const progressFill = document.getElementById('progress-fill');
-      const progressStatus = document.getElementById('progress-status');
-      const progressPercent = document.getElementById('progress-percent');
-      const resultBanner = document.getElementById('result-banner');
-      const bannerTitle = document.getElementById('banner-title');
-      const bannerDesc = document.getElementById('banner-desc');
-      const bodyEl = document.getElementById('body');
-      
-      const mForm = document.getElementById('m-form');
-      const mGene = document.getElementById('m-gene');
-      const mTail = document.getElementById('m-tail');
-      const mStatus = document.getElementById('m-status');
-
-      btn.disabled = true;
-      resultBanner.style.display = 'none';
-      matrixColor = '#10b981'; // 绿色净化雨
-      mStatus.textContent = '紧急修复中';
-
-      speak("启动绿色安全协议，正在强制清除猪猪残留基因。");
-
-      let progress = 50;
-      const interval = setInterval(() => {
-        progress += 3;
-        if (progress > 100) progress = 100;
-
-        progressFill.style.width = progress + "%";
-        progressPercent.textContent = progress + "%";
-        mGene.textContent = (100 - progress).toFixed(1) + "% 猪基因";
-        mTail.textContent = Math.max(0, 100 - (progress - 50) * 2) + "%";
-        progressStatus.textContent = `正在强力清除残留猪基因... ${progress}%`;
-
-        if (progress === 100) {
-          clearInterval(interval);
-          resultBanner.style.display = "block";
-          resultBanner.className = "result-banner";
-          bannerTitle.textContent = "✨ 修复成功：杨若璇已安全回归人类！";
-          bannerDesc.textContent = "（警告：防火墙提示，下次随时可能再次变成小猪 🐷）";
-
-          matrixColor = '#38bdf8'; // 科技蓝
-          chars = baseChars;
-          btn.disabled = false;
-          btn.className = "transform-btn";
-          btn.textContent = "✨ 再次一键启动：把杨若璇变成猪 🐷";
-          mStatus.textContent = '安全运行 (人类形态)';
-          mForm.textContent = '标准人类 (暂时的)';
-          appState = 0; // 重置回初始状态
-          speak("基因净化完毕，杨若璇已成功恢复人类形态。");
-        }
-      }, 50);
-    }
-  </script>
-  <script>
-    // Hidden developer entrance: click the title five times to reveal the preserved lab.
-    (() => {
-      const overlay = document.getElementById('disappear-overlay');
-      const secret = document.getElementById('disappear-title');
-      let clicks = 0;
-      let resetTimer;
-      const reveal = () => {
-        overlay.classList.add('reveal');
-        setTimeout(() => { overlay.style.display = 'none'; }, 560);
-      };
-      const count = () => {
-        clicks += 1;
-        clearTimeout(resetTimer);
-        resetTimer = setTimeout(() => { clicks = 0; }, 4000);
-        if (clicks >= 5) reveal();
-      };
-      secret.addEventListener('click', count);
-      secret.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); count(); }
-      });
-    })();
-  </script>
+  <div class="toast" role="status" hidden><span class="toast-check" aria-hidden="true">✓</span><span>收到了，这句话已经留在这里。</span></div>
+  <noscript><p class="noscript-note">开启 JavaScript 后即可读取和发布留言。</p></noscript>
 </body>
 </html>
