@@ -56,11 +56,10 @@
   }
   function emptyState(unavailable = false) {
     const card = document.createElement('div'); card.className = 'empty-card';
-    const mark = document.createElement('span'); mark.className = 'empty-symbol'; mark.textContent = unavailable ? '…' : 'R·'; mark.setAttribute('aria-hidden', 'true');
-    const heading = document.createElement('h3'); heading.textContent = unavailable ? '这一页，暂时没能打开。' : '这里还很安静。';
-    const detail = document.createElement('p'); detail.textContent = unavailable ? '请点右上角的刷新，过一会儿再试。' : '第一条留言，会让这本小册子有了开头。';
-    card.append(mark, heading, detail);
-    if (!unavailable) { const link = document.createElement('a'); link.href = '#compose'; link.textContent = '留下第一句话 ↗'; card.append(link); }
+    const mark = document.createElement('span'); mark.className = 'empty-symbol'; mark.textContent = unavailable ? '…' : '—'; mark.setAttribute('aria-hidden', 'true');
+    const heading = document.createElement('h3'); heading.textContent = unavailable ? '暂时无法读取，请刷新重试。' : '还没有留言';
+    card.append(mark, heading);
+    if (!unavailable) { const link = document.createElement('a'); link.href = '#compose'; link.textContent = '写 ↗'; card.append(link); }
     return card;
   }
   function messageCard(message, fresh = false) {
@@ -99,7 +98,7 @@
   function updateCooldown() {
     const remaining = Math.ceil((cooldown - Date.now()) / 1000);
     if (remaining > 0) { submit.disabled = true; label.textContent = remaining + ' 秒后，可以再写一条'; }
-    else { submit.disabled = false; label.textContent = '把这句话留下'; clearInterval(cooldownTimer); }
+    else { submit.disabled = false; label.textContent = '留下'; clearInterval(cooldownTimer); }
   }
   let cooldownTimer;
   content.addEventListener('input', () => { updateCounter(); if (content.hasAttribute('aria-invalid')) fieldError(content, ''); });
@@ -112,13 +111,13 @@
     const textError = size(text) < 2 || size(text) > 500 ? '留言请填写 2～500 个字。' : '';
     fieldError(nickname, nickError); fieldError(content, textError); status('');
     if (nickError || textError) { (nickError ? nickname : content).focus(); return; }
-    submit.disabled = true; label.textContent = '正在把这句话收好…';
+    submit.disabled = true; label.textContent = '发布中…';
     try {
       if (!session || Date.parse(session.expiresAt) - Date.now() < 3000) await getSession();
       const wait = session.readyAt - Date.now(); if (wait > 0) await new Promise(resolve => setTimeout(resolve, wait + 50));
       const data = await api('/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nickname: nick, content: text, website: $('#website').value, token: session.token }) });
       // Only a server-confirmed write clears the draft and shows success.
-      content.value = ''; updateCounter(); status('已经发布。谢谢你留下的这句话。', true);
+      content.value = ''; updateCounter(); status('已发布。', true);
       if (seen.size === 0) list.replaceChildren();
       if (!seen.has(data.message.id)) { seen.add(data.message.id); list.prepend(messageCard(data.message, true)); total += 1; $('.message-count').textContent = String(total); }
       notice.hidden = true; $('.list-status').textContent = '刚刚收到新留言';

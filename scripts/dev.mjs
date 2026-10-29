@@ -14,7 +14,7 @@ if (!sqlite.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name=
 }
 const db = { prepare(sql) { return { bind(...values) { const stmt = sqlite.prepare(sql); return { first: async () => stmt.get(...values) || null, all: async () => ({ results: stmt.all(...values) }), run: async () => stmt.run(...values) }; }, first: async () => sqlite.prepare(sql).get() || null, all: async () => ({ results: sqlite.prepare(sql).all() }) }; } };
 const env = { DB: db, SIGNING_SECRET: process.env.SIGNING_SECRET || randomBytes(32).toString('hex') };
-const files = { '/': ['index.html','text/html'], '/index.html': ['index.html','text/html'], '/styles.css': ['styles.css','text/css'], '/guestbook.js': ['guestbook.js','text/javascript'], '/favicon.svg': ['favicon.svg','image/svg+xml'] };
+const files = { '/': ['index.html','text/html'], '/index.html': ['index.html','text/html'], '/styles.css': ['styles.css','text/css'], '/guestbook.js': ['guestbook.js','text/javascript'], '/marquee.js': ['marquee.js','text/javascript'], '/languages.json': ['languages.json','application/json'], '/favicon.svg': ['favicon.svg','image/svg+xml'] };
 const port = Number(process.env.PORT) || 4173;
 const server = http.createServer(async (req, res) => {
   try {

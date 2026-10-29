@@ -4,68 +4,58 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f5f5ee">
-  <meta name="description" content="给杨若璇的留言簿。留下一些想说的话，让日常的片刻在这里停一停。">
-  <meta property="og:title" content="给杨若璇的留言簿">
-  <meta property="og:description" content="留下一些想说的话。">
+  <meta name="description" content="杨若璇。">
+  <meta property="og:title" content="杨若璇">
+  <meta property="og:description" content="杨若璇的留言簿">
   <meta property="og:type" content="website">
-  <title>给杨若璇的留言簿 · A place for words</title>
+  <title>杨若璇</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
+  <script src="/marquee.js" defer></script>
   <script src="/guestbook.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#messages">跳到留言</a>
   <div class="page-grain" aria-hidden="true"></div>
-  <div class="site-shell">
-    <header class="site-header">
-      <a class="wordmark" href="#" aria-label="留言簿首页"><span class="monogram">R<span>·</span></span><span>若璇的留言簿<small>A PERSONAL GUESTBOOK</small></span></a>
-      <nav aria-label="主导航"><a class="nav-link" href="#messages">读留言 <span>↙</span></a><a class="nav-link write-nav" href="#compose">写几句 <span>↗</span></a><button class="theme-toggle" type="button" aria-label="切换到深色外观" aria-pressed="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.1A8.3 8.3 0 0 1 9.9 4 8.4 8.4 0 1 0 20 14.1Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></nav>
-    </header>
-    <main>
-      <section class="hero" aria-labelledby="page-title">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="live-dot"></span> A SMALL PLACE FOR YOUR WORDS</p>
-          <h1 id="page-title">给杨若璇的<br><span class="title-line">留言簿<span class="title-dot">.</span><svg class="title-scribble" viewBox="0 0 250 20" aria-hidden="true"><path d="M3 13C68 0 170 2 243 11M13 18C89 9 175 8 229 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></h1>
-          <p class="hero-subtitle">留下一些想说的话。</p>
-          <p class="hero-description">一句问候、一点近况，或是偶然想到的小事。<br class="desktop-break">不用郑重其事，写下来就好。</p>
-          <a class="hero-cta" href="#compose"><span>翻开新的一页</span><span class="circle-arrow" aria-hidden="true">↗</span></a>
-          <div class="hero-footnote"><span class="tiny-cross" aria-hidden="true">✳</span><span>慢慢写。这里一直留着位置。</span></div>
+  <header class="site-header site-shell">
+    <a class="wordmark" href="#page-title" aria-label="杨若璇首页">RUOXUAN<span>·</span></a>
+    <nav aria-label="主导航">
+      <a class="nav-link" href="#messages">读</a><a class="nav-link" href="#compose">写</a>
+      <button class="motion-toggle icon-button" type="button" aria-label="暂停弹幕" aria-pressed="false" title="暂停弹幕"><span aria-hidden="true">Ⅱ</span></button>
+      <button class="theme-toggle icon-button" type="button" aria-label="切换到深色外观" aria-pressed="false"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M20 14.1A8.3 8.3 0 0 1 9.9 4 8.4 8.4 0 1 0 20 14.1Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+    </nav>
+  </header>
+  <main>
+    <section class="name-stage" aria-labelledby="page-title">
+      <div class="stage-grid" aria-hidden="true"></div>
+      <div class="marquee-field" aria-hidden="true"></div>
+      <div class="name-center"><p class="name-roman" aria-hidden="true">YANG RUOXUAN</p><h1 id="page-title">杨若璇<span class="name-period" aria-hidden="true">.</span></h1></div>
+      <a class="stage-down" href="#messages" aria-label="往下读留言"><svg width="20" height="26" viewBox="0 0 20 26" aria-hidden="true"><path d="M10 2v20M4 16l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></a>
+    </section>
+    <section class="guestbook-grid site-shell" aria-label="留言簿">
+      <div class="messages-column" id="messages">
+        <div class="section-heading"><h2>留言<span class="message-count" aria-label="留言总数">—</span></h2><button class="refresh-button" type="button" aria-label="刷新留言"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6.1 7a7 7 0 0 1 11.5-1l2.4 3M4 15l2.4 3A7 7 0 0 0 18 17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        <span class="list-status sr-only" role="status">加载中</span>
+        <div class="list-notice" id="list-notice" role="status" hidden></div>
+        <div class="message-list" id="message-list" aria-live="polite" aria-busy="true"><div class="loading-card"><span class="loading-dot"></span>加载中</div></div>
+        <button class="load-more" type="button" hidden>更多 <span aria-hidden="true">↓</span></button>
+      </div>
+      <aside class="compose-column" id="compose" aria-labelledby="compose-title">
+        <div class="compose-card"><h2 id="compose-title">写</h2>
+          <form id="message-form" novalidate>
+            <div class="field"><label for="nickname">昵称</label><input id="nickname" name="nickname" type="text" maxlength="48" autocomplete="nickname" placeholder="你的名字" required aria-describedby="nickname-error"><p class="field-error" id="nickname-error" hidden></p></div>
+            <div class="field"><label for="message">留言</label><textarea id="message" name="message" rows="5" maxlength="1000" placeholder="…" required aria-describedby="message-error character-count"></textarea><div class="textarea-footer"><span id="character-count">0 / 500</span></div><p class="field-error" id="message-error" hidden></p></div>
+            <div class="honey-field" aria-hidden="true"><label for="website">请保持此项为空</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+            <p class="form-status" id="form-status" role="status" hidden></p>
+            <button class="submit-button" type="submit"><span class="submit-label">留下</span><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="public-note">公开留言 · 无需注册</p>
+          </form>
         </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="art-grid"></div><span class="art-coordinate coordinate-top">FIG. 01 — WORDS, KEPT.</span>
-          <div class="orbital orbital-one"></div><div class="orbital orbital-two"></div><div class="orbital-point"></div>
-          <div class="paper-sculpture"><div class="paper-back"></div><div class="paper-middle"></div><div class="paper-front"><div class="paper-top"><span>THE LITTLE THINGS</span><span>↗</span></div><div class="paper-main">有些话，<br>值得被留下<span>。</span></div><div class="paper-rule"></div><div class="paper-bottom"><span>To. 杨若璇</span><span class="paper-flower">✳</span></div></div><div class="paper-tab">OPEN / 随时欢迎</div></div>
-          <div class="art-label"><span class="label-dot"></span> 一页一页，收好日常。</div><span class="art-coordinate coordinate-bottom">NOTES / NO RUSH</span>
-        </div>
-      </section>
-      <div class="section-divider"><span>THE GUESTBOOK</span><span>平凡的字句，也有它的分量。</span><span aria-hidden="true">↓</span></div>
-      <section class="guestbook-grid" aria-label="留言簿">
-        <div class="messages-column" id="messages">
-          <div class="section-heading"><div><p class="eyebrow section-eyebrow">WORDS LEFT HERE</p><h2>字里行间<span class="message-count" aria-label="留言总数">—</span></h2></div><button class="refresh-button" type="button" aria-label="刷新留言"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6.1 7a7 7 0 0 1 11.5-1l2.4 3M4 15l2.4 3A7 7 0 0 0 18 17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>刷新</span></button></div>
-          <div class="list-caption"><span>最新的留言，放在最前面。</span><span class="list-line" aria-hidden="true"></span><span class="list-status">正在翻页</span></div>
-          <div class="list-notice" id="list-notice" role="status" hidden></div>
-          <div class="message-list" id="message-list" aria-live="polite" aria-busy="true"><div class="loading-card"><span class="loading-dot"></span> 正在打开留言簿…</div></div>
-          <button class="load-more" type="button" hidden>再读一些 <span aria-hidden="true">↓</span></button>
-          <div class="endnote"><span aria-hidden="true">✳</span><p>每一条留言，都是来过的痕迹。</p></div>
-        </div>
-        <aside class="compose-column" id="compose" aria-labelledby="compose-title">
-          <div class="compose-card"><div class="compose-topline"><span>YOUR TURN</span><span aria-hidden="true">↗</span></div><h2 id="compose-title">写在这一页</h2><p class="compose-intro">想到什么，就写什么。</p>
-            <form id="message-form" novalidate>
-              <div class="field"><label for="nickname">怎么称呼你 <span>01</span></label><input id="nickname" name="nickname" type="text" maxlength="48" autocomplete="nickname" placeholder="留下一个昵称" required aria-describedby="nickname-error"><p class="field-error" id="nickname-error" hidden></p></div>
-              <div class="field"><label for="message">想说的话 <span>02</span></label><textarea id="message" name="message" rows="5" maxlength="1000" placeholder="今天有什么想分享的小事吗？" required aria-describedby="message-error character-count"></textarea><div class="textarea-footer"><span>认真读，也认真收藏。</span><span id="character-count">0 / 500</span></div><p class="field-error" id="message-error" hidden></p></div>
-              <div class="honey-field" aria-hidden="true"><label for="website">请保持此项为空</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-              <p class="form-status" id="form-status" role="status" hidden></p>
-              <button class="submit-button" type="submit"><span class="submit-label">把这句话留下</span><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-              <p class="public-note">无需注册 · 留言将公开展示<br>请把联系方式等个人信息留在别处。</p>
-            </form>
-          </div>
-          <div class="margin-note"><span aria-hidden="true">↳</span><p>不必写得漂亮。<br>你的表达，本来就有自己的样子。</p></div>
-        </aside>
-      </section>
-    </main>
-    <footer class="site-footer"><a class="footer-mark" href="#" aria-label="回到顶部">R<span>·</span></a><div><p>给杨若璇的留言簿</p><span>A little space, for everyday words.</span></div><a href="#page-title" class="back-top">回到开头 <span aria-hidden="true">↑</span></a></footer>
-  </div>
-  <div class="toast" role="status" hidden><span class="toast-check" aria-hidden="true">✓</span><span>收到了，这句话已经留在这里。</span></div>
-  <noscript><p class="noscript-note">开启 JavaScript 后即可读取和发布留言。</p></noscript>
+      </aside>
+    </section>
+  </main>
+  <footer class="site-footer site-shell"><span>杨若璇</span><a href="#page-title" class="back-top" aria-label="回到顶部">↑</a></footer>
+  <div class="toast" role="status" hidden><span aria-hidden="true">✓</span><span>已留下。</span></div>
+  <noscript><p class="noscript-note">开启 JavaScript 后可读写留言。</p></noscript>
 </body>
 </html>

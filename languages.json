@@ -1,0 +1,1328 @@
+[
+  {
+    "language": "English",
+    "code": "en",
+    "text": "I love you",
+    "direction": "ltr"
+  },
+  {
+    "language": "Adangme",
+    "code": "ada",
+    "text": "i suɔ mo",
+    "direction": "ltr"
+  },
+  {
+    "language": "Afrikaans",
+    "code": "af",
+    "text": "ek het jou lief",
+    "direction": "ltr"
+  },
+  {
+    "language": "Akan",
+    "code": "ak",
+    "text": "mo dow",
+    "direction": "ltr"
+  },
+  {
+    "language": "Albanian",
+    "code": "sq",
+    "text": "të dua",
+    "direction": "ltr"
+  },
+  {
+    "language": "Southern Altai",
+    "code": "alt",
+    "text": "мен сени сӱӱп јадым",
+    "direction": "ltr"
+  },
+  {
+    "language": "Alutiiq",
+    "code": "ems",
+    "text": "qunukamken",
+    "direction": "ltr"
+  },
+  {
+    "language": "Amharic",
+    "code": "am",
+    "text": "አፈቅርሻለሁ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Arabic",
+    "code": "ar",
+    "text": "أُحِبُّكِ",
+    "direction": "rtl"
+  },
+  {
+    "language": "Egyptian Arabic",
+    "code": "arz",
+    "text": "بحبك",
+    "direction": "rtl"
+  },
+  {
+    "language": "Moroccan Arabic",
+    "code": "ary",
+    "text": "كنبغيك",
+    "direction": "rtl"
+  },
+  {
+    "language": "Aragonese",
+    "code": "an",
+    "text": "te quiero",
+    "direction": "ltr"
+  },
+  {
+    "language": "Armenian",
+    "code": "hy",
+    "text": "ես քեզ սիրում եմ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Assamese",
+    "code": "as",
+    "text": "মই তোমাক ভাল পাওঁ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Asturian",
+    "code": "ast",
+    "text": "te quiero",
+    "direction": "ltr"
+  },
+  {
+    "language": "Azerbaijani",
+    "code": "az",
+    "text": "səni sevirəm",
+    "direction": "ltr"
+  },
+  {
+    "language": "Bashkir",
+    "code": "ba",
+    "text": "мин һине яратам",
+    "direction": "ltr"
+  },
+  {
+    "language": "Basque",
+    "code": "eu",
+    "text": "maite zaitut",
+    "direction": "ltr"
+  },
+  {
+    "language": "Belarusian",
+    "code": "be",
+    "text": "я цябе́ каха́ю",
+    "direction": "ltr"
+  },
+  {
+    "language": "Bengali",
+    "code": "bn",
+    "text": "আমি তোমাকে ভালোবাসি",
+    "direction": "ltr"
+  },
+  {
+    "language": "Central Bikol",
+    "code": "bcl",
+    "text": "padaba taka",
+    "direction": "ltr"
+  },
+  {
+    "language": "Breton",
+    "code": "br",
+    "text": "me da gar",
+    "direction": "ltr"
+  },
+  {
+    "language": "Bulgarian",
+    "code": "bg",
+    "text": "оби́чам те",
+    "direction": "ltr"
+  },
+  {
+    "language": "Burmese",
+    "code": "my",
+    "text": "ခင်ဗျားချစ်တယ်",
+    "direction": "ltr"
+  },
+  {
+    "language": "Buryat",
+    "code": "bua",
+    "text": "би шамдаа дуратайб",
+    "direction": "ltr"
+  },
+  {
+    "language": "Caló",
+    "code": "rmq",
+    "text": "te camelo",
+    "direction": "ltr"
+  },
+  {
+    "language": "Catalan",
+    "code": "ca",
+    "text": "t'estimo",
+    "direction": "ltr"
+  },
+  {
+    "language": "Cebuano",
+    "code": "ceb",
+    "text": "gihigugma ko ikaw",
+    "direction": "ltr"
+  },
+  {
+    "language": "Chechen",
+    "code": "ce",
+    "text": "суна хьо еза",
+    "direction": "ltr"
+  },
+  {
+    "language": "Cherokee",
+    "code": "chr",
+    "text": "ᎬᎨᏳᎯ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Chichewa",
+    "code": "ny",
+    "text": "ndimakukonda",
+    "direction": "ltr"
+  },
+  {
+    "language": "Chickasaw",
+    "code": "cic",
+    "text": "chiholloli",
+    "direction": "ltr"
+  },
+  {
+    "language": "Cantonese",
+    "code": "yue",
+    "text": "我愛你",
+    "direction": "ltr"
+  },
+  {
+    "language": "Dungan",
+    "code": "dng",
+    "text": "вә нэ ни",
+    "direction": "ltr"
+  },
+  {
+    "language": "Hakka",
+    "code": "hak",
+    "text": "𠊎愛你",
+    "direction": "ltr"
+  },
+  {
+    "language": "Hokkien",
+    "code": "nan",
+    "text": "我疼汝",
+    "direction": "ltr"
+  },
+  {
+    "language": "Mandarin",
+    "code": "cmn",
+    "text": "我愛你",
+    "direction": "ltr"
+  },
+  {
+    "language": "Wu",
+    "code": "wuu",
+    "text": "我愛儂",
+    "direction": "ltr"
+  },
+  {
+    "language": "Chittagonian",
+    "code": "ctg",
+    "text": "আঁই তুয়ানরে বেশি গোম লাগে",
+    "direction": "ltr"
+  },
+  {
+    "language": "Chukchi",
+    "code": "ckt",
+    "text": "гымнан гыт ы’ԓгу тыԓгыркынигыт",
+    "direction": "ltr"
+  },
+  {
+    "language": "Chuvash",
+    "code": "cv",
+    "text": "эпӗ сана юрататӑп",
+    "direction": "ltr"
+  },
+  {
+    "language": "Cia-Cia",
+    "code": "cia",
+    "text": "indau pe'elu iso'o",
+    "direction": "ltr"
+  },
+  {
+    "language": "East Circassian",
+    "code": "kbd",
+    "text": "фӏыуэ узолъагъу",
+    "direction": "ltr"
+  },
+  {
+    "language": "Cornish",
+    "code": "kw",
+    "text": "My a'th kar",
+    "direction": "ltr"
+  },
+  {
+    "language": "Corsican",
+    "code": "co",
+    "text": "ti tengu cara",
+    "direction": "ltr"
+  },
+  {
+    "language": "Czech",
+    "code": "cs",
+    "text": "miluji tě",
+    "direction": "ltr"
+  },
+  {
+    "language": "Danish",
+    "code": "da",
+    "text": "jeg elsker dig",
+    "direction": "ltr"
+  },
+  {
+    "language": "Dolgan",
+    "code": "dlg",
+    "text": "мин энигин таптыыбын",
+    "direction": "ltr"
+  },
+  {
+    "language": "Egyptian",
+    "code": "egy",
+    "text": "mr.j ṯn",
+    "direction": "ltr"
+  },
+  {
+    "language": "Erzya",
+    "code": "myv",
+    "text": "вечктян",
+    "direction": "ltr"
+  },
+  {
+    "language": "Estonian",
+    "code": "et",
+    "text": "mina armastan sind",
+    "direction": "ltr"
+  },
+  {
+    "language": "Ewondo",
+    "code": "ewo",
+    "text": "ma ding wa",
+    "direction": "ltr"
+  },
+  {
+    "language": "Faroese",
+    "code": "fo",
+    "text": "eg elski teg",
+    "direction": "ltr"
+  },
+  {
+    "language": "Finnish",
+    "code": "fi",
+    "text": "minä rakastan sinua",
+    "direction": "ltr"
+  },
+  {
+    "language": "Franco-Provençal",
+    "code": "frp",
+    "text": "jo t'amo",
+    "direction": "ltr"
+  },
+  {
+    "language": "French",
+    "code": "fr",
+    "text": "je t'aime",
+    "direction": "ltr"
+  },
+  {
+    "language": "Old French",
+    "code": "fro",
+    "text": "je t'aim",
+    "direction": "ltr"
+  },
+  {
+    "language": "West Frisian",
+    "code": "fy",
+    "text": "ik hâld fan dy",
+    "direction": "ltr"
+  },
+  {
+    "language": "Galician",
+    "code": "gl",
+    "text": "ámote",
+    "direction": "ltr"
+  },
+  {
+    "language": "German",
+    "code": "de",
+    "text": "ich liebe dich",
+    "direction": "ltr"
+  },
+  {
+    "language": "Alemannic German",
+    "code": "gsw",
+    "text": "ich lieb dich",
+    "direction": "ltr"
+  },
+  {
+    "language": "Greek",
+    "code": "el",
+    "text": "σε αγαπώ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Ancient Greek",
+    "code": "grc",
+    "text": "σὲ φιλῶ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Greenlandic",
+    "code": "kl",
+    "text": "asavakkit",
+    "direction": "ltr"
+  },
+  {
+    "language": "Haitian Creole",
+    "code": "ht",
+    "text": "mwen renmen ou",
+    "direction": "ltr"
+  },
+  {
+    "language": "Hausa",
+    "code": "ha",
+    "text": "ina sonki",
+    "direction": "ltr"
+  },
+  {
+    "language": "Hawaiian",
+    "code": "haw",
+    "text": "aloha wau iāʻoe",
+    "direction": "ltr"
+  },
+  {
+    "language": "Hebrew",
+    "code": "he",
+    "text": "אֲנִי אוֹהֵב אוֹתָךְ",
+    "direction": "rtl"
+  },
+  {
+    "language": "Hiligaynon",
+    "code": "hil",
+    "text": "ginahigugma ko ikaw",
+    "direction": "ltr"
+  },
+  {
+    "language": "Hindi",
+    "code": "hi",
+    "text": "मैं तुमसे प्यार करता हूँ",
+    "direction": "ltr"
+  },
+  {
+    "language": "White Hmong",
+    "code": "mww",
+    "text": "kuv hlub koj",
+    "direction": "ltr"
+  },
+  {
+    "language": "Hopi",
+    "code": "hop",
+    "text": "nu’ umi unangwa’ta",
+    "direction": "ltr"
+  },
+  {
+    "language": "Hungarian",
+    "code": "hu",
+    "text": "szeretlek",
+    "direction": "ltr"
+  },
+  {
+    "language": "Ibaloi",
+    "code": "ibl",
+    "text": "pipiyam taka",
+    "direction": "ltr"
+  },
+  {
+    "language": "Icelandic",
+    "code": "is",
+    "text": "ég elska þig",
+    "direction": "ltr"
+  },
+  {
+    "language": "Igbo",
+    "code": "ig",
+    "text": "afulu m gi na anya",
+    "direction": "ltr"
+  },
+  {
+    "language": "Indonesian",
+    "code": "id",
+    "text": "aku cinta kamu",
+    "direction": "ltr"
+  },
+  {
+    "language": "Inuktitut",
+    "code": "iu",
+    "text": "ᓇᒡᓕᒋᕙᒋᑦ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Irish",
+    "code": "ga",
+    "text": "tá grá agam duit",
+    "direction": "ltr"
+  },
+  {
+    "language": "Italian",
+    "code": "it",
+    "text": "ti amo",
+    "direction": "ltr"
+  },
+  {
+    "language": "Jamaican Creole",
+    "code": "jam",
+    "text": "mi love yuh",
+    "direction": "ltr"
+  },
+  {
+    "language": "Japanese",
+    "code": "ja",
+    "text": "愛してる",
+    "direction": "ltr"
+  },
+  {
+    "language": "Javanese",
+    "code": "jv",
+    "text": "kula tresna sampeyan",
+    "direction": "ltr"
+  },
+  {
+    "language": "Jingpho",
+    "code": "kac",
+    "text": "nang hpe ngai tsaw ra ai",
+    "direction": "ltr"
+  },
+  {
+    "language": "Kabyle",
+    "code": "kab",
+    "text": "Hamlaγkem",
+    "direction": "ltr"
+  },
+  {
+    "language": "Kalmyk",
+    "code": "xal",
+    "text": "би чамд дуртав",
+    "direction": "ltr"
+  },
+  {
+    "language": "Kankanaey",
+    "code": "kne",
+    "text": "laylaydek sik-a",
+    "direction": "ltr"
+  },
+  {
+    "language": "Kannada",
+    "code": "kn",
+    "text": "ನಾನು ನಿನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತೇನೆ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Kapampangan",
+    "code": "pam",
+    "text": "kaluguran daka",
+    "direction": "ltr"
+  },
+  {
+    "language": "Karachay-Balkar",
+    "code": "krc",
+    "text": "мен сени сюеме",
+    "direction": "ltr"
+  },
+  {
+    "language": "Karelian",
+    "code": "krl",
+    "text": "minä armastan sindai",
+    "direction": "ltr"
+  },
+  {
+    "language": "Kashmiri",
+    "code": "ks",
+    "text": "مےٚ چھِ چٲنؠ ماے",
+    "direction": "rtl"
+  },
+  {
+    "language": "Kazakh",
+    "code": "kk",
+    "text": "мен сені сүйемін",
+    "direction": "ltr"
+  },
+  {
+    "language": "Khakas",
+    "code": "kjh",
+    "text": "мин сағаа хынчам",
+    "direction": "ltr"
+  },
+  {
+    "language": "Khmer",
+    "code": "km",
+    "text": "បងស្រឡាញ់អូន",
+    "direction": "ltr"
+  },
+  {
+    "language": "Komi-Zyrian",
+    "code": "kpv",
+    "text": "ме тэнӧ радейта",
+    "direction": "ltr"
+  },
+  {
+    "language": "Korean",
+    "code": "ko",
+    "text": "사랑해요",
+    "direction": "ltr"
+  },
+  {
+    "language": "Koryak",
+    "code": "kpy",
+    "text": "гымнан гыччи ылӈу тыкулӈыги",
+    "direction": "ltr"
+  },
+  {
+    "language": "Kristang",
+    "code": "mcm",
+    "text": "Em t' amo'b",
+    "direction": "ltr"
+  },
+  {
+    "language": "Kumyk",
+    "code": "kum",
+    "text": "мен сени сюемен",
+    "direction": "ltr"
+  },
+  {
+    "language": "Central Kurdish",
+    "code": "ckb",
+    "text": "من عاشقی تۆم",
+    "direction": "rtl"
+  },
+  {
+    "language": "Northern Kurdish",
+    "code": "kmr",
+    "text": "ez ji te hez dikim",
+    "direction": "ltr"
+  },
+  {
+    "language": "Kyrgyz",
+    "code": "ky",
+    "text": "мен сени сүйөм",
+    "direction": "ltr"
+  },
+  {
+    "language": "Lao",
+    "code": "lo",
+    "text": "ຂ້ອຍຮັກເຈົ້າ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Latin",
+    "code": "la",
+    "text": "te amo",
+    "direction": "ltr"
+  },
+  {
+    "language": "Latvian",
+    "code": "lv",
+    "text": "es mīlu tevi",
+    "direction": "ltr"
+  },
+  {
+    "language": "Lezgi",
+    "code": "lez",
+    "text": "заз вун кӏанзава",
+    "direction": "ltr"
+  },
+  {
+    "language": "Lingala",
+    "code": "ln",
+    "text": "nalingí yɔ̌",
+    "direction": "ltr"
+  },
+  {
+    "language": "Lithuanian",
+    "code": "lt",
+    "text": "aš tave myliu",
+    "direction": "ltr"
+  },
+  {
+    "language": "Louisiana Creole",
+    "code": "lou",
+    "text": "mo laime toi",
+    "direction": "ltr"
+  },
+  {
+    "language": "Low German",
+    "code": "nds",
+    "text": "ik leev di",
+    "direction": "ltr"
+  },
+  {
+    "language": "Luo",
+    "code": "luo",
+    "text": "aheri",
+    "direction": "ltr"
+  },
+  {
+    "language": "Lushootseed",
+    "code": "lut",
+    "text": "ʔəsx̌aƛ̕tubicid čəd",
+    "direction": "ltr"
+  },
+  {
+    "language": "Luxembourgish",
+    "code": "lb",
+    "text": "Ech hunn dech gär",
+    "direction": "ltr"
+  },
+  {
+    "language": "Macedonian",
+    "code": "mk",
+    "text": "те сакам",
+    "direction": "ltr"
+  },
+  {
+    "language": "Malay",
+    "code": "ms",
+    "text": "saya cintakan mu",
+    "direction": "ltr"
+  },
+  {
+    "language": "Malayalam",
+    "code": "ml",
+    "text": "ഞാൻ നിന്നെ പ്രേമിക്കുന്നു",
+    "direction": "ltr"
+  },
+  {
+    "language": "Maltese",
+    "code": "mt",
+    "text": "inħobbok",
+    "direction": "ltr"
+  },
+  {
+    "language": "Manx",
+    "code": "gv",
+    "text": "ta graih aym ort",
+    "direction": "ltr"
+  },
+  {
+    "language": "Māori",
+    "code": "mi",
+    "text": "kei te aroha au i a koe",
+    "direction": "ltr"
+  },
+  {
+    "language": "Marathi",
+    "code": "mr",
+    "text": "माझं तुझ्यावर प्रेम आहे",
+    "direction": "ltr"
+  },
+  {
+    "language": "Eastern Mari",
+    "code": "mhr",
+    "text": "мый тыйым йӧратем",
+    "direction": "ltr"
+  },
+  {
+    "language": "Mohawk",
+    "code": "moh",
+    "text": "konoronhkwa",
+    "direction": "ltr"
+  },
+  {
+    "language": "Moksha",
+    "code": "mdf",
+    "text": "келькте",
+    "direction": "ltr"
+  },
+  {
+    "language": "Mongolian",
+    "code": "mn",
+    "text": "би чамд хайртай",
+    "direction": "ltr"
+  },
+  {
+    "language": "Moore",
+    "code": "mos",
+    "text": "mam nonga fo",
+    "direction": "ltr"
+  },
+  {
+    "language": "Navajo",
+    "code": "nv",
+    "text": "ayóóʼánííníshʼní",
+    "direction": "ltr"
+  },
+  {
+    "language": "Neapolitan",
+    "code": "nap",
+    "text": "ti amo",
+    "direction": "ltr"
+  },
+  {
+    "language": "Nepali",
+    "code": "ne",
+    "text": "म तिमीलाई माया गर्छु।",
+    "direction": "ltr"
+  },
+  {
+    "language": "Norwegian (Bokmål)",
+    "code": "nb",
+    "text": "jeg elsker deg",
+    "direction": "ltr"
+  },
+  {
+    "language": "Occitan",
+    "code": "oc",
+    "text": "t'aimi",
+    "direction": "ltr"
+  },
+  {
+    "language": "Odia",
+    "code": "or",
+    "text": "ମୁଁ ତୁମକୁ ଭଲପାଏ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Ojibwe",
+    "code": "oj",
+    "text": "gizaagi'in",
+    "direction": "ltr"
+  },
+  {
+    "language": "Old English",
+    "code": "ang",
+    "text": "iċ lufiġe þē",
+    "direction": "ltr"
+  },
+  {
+    "language": "Old Tupi",
+    "code": "tpw",
+    "text": "oroaûsub",
+    "direction": "ltr"
+  },
+  {
+    "language": "Oneida",
+    "code": "one",
+    "text": "kunolúkhwaʼ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Pangasinan",
+    "code": "pag",
+    "text": "inaro taka",
+    "direction": "ltr"
+  },
+  {
+    "language": "Papiamentu",
+    "code": "pap",
+    "text": "mi stima bo",
+    "direction": "ltr"
+  },
+  {
+    "language": "Pashto",
+    "code": "ps",
+    "text": "تا سره مينه کوم",
+    "direction": "rtl"
+  },
+  {
+    "language": "Persian (Iranian)",
+    "code": "fa",
+    "text": "عاشِقِتَم",
+    "direction": "rtl"
+  },
+  {
+    "language": "Phuthi",
+    "code": "und",
+    "text": "Giyakutshadza",
+    "direction": "ltr"
+  },
+  {
+    "language": "Pipil",
+    "code": "ppl",
+    "text": "nimetztasujta",
+    "direction": "ltr"
+  },
+  {
+    "language": "Polish",
+    "code": "pl",
+    "text": "kocham cię",
+    "direction": "ltr"
+  },
+  {
+    "language": "Portuguese",
+    "code": "pt",
+    "text": "amo-te",
+    "direction": "ltr"
+  },
+  {
+    "language": "Punjabi",
+    "code": "pa",
+    "text": "ਮੈਂ ਤੈਨੂੰ ਪਿਆਰ ਕਰਦਾ ਹਾਂ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Quechua",
+    "code": "qu",
+    "text": "qanta munani",
+    "direction": "ltr"
+  },
+  {
+    "language": "Romanian",
+    "code": "ro",
+    "text": "te iubesc",
+    "direction": "ltr"
+  },
+  {
+    "language": "Romansh",
+    "code": "rm",
+    "text": "jau hai tai gument",
+    "direction": "ltr"
+  },
+  {
+    "language": "Russian",
+    "code": "ru",
+    "text": "я люблю тебя",
+    "direction": "ltr"
+  },
+  {
+    "language": "Inari Sami",
+    "code": "smn",
+    "text": "mun rähistâm tuu",
+    "direction": "ltr"
+  },
+  {
+    "language": "Northern Sami",
+    "code": "se",
+    "text": "mun ráhkistan du",
+    "direction": "ltr"
+  },
+  {
+    "language": "Skolt Sami",
+    "code": "sms",
+    "text": "mon rääʹǩǩstam tuu",
+    "direction": "ltr"
+  },
+  {
+    "language": "Sanskrit",
+    "code": "sa",
+    "text": "त्वयि स्निह्यामि",
+    "direction": "ltr"
+  },
+  {
+    "language": "Scots",
+    "code": "sco",
+    "text": "A luive ye",
+    "direction": "ltr"
+  },
+  {
+    "language": "Scottish Gaelic",
+    "code": "gd",
+    "text": "tha gràdh agam dhut",
+    "direction": "ltr"
+  },
+  {
+    "language": "Serbo-Croatian",
+    "code": "sh",
+    "text": "во̏лӣм те",
+    "direction": "ltr"
+  },
+  {
+    "language": "Shona",
+    "code": "sn",
+    "text": "Ndinokuda",
+    "direction": "ltr"
+  },
+  {
+    "language": "Shor",
+    "code": "cjs",
+    "text": "мен саға кӧленчам",
+    "direction": "ltr"
+  },
+  {
+    "language": "Sinhalese",
+    "code": "si",
+    "text": "මම ඔයාට ආදරෙයි",
+    "direction": "ltr"
+  },
+  {
+    "language": "Slovak",
+    "code": "sk",
+    "text": "ľúbim ťa",
+    "direction": "ltr"
+  },
+  {
+    "language": "Slovene",
+    "code": "sl",
+    "text": "ljubim te",
+    "direction": "ltr"
+  },
+  {
+    "language": "Somali",
+    "code": "so",
+    "text": "Waan ku jeclahay",
+    "direction": "ltr"
+  },
+  {
+    "language": "Sotho",
+    "code": "st",
+    "text": "ke a go rata",
+    "direction": "ltr"
+  },
+  {
+    "language": "Spanish",
+    "code": "es",
+    "text": "te quiero",
+    "direction": "ltr"
+  },
+  {
+    "language": "Sundanese",
+    "code": "su",
+    "text": "Abdi bogoh ka anjeun",
+    "direction": "ltr"
+  },
+  {
+    "language": "Swahili",
+    "code": "sw",
+    "text": "nakupenda",
+    "direction": "ltr"
+  },
+  {
+    "language": "Swedish",
+    "code": "sv",
+    "text": "jag älskar dig",
+    "direction": "ltr"
+  },
+  {
+    "language": "Sylheti",
+    "code": "syl",
+    "text": "ꠝꠥꠁ ꠔꠥꠝꠣꠞꠦ ꠜꠣꠟꠣ ꠙꠣꠁ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Tabasaran",
+    "code": "tab",
+    "text": "узуз уву ккунжазуз",
+    "direction": "ltr"
+  },
+  {
+    "language": "Tagalog",
+    "code": "tl",
+    "text": "mahal kita",
+    "direction": "ltr"
+  },
+  {
+    "language": "Tahitian",
+    "code": "ty",
+    "text": "ua here vau ia oe",
+    "direction": "ltr"
+  },
+  {
+    "language": "Tajik",
+    "code": "tg",
+    "text": "ман туро дӯст медорам",
+    "direction": "ltr"
+  },
+  {
+    "language": "Tamil",
+    "code": "ta",
+    "text": "நான் உன்னைக் காதலிக்கிறேன்",
+    "direction": "ltr"
+  },
+  {
+    "language": "Tatar",
+    "code": "tt",
+    "text": "мин сине яратам",
+    "direction": "ltr"
+  },
+  {
+    "language": "Telugu",
+    "code": "te",
+    "text": "నేను నిన్ను ప్రేమిస్తున్నాను",
+    "direction": "ltr"
+  },
+  {
+    "language": "Thai",
+    "code": "th",
+    "text": "ผมรักคุณ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Tok Pisin",
+    "code": "tpi",
+    "text": "mi lavim yu",
+    "direction": "ltr"
+  },
+  {
+    "language": "Tswana",
+    "code": "tn",
+    "text": "ke a go rata",
+    "direction": "ltr"
+  },
+  {
+    "language": "Tumbuka",
+    "code": "tum",
+    "text": "nkhukutemwa",
+    "direction": "ltr"
+  },
+  {
+    "language": "Turkish",
+    "code": "tr",
+    "text": "seni seviyorum",
+    "direction": "ltr"
+  },
+  {
+    "language": "Turkmen",
+    "code": "tk",
+    "text": "men seni söýýärin",
+    "direction": "ltr"
+  },
+  {
+    "language": "Udmurt",
+    "code": "udm",
+    "text": "мон тонэ яратӥсько",
+    "direction": "ltr"
+  },
+  {
+    "language": "Ukrainian",
+    "code": "uk",
+    "text": "я тебе́ коха́ю",
+    "direction": "ltr"
+  },
+  {
+    "language": "Urdu",
+    "code": "ur",
+    "text": "مُجھے تُم سے پْیار ہَے",
+    "direction": "rtl"
+  },
+  {
+    "language": "Uzbek",
+    "code": "uz",
+    "text": "men seni sevaman",
+    "direction": "ltr"
+  },
+  {
+    "language": "Venetan",
+    "code": "vec",
+    "text": "te amo",
+    "direction": "ltr"
+  },
+  {
+    "language": "Vietnamese",
+    "code": "vi",
+    "text": "anh yêu em",
+    "direction": "ltr"
+  },
+  {
+    "language": "Welsh",
+    "code": "cy",
+    "text": "'Rwy'n dy garu di",
+    "direction": "ltr"
+  },
+  {
+    "language": "Xhosa",
+    "code": "xh",
+    "text": "ndiyakuthanda",
+    "direction": "ltr"
+  },
+  {
+    "language": "Yakut",
+    "code": "sah",
+    "text": "мин эйиги́н тапты́ыбын",
+    "direction": "ltr"
+  },
+  {
+    "language": "Yiddish",
+    "code": "yi",
+    "text": "איך ליבע דיך",
+    "direction": "rtl"
+  },
+  {
+    "language": "Yoruba",
+    "code": "yo",
+    "text": "mo nífẹ̀ẹ́ rẹ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Yup'ik",
+    "code": "esu",
+    "text": "kenkamken",
+    "direction": "ltr"
+  },
+  {
+    "language": "Zazaki",
+    "code": "zza",
+    "text": "ez to sinena",
+    "direction": "ltr"
+  },
+  {
+    "language": "Zulu",
+    "code": "zu",
+    "text": "ngiyakuthanda",
+    "direction": "ltr"
+  },
+  {
+    "language": "Gulf Arabic",
+    "code": "afb",
+    "text": "اَحِبِّچْ",
+    "direction": "rtl"
+  },
+  {
+    "language": "Hijazi Arabic",
+    "code": "acw",
+    "text": "أحبك",
+    "direction": "rtl"
+  },
+  {
+    "language": "Karo Batak",
+    "code": "btx",
+    "text": "keleng ateku kam",
+    "direction": "ltr"
+  },
+  {
+    "language": "Simalungun Batak",
+    "code": "bts",
+    "text": "holong do uhurhu bamu",
+    "direction": "ltr"
+  },
+  {
+    "language": "Toba Batak",
+    "code": "bbc",
+    "text": "holong do rohangku tu ho",
+    "direction": "ltr"
+  },
+  {
+    "language": "Dutch",
+    "code": "nl",
+    "text": "ik hou van je",
+    "direction": "ltr"
+  },
+  {
+    "language": "Georgian",
+    "code": "ka",
+    "text": "მე შენ მიყვარხარ",
+    "direction": "ltr"
+  },
+  {
+    "language": "Gujarati",
+    "code": "gu",
+    "text": "હું તને પ્રેમ કરું છું",
+    "direction": "ltr"
+  },
+  {
+    "language": "Ingrian",
+    "code": "izh",
+    "text": "miä suvvaan sinnua",
+    "direction": "ltr"
+  },
+  {
+    "language": "Dzubukuá",
+    "code": "kzw",
+    "text": "dzuka ado",
+    "direction": "ltr"
+  },
+  {
+    "language": "Lombard",
+    "code": "lmo",
+    "text": "te vòj ben",
+    "direction": "ltr"
+  },
+  {
+    "language": "Lower Tanana",
+    "code": "taa",
+    "text": "nek'a dest'a",
+    "direction": "ltr"
+  },
+  {
+    "language": "Mandan",
+    "code": "mhq",
+    "text": "minikíkiirasxte'sh",
+    "direction": "ltr"
+  },
+  {
+    "language": "Northern Mansi",
+    "code": "mns",
+    "text": "ам наӈын э̄руптылум",
+    "direction": "ltr"
+  },
+  {
+    "language": "Mi'kmaq",
+    "code": "mic",
+    "text": "kesalul",
+    "direction": "ltr"
+  },
+  {
+    "language": "Nahuatl",
+    "code": "nah",
+    "text": "nimitztlazohtla",
+    "direction": "ltr"
+  },
+  {
+    "language": "Nheengatu",
+    "code": "yrl",
+    "text": "asaisú indé",
+    "direction": "ltr"
+  },
+  {
+    "language": "Nǀuu",
+    "code": "ngh",
+    "text": "na ǁʻâa a",
+    "direction": "ltr"
+  },
+  {
+    "language": "Old Norse",
+    "code": "non",
+    "text": "ek elska þik",
+    "direction": "ltr"
+  },
+  {
+    "language": "Romani",
+    "code": "rom",
+    "text": "kamav tut",
+    "direction": "ltr"
+  },
+  {
+    "language": "Samoan",
+    "code": "sm",
+    "text": "ʻou te alofa iate ʻoe",
+    "direction": "ltr"
+  },
+  {
+    "language": "Sranan Tongo",
+    "code": "srn",
+    "text": "mi lobi yu",
+    "direction": "ltr"
+  },
+  {
+    "language": "Swazi",
+    "code": "ss",
+    "text": "ngiyakutsandza",
+    "direction": "ltr"
+  },
+  {
+    "language": "Traveller Norwegian",
+    "code": "rmg",
+    "text": "miro asjar låsjano an diro",
+    "direction": "ltr"
+  },
+  {
+    "language": "Unami",
+    "code": "unm",
+    "text": "ktaholël",
+    "direction": "ltr"
+  },
+  {
+    "language": "Uyghur",
+    "code": "ug",
+    "text": "مەن سئىزنئى سئۆيئىمەن",
+    "direction": "rtl"
+  }
+]

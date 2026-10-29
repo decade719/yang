@@ -24,14 +24,14 @@ before(async () => {
 });
 
 test('built Worker serves its actual HTML, CSS, JavaScript and icon', async () => {
-  for (const [route, type] of [['/', 'text/html'], ['/index.html', 'text/html'], ['/styles.css', 'text/css'], ['/guestbook.js', 'text/javascript'], ['/favicon.svg', 'image/svg+xml']]) {
+  for (const [route, type] of [['/', 'text/html'], ['/index.html', 'text/html'], ['/styles.css', 'text/css'], ['/guestbook.js', 'text/javascript'], ['/marquee.js', 'text/javascript'], ['/languages.json', 'application/json'], ['/favicon.svg', 'image/svg+xml']]) {
     const response = await worker.fetch(new Request(origin + route), {});
     assert.equal(response.status, 200, route);
     assert.equal(response.headers.get('Content-Type').split(';')[0], type);
     assert.ok((await response.text()).length > 0, route);
   }
-  assert.match(html, /给杨若璇的留言簿/);
-  assert.match(html, /留下一些想说的话。/);
+  assert.match(html, /<title>杨若璇<\/title>/);
+  assert.match(html, /id="page-title">杨若璇/);
   assert.equal(await (await worker.fetch(new Request(origin + '/index.html'), {})).text(), html);
 });
 
