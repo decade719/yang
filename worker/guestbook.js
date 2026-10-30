@@ -4,6 +4,7 @@ const TOKEN_TTL_MS = 15 * 60 * 1000;
 const MINIMUM_WAIT_MS = 2000;
 const COOLDOWN_MS = 45 * 1000;
 const MAX_BODY_BYTES = 8192;
+const FRONTEND_ORIGINS = new Set(['https://yangruoxuan.ltd', 'https://www.yangruoxuan.ltd']);
 const encoder = new TextEncoder();
 const CONTROL_CHARACTERS = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\u202a-\u202e\u2066-\u2069]/u;
 const URL_PATTERN = /(?:https?:\/\/|www\.|\b[a-z0-9][a-z0-9.-]*\.(?:com|net|org|cn|io|xyz|top|vip|shop|cc|me|link)(?:\b|\/))/iu;
@@ -59,10 +60,11 @@ function requireDatabase(env) {
 
 function requireSameOrigin(request, mandatory = false) {
   const origin = request.headers.get('Origin');
-  if ((mandatory && !origin) || (origin && origin !== new URL(request.url).origin)) {
+  const knownFrontend = FRONTEND_ORIGINS.has(origin);
+  if ((mandatory && !origin) || (origin && origin !== new URL(request.url).origin && !knownFrontend)) {
     fail(403, 'ORIGIN_NOT_ALLOWED', '请在本站打开留言簿后再发布。');
   }
-  if (request.headers.get('Sec-Fetch-Site') === 'cross-site') {
+  if (request.headers.get('Sec-Fetch-Site') === 'cross-site' && !knownFrontend) {
     fail(403, 'ORIGIN_NOT_ALLOWED', '请在本站打开留言簿后再发布。');
   }
 }
@@ -242,9 +244,16 @@ async function postMessage(request, env) {
   return json({ message: present(row), cooldownSeconds: 45 }, 201);
 }
 
-export async function handleApi(request, env) {
+async function dispatchApi(request, env) {
   try {
     const path = new URL(request.url).pathname;
+    if (request.method === 'OPTIONS' && (path === '/api/messages' || path === '/api/session')) {
+      requireSameOrigin(request, true);
+      const method = request.headers.get('Access-Control-Request-Method');
+      const requested = (request.headers.get('Access-Control-Request-Headers') || '').split(',').map(value => value.trim().toLowerCase()).filter(Boolean);
+      if (!['GET', 'POST'].includes(method) || (path === '/api/session' && method !== 'GET') || requested.some(value => value !== 'content-type')) fail(403, 'ORIGIN_NOT_ALLOWED', '请使用本站的留言表单。');
+      return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+    }
     if (path === '/api/session' && request.method === 'GET') return await createSession(request, env);
     if (path === '/api/messages' && request.method === 'GET') return await listMessages(request, env);
     if (path === '/api/messages' && request.method === 'POST') return await postMessage(request, env);
@@ -259,4 +268,19 @@ export async function handleApi(request, env) {
     console.error('Guestbook request failed:', error instanceof Error ? error.message : 'unknown');
     return json({ error: '留言暂时没有送达，请稍后重试。', code: 'SERVICE_UNAVAILABLE' }, 503);
   }
+}
+
+export async function handleApi(request, env) {
+  const response = await dispatchApi(request, env);
+  const origin = request.headers.get('Origin');
+  if (!FRONTEND_ORIGINS.has(origin)) return response;
+  const headers = new Headers(response.headers);
+  headers.set('Access-Control-Allow-Origin', origin);
+  headers.set('Vary', 'Origin');
+  if (request.method === 'OPTIONS' && response.status === 204) {
+    headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    headers.set('Access-Control-Max-Age', '600');
+  }
+  return new Response(response.body, { status: response.status, headers });
 }

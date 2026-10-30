@@ -27,6 +27,23 @@ function client(fetcher, options = {}) {
   return { api, waits };
 }
 
+test('static custom-domain frontend uses the shared backend URL without sending cookies', async () => {
+  const requests = [];
+  const baseURL = 'https://yang-ruoxuan-guestbook.spiffy-berry-3280.chatgpt.site';
+  const { api } = client(async (path, options) => {
+    requests.push({ path, options });
+    return options.method === 'POST' ? json({ message, cooldownSeconds: 45 }, 201) : json(page);
+  }, { baseURL });
+  assert.deepEqual(await api('/api/messages?cursor=next'), page);
+  const body = JSON.stringify({ nickname: '来访者', content: '同一个留言簿', token: 'signed-token' });
+  await api('/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+  assert.equal(requests[0].path, baseURL + '/api/messages?cursor=next');
+  assert.equal(requests[1].path, baseURL + '/api/messages');
+  assert.equal(requests[1].options.body, body);
+  assert.equal(requests[1].options.headers.get('Content-Type'), 'application/json');
+  assert.ok(requests.every(request => request.options.credentials === 'omit'));
+});
+
 test('GET recovers from an HTML gateway error and explicitly requests JSON', async () => {
   const requests = [];
   const { api, waits } = client(async (path, options) => {

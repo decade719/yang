@@ -81,6 +81,8 @@ test('local sans font is served as its exact WOFF2 bytes with immutable caching'
   assert.equal(await head.text(), '');
   const license = await readFile(new URL('../fonts/OFL.txt', import.meta.url), 'utf8');
   assert.match(license, /SIL OPEN FONT LICENSE/);
+  const staticCSS = await readFile(new URL('../typography.css', import.meta.url), 'utf8');
+  assert.ok(staticCSS.includes(font.src), 'source deployment must reference an existing font file without a Worker alias');
 });
 
 test('page includes initial shared messages safely without relying on a browser API fetch', async () => {

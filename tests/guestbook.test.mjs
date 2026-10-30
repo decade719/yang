@@ -69,6 +69,50 @@ test('missing database or signing secret never reports a successful write', asyn
   assert.deepEqual(await response.json(), { error: '留言服务还未准备好，请稍后再来。', code: 'SERVICE_UNAVAILABLE' });
 });
 
+test('the exact custom domains can preflight, read and publish to the shared backend', async t => {
+  const { env, advance } = environment(t);
+  for (const origin of ['https://yangruoxuan.ltd', 'https://www.yangruoxuan.ltd']) {
+    const cors = { Origin: origin, 'Sec-Fetch-Site': 'cross-site' };
+    const preflight = await handleApi(req('/api/messages', 'OPTIONS', undefined, { ...cors, 'Access-Control-Request-Method': 'POST', 'Access-Control-Request-Headers': 'content-type' }), env);
+    assert.equal(preflight.status, 204);
+    assert.equal(preflight.headers.get('Access-Control-Allow-Origin'), origin);
+    assert.equal(preflight.headers.get('Access-Control-Allow-Headers'), 'Content-Type');
+    assert.equal(preflight.headers.get('Access-Control-Allow-Credentials'), null);
+    const sessionResponse = await handleApi(req('/api/session', 'GET', undefined, cors), env);
+    assert.equal(sessionResponse.status, 200);
+    assert.equal(sessionResponse.headers.get('Access-Control-Allow-Origin'), origin);
+    const token = (await sessionResponse.json()).token;
+    advance(46000);
+    const response = await post(env, token, '来自自定义域名 ' + origin, {}, cors);
+    // URL validation deliberately excludes links from messages.
+    assert.equal(response.status, 422);
+    const published = await post(env, token, origin.includes('www.') ? '从另一个入口留下。' : '从自定义域名留下。', {}, cors);
+    assert.equal(published.status, 201);
+    assert.equal(published.headers.get('Access-Control-Allow-Origin'), origin);
+    const list = await handleApi(req('/api/messages', 'GET', undefined, cors), env);
+    assert.equal(list.status, 200);
+    assert.equal(list.headers.get('Access-Control-Allow-Origin'), origin);
+    assert.ok((await list.json()).messages.length > 0);
+  }
+  assert.equal(env.DB.sqlite.prepare('SELECT COUNT(*) AS n FROM messages').get().n, 2);
+});
+
+test('custom domain access rejects lookalike origins and extra preflight permissions', async t => {
+  const { env } = environment(t);
+  for (const origin of ['https://yangruoxuan.ltd.evil.test', 'http://yangruoxuan.ltd', 'https://yangruoxuan.ltd:8443', 'null']) {
+    const response = await handleApi(req('/api/messages', 'OPTIONS', undefined, { Origin: origin, 'Access-Control-Request-Method': 'POST', 'Access-Control-Request-Headers': 'content-type' }), env);
+    assert.equal(response.status, 403);
+    assert.equal(response.headers.get('Access-Control-Allow-Origin'), null);
+    const token = await handleApi(req('/api/session', 'GET', undefined, { Origin: origin, 'Sec-Fetch-Site': 'cross-site' }), env);
+    assert.equal(token.status, 403);
+  }
+  for (const [method, header] of [['DELETE', 'content-type'], ['POST', 'authorization']]) {
+    const response = await handleApi(req('/api/messages', 'OPTIONS', undefined, { Origin: 'https://yangruoxuan.ltd', 'Access-Control-Request-Method': method, 'Access-Control-Request-Headers': header }), env);
+    assert.equal(response.status, 403);
+    assert.equal(response.headers.get('Access-Control-Allow-Headers'), null);
+  }
+});
+
 test('empty shared database returns a genuine empty state', async t => {
   const { env } = environment(t);
   const response = await handleApi(req('/api/messages'), env);

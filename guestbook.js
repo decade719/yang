@@ -1,5 +1,5 @@
 // Keep network recovery independent of the page so it can be exercised directly.
-function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve => setTimeout(resolve, ms)), timeoutMs = 10000 } = {}) {
+function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve => setTimeout(resolve, ms)), timeoutMs = 10000, baseURL = '' } = {}) {
   const validMessage = item => item && typeof item.id === 'string' && typeof item.nickname === 'string' && typeof item.content === 'string' && typeof item.createdAt === 'string' && Number.isFinite(Date.parse(item.createdAt));
   function validData(path, method, data) {
     if (!data || typeof data !== 'object') return false;
@@ -19,7 +19,8 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
       try {
         const headers = new Headers(options.headers);
         headers.set('Accept', 'application/json');
-        const response = await fetcher(path, { ...options, headers, signal: controller.signal, credentials: 'same-origin', cache: 'no-store' });
+        const target = baseURL ? new URL(path, baseURL).href : path;
+        const response = await fetcher(target, { ...options, headers, signal: controller.signal, credentials: baseURL ? 'omit' : 'same-origin', cache: 'no-store' });
         const data = await response.json().catch(() => null);
         if (response.ok && validData(path, method, data)) return data;
         const applicationError = !response.ok && typeof data?.error === 'string';
@@ -48,7 +49,8 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
   const $ = selector => document.querySelector(selector);
   const form = $('#message-form'), nickname = $('#nickname'), content = $('#message');
   if (!form) return;
-  const api = createGuestbookApi();
+  const customDomain = ['yangruoxuan.ltd', 'www.yangruoxuan.ltd'].includes(window.location?.hostname);
+  const api = createGuestbookApi({ baseURL: customDomain ? 'https://yang-ruoxuan-guestbook.spiffy-berry-3280.chatgpt.site' : '' });
   const list = $('#message-list'), notice = $('#list-notice'), more = $('.load-more');
   const submit = $('.submit-button'), label = $('.submit-label'), refresh = $('.refresh-button');
   let session = null, sessionPromise = null, nextCursor = null, loading = false, total = 0, cooldown = 0, toastTimer, listFailed = false, recoveryTimer;
