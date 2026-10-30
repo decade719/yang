@@ -10,6 +10,7 @@ for (const [file, route, type] of [
   ['styles.css', '/styles.css', 'text/css; charset=utf-8'],
   ['space.css', '/space.css', 'text/css; charset=utf-8'],
   ['gallery.css', '/gallery.css', 'text/css; charset=utf-8'],
+  ['typography.css', '/typography.css', 'text/css; charset=utf-8'],
   ['guestbook.js', '/guestbook.js', 'text/javascript; charset=utf-8'],
   ['marquee.js', '/marquee.js', 'text/javascript; charset=utf-8'],
   ['constellation.js', '/constellation.js', 'text/javascript; charset=utf-8'],
@@ -18,6 +19,12 @@ for (const [file, route, type] of [
   ['languages.json', '/languages.json', 'application/json; charset=utf-8'],
   ['favicon.svg', '/favicon.svg', 'image/svg+xml']
 ]) assets[route] = { body: await readFile(path.join(root, file), 'utf8'), type };
+const font = JSON.parse(await readFile(path.join(root, 'fonts/manifest.json'), 'utf8'));
+if (!/^\/fonts\/ruoxuan-sans-[a-f0-9]{12}\.woff2$/.test(font.src)) throw new Error('Unexpected font path.');
+const fontBytes = await readFile(path.join(root, font.src.slice(1)));
+if (!font.src.endsWith(createHash('sha256').update(fontBytes).digest('hex').slice(0, 12) + '.woff2')) throw new Error('Font hash mismatch.');
+assets[font.src] = { body: fontBytes.toString('base64'), encoding: 'base64', type: 'font/woff2', cache: 'public, max-age=31536000, immutable' };
+assets['/typography.css'].body = assets['/typography.css'].body.replaceAll('/fonts/ruoxuan-sans.woff2', font.src);
 // Each deployed page references the exact script/style content it was built with.
 // Keep the old paths for already-open pages, but new pages never reuse their URLs.
 for (const [route, asset] of Object.entries(assets)) {
@@ -46,4 +53,4 @@ await mkdir(path.join(root, 'dist/server'), { recursive: true });
 await mkdir(path.join(root, 'dist/.openai'), { recursive: true });
 await writeFile(path.join(root, 'dist/server/index.js'), source);
 await copyFile(path.join(root, '.openai/hosting.json'), path.join(root, 'dist/.openai/hosting.json'));
-console.log(`Built guestbook Worker with ${Object.keys(assets).length} embedded assets, including six optimized full-frame photos.`);
+console.log(`Built guestbook Worker with ${Object.keys(assets).length} embedded assets, six photos and a local sans font.`);

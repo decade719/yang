@@ -1,0 +1,11 @@
+{
+  "src": "/fonts/ruoxuan-sans-3bc1da399db6.woff2",
+  "family": "Ruoxuan Sans",
+  "weight": [
+    300,
+    600
+  ],
+  "glyphs": 4610,
+  "source": "https://github.com/notofonts/noto-cjk/blob/main/Sans/Variable/TTF/Subset/NotoSansSC-VF.ttf",
+  "license": "OFL.txt"
+}

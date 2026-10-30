@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/space.css">
   <link rel="stylesheet" href="/gallery.css">
+  <link rel="stylesheet" href="/typography.css">
   <script src="/marquee.js" defer></script>
   <script src="/guestbook.js" defer></script>
   <script src="/constellation.js" defer></script>
@@ -37,15 +38,15 @@
       <div class="name-center"><p class="name-roman" aria-hidden="true">YANG RUOXUAN</p><h1 id="page-title">杨若璇<span class="name-period" aria-hidden="true">.</span></h1></div>
       <a class="stage-down" href="#moments" aria-label="往下看照片"><svg width="20" height="26" viewBox="0 0 20 26" aria-hidden="true"><path d="M10 2v20M4 16l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></a>
     </section>
-    <section class="photo-gallery site-shell" id="moments" aria-label="照片" aria-roledescription="轮播相册">
+    <section class="photo-gallery site-shell" id="moments" aria-label="照片" aria-roledescription="照片拼贴">
       <div class="gallery-orbit" aria-hidden="true"></div>
       <div class="photo-stage" tabindex="0" aria-label="照片展示，使用左右方向键切换">
-        <figure class="photo-slide is-active" data-photo="0" data-slot="0" aria-hidden="false"><img class="photo-atmosphere" src="/photos/thumb-01-33d6d38b69.webp" alt="" aria-hidden="true"><img class="photo-original" src="/photos/moment-01-d9e3430046.webp" width="1600" height="736" alt="夜空下的游戏人物" decoding="async" loading="lazy" draggable="false"></figure>
-        <figure class="photo-slide" data-photo="1" data-slot="1" aria-hidden="true"><img class="photo-atmosphere" data-src="/photos/thumb-02-1e2864bb95.webp" alt="" aria-hidden="true"><img class="photo-original" data-src="/photos/moment-02-242adf640d.webp" width="1280" height="960" alt="蓝色天空中的电影画面" decoding="async" draggable="false"></figure>
-        <figure class="photo-slide" data-photo="2" data-slot="2" aria-hidden="true"><img class="photo-atmosphere" data-src="/photos/thumb-03-dedacdb003.webp" alt="" aria-hidden="true"><img class="photo-original" data-src="/photos/moment-03-bd0e992106.webp" width="1200" height="1600" alt="小狗挂件" decoding="async" draggable="false"></figure>
-        <figure class="photo-slide" data-photo="3" data-slot="3" aria-hidden="true"><img class="photo-atmosphere" data-src="/photos/thumb-04-e0bc91cba2.webp" alt="" aria-hidden="true"><img class="photo-original" data-src="/photos/moment-04-cc4e69f92e.webp" width="1200" height="1600" alt="一篮毛绒玩偶" decoding="async" draggable="false"></figure>
-        <figure class="photo-slide" data-photo="4" data-slot="4" aria-hidden="true"><img class="photo-atmosphere" data-src="/photos/thumb-05-9cd4815d03.webp" alt="" aria-hidden="true"><img class="photo-original" data-src="/photos/moment-05-745568b47f.webp" width="1448" height="1086" alt="桌上的相框与咖啡杯" decoding="async" draggable="false"></figure>
-        <figure class="photo-slide" data-photo="5" data-slot="5" aria-hidden="true"><img class="photo-atmosphere" data-src="/photos/thumb-06-57fbb56079.webp" alt="" aria-hidden="true"><img class="photo-original" data-src="/photos/moment-06-3a1aa828b3.webp" width="526" height="654" alt="小猩猩插画" decoding="async" draggable="false"></figure>
+        <figure class="photo-slide is-active" data-photo="0" data-slot="0"><button class="photo-pick" type="button" aria-label="将这张照片置于前方：夜空下的游戏人物" aria-pressed="true"><img class="photo-original" src="/photos/moment-01-d9e3430046.webp" width="1600" height="736" alt="夜空下的游戏人物" decoding="async" loading="lazy" draggable="false"></button></figure>
+        <figure class="photo-slide" data-photo="1" data-slot="1"><button class="photo-pick" type="button" aria-label="将这张照片置于前方：蓝色天空中的电影画面" aria-pressed="false"><img class="photo-original" src="/photos/moment-02-242adf640d.webp" width="1280" height="960" alt="蓝色天空中的电影画面" decoding="async" loading="lazy" draggable="false"></button></figure>
+        <figure class="photo-slide" data-photo="2" data-slot="2"><button class="photo-pick" type="button" aria-label="将这张照片置于前方：小狗挂件" aria-pressed="false"><img class="photo-original" src="/photos/moment-03-bd0e992106.webp" width="1200" height="1600" alt="小狗挂件" decoding="async" loading="lazy" draggable="false"></button></figure>
+        <figure class="photo-slide" data-photo="3" data-slot="3"><button class="photo-pick" type="button" aria-label="将这张照片置于前方：一篮毛绒玩偶" aria-pressed="false"><img class="photo-original" src="/photos/moment-04-cc4e69f92e.webp" width="1200" height="1600" alt="一篮毛绒玩偶" decoding="async" loading="lazy" draggable="false"></button></figure>
+        <figure class="photo-slide" data-photo="4" data-slot="4"><button class="photo-pick" type="button" aria-label="将这张照片置于前方：桌上的相框与咖啡杯" aria-pressed="false"><img class="photo-original" src="/photos/moment-05-745568b47f.webp" width="1448" height="1086" alt="桌上的相框与咖啡杯" decoding="async" loading="lazy" draggable="false"></button></figure>
+        <figure class="photo-slide" data-photo="5" data-slot="5"><button class="photo-pick" type="button" aria-label="将这张照片置于前方：小猩猩插画" aria-pressed="false"><img class="photo-original" src="/photos/moment-06-3a1aa828b3.webp" width="526" height="654" alt="小猩猩插画" decoding="async" loading="lazy" draggable="false"></button></figure>
       </div>
       <div class="gallery-footer">
         <div class="gallery-count"><span class="gallery-current">01</span><span class="gallery-count-line" aria-hidden="true"></span><span>06</span></div>
@@ -78,5 +79,6 @@
   <footer class="site-footer site-shell"><span>杨若璇</span><a href="#page-title" class="back-top" aria-label="回到顶部">↑</a></footer>
   <div class="toast" role="status" hidden><span aria-hidden="true">✓</span><span>已留下。</span></div>
   <noscript><p class="noscript-note">开启 JavaScript 后可读写留言。</p></noscript>
+  <!--guestbook-bootstrap-->
 </body>
 </html>

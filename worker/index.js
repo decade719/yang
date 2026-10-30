@@ -10,6 +10,17 @@ export const securityHeaders = {
 // Replaced by the build script; there are no filesystem reads in production.
 const ASSETS = /*__STATIC_ASSETS__*/ {};
 const decodedAssets = new Map();
+export async function withInitialMessages(request, env, html) {
+  const marker = '<!--guestbook-bootstrap-->';
+  if (!html.includes(marker) || !env.DB?.prepare) return html;
+  // Read within this Worker: initial page display does not depend on a second
+  // browser fetch, which some clients/intermediaries fail to deliver correctly.
+  const result = await handleApi(new Request(new URL('/api/messages', request.url)), env);
+  if (!result.ok) return html;
+  const data = await result.json();
+  const safe = JSON.stringify(data).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+  return html.replace(marker, () => `<script id="guestbook-bootstrap" type="application/json">${safe}</script>`);
+}
 function assetBody(path, asset) {
   if (asset.encoding !== 'base64') return asset.body;
   if (!decodedAssets.has(path)) {
@@ -33,6 +44,7 @@ export default {
     if (!['GET', 'HEAD'].includes(request.method)) return new Response('Method not allowed', { status: 405, headers: { ...securityHeaders, Allow: 'GET, HEAD' } });
     const asset = ASSETS[path === '/index.html' ? '/' : path];
     if (!asset) return new Response('这一页还没有写下。', { status: 404, headers: { ...securityHeaders, 'Content-Type': 'text/plain; charset=utf-8' } });
-    return new Response(request.method === 'HEAD' ? null : assetBody(path, asset), { headers: { ...securityHeaders, 'Content-Type': asset.type, 'Cache-Control': asset.cache || 'public, max-age=0, must-revalidate' } });
+    const body = request.method === 'HEAD' ? null : asset.type.startsWith('text/html') ? await withInitialMessages(request, env, asset.body) : assetBody(path, asset);
+    return new Response(body, { headers: { ...securityHeaders, 'Content-Type': asset.type, 'Cache-Control': asset.cache || 'public, max-age=0, must-revalidate' } });
   }
 };

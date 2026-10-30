@@ -40,8 +40,8 @@ test('deployed HTML requests content-versioned scripts and styles instead of sta
   const response = await worker.fetch(new Request(origin + '/'), {});
   assert.equal(response.headers.get('Cache-Control'), 'no-store');
   const references = [...html.matchAll(/(?:src|href)="(\/assets\/[^" ]+\.(?:js|css))"/g)].map(match => match[1]);
-  assert.equal(references.length, 7);
-  assert.equal(new Set(references).size, 7);
+  assert.equal(references.length, 8);
+  assert.equal(new Set(references).size, 8);
   assert.doesNotMatch(html, /(?:src|href)="\/(?:guestbook|marquee|constellation|gallery)\.js"/);
   for (const route of references) {
     const match = route.match(/^\/assets\/(.+)\.([a-f0-9]{12})\.(js|css)$/);
@@ -52,7 +52,10 @@ test('deployed HTML requests content-versioned scripts and styles instead of sta
     const bytes = Buffer.from(await asset.arrayBuffer());
     assert.equal(createHash('sha256').update(bytes).digest('hex').slice(0, 12), match[2]);
     const original = await readFile(new URL(`../${match[1]}.${match[3]}`, import.meta.url));
-    assert.deepEqual(bytes, original);
+    if (match[1] === 'typography') {
+      const font = JSON.parse(await readFile(new URL('../fonts/manifest.json', import.meta.url), 'utf8'));
+      assert.equal(bytes.toString(), original.toString().replaceAll('/fonts/ruoxuan-sans.woff2', font.src));
+    } else assert.deepEqual(bytes, original);
     const legacy = await worker.fetch(new Request(origin + `/${match[1]}.${match[3]}`), {});
     assert.equal(legacy.headers.get('Cache-Control'), 'no-store');
     assert.deepEqual(Buffer.from(await legacy.arrayBuffer()), bytes);
@@ -61,6 +64,44 @@ test('deployed HTML requests content-versioned scripts and styles instead of sta
   assert.equal(nonexistent.status, 404);
   const index = await worker.fetch(new Request(origin + '/index.html'), {});
   assert.equal(index.headers.get('Cache-Control'), 'no-store');
+});
+
+test('local sans font is served as its exact WOFF2 bytes with immutable caching', async () => {
+  const font = JSON.parse(await readFile(new URL('../fonts/manifest.json', import.meta.url), 'utf8'));
+  const response = await worker.fetch(new Request(origin + font.src), {});
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('Content-Type'), 'font/woff2');
+  assert.match(response.headers.get('Cache-Control'), /immutable/);
+  const bytes = Buffer.from(await response.arrayBuffer());
+  assert.equal(bytes.subarray(0, 4).toString(), 'wOF2');
+  assert.deepEqual(bytes, await readFile(new URL('..' + font.src, import.meta.url)));
+  assert.ok(bytes.length < 1600000);
+  const head = await worker.fetch(new Request(origin + font.src, { method: 'HEAD' }), {});
+  assert.equal(head.status, 200);
+  assert.equal(await head.text(), '');
+  const license = await readFile(new URL('../fonts/OFL.txt', import.meta.url), 'utf8');
+  assert.match(license, /SIL OPEN FONT LICENSE/);
+});
+
+test('page includes initial shared messages safely without relying on a browser API fetch', async () => {
+  const row = { id: '00000000-0000-4000-8000-000000000001', nickname: '</script><img src=x onerror=alert(1)>', content: 'hello </script>\u2028 $&', created_at: 1793285192619 };
+  const env = { DB: { prepare(sql) {
+    return sql.includes('COUNT(*)') ? { first: async () => ({ total: 1 }) } : { bind: () => ({ all: async () => ({ results: [row] }) }) };
+  } } };
+  const response = await worker.fetch(new Request(origin + '/'), env);
+  const page = await response.text();
+  assert.equal(response.headers.get('Cache-Control'), 'no-store');
+  const match = page.match(/<script id="guestbook-bootstrap" type="application\/json">([\s\S]*?)<\/script>/);
+  assert.ok(match);
+  assert.equal(match[1].includes('<'), false);
+  const parsed = JSON.parse(match[1]);
+  assert.equal(parsed.total, 1);
+  assert.equal(parsed.messages[0].nickname, row.nickname);
+  assert.equal(parsed.messages[0].content, row.content);
+  assert.doesNotMatch(page, /<img src=x onerror=/);
+  const head = await worker.fetch(new Request(origin + '/', { method: 'HEAD' }), { DB: { prepare() { throw new Error('HEAD must not query'); } } });
+  assert.equal(head.status, 200);
+  assert.equal(await head.text(), '');
 });
 
 test('six full-frame photos and previews survive binary packaging with immutable hashed URLs', async () => {

@@ -34,7 +34,10 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
         const timedOut = error.name === 'AbortError';
         failure = Object.assign(new Error(timedOut ? '网络有点慢，请稍后重试，已填写的内容会保留。' : '暂时连接不上留言簿，请检查网络后重试。'), { code: timedOut ? 'TIMEOUT' : 'NETWORK_ERROR', retryable: true });
       } finally { clearTimeout(timeout); }
-      if (!failure.retryable || attempt === attempts - 1) throw failure;
+      if (!failure.retryable || attempt === attempts - 1) {
+        console.warn('Guestbook request failed', { path: new URL(path, 'https://guestbook.invalid').pathname, status: failure.status || 0, code: failure.code });
+        throw failure;
+      }
       await wait(500 * (attempt + 1));
     }
   };
@@ -50,6 +53,12 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
   const submit = $('.submit-button'), label = $('.submit-label'), refresh = $('.refresh-button');
   let session = null, sessionPromise = null, nextCursor = null, loading = false, total = 0, cooldown = 0, toastTimer, listFailed = false, recoveryTimer;
   const seen = new Set();
+  let initialMessages = null;
+  try {
+    const node = $('#guestbook-bootstrap');
+    const data = node ? JSON.parse(node.textContent) : null;
+    if (data && Array.isArray(data.messages) && Number.isInteger(data.total) && (data.nextCursor === null || typeof data.nextCursor === 'string')) initialMessages = data;
+  } catch { /* API loading remains available when the page has no initial data. */ }
   const size = value => Array.from(value.normalize('NFC').trim()).length;
   const themeButton = $('.theme-toggle');
   function setTheme(dark) {
@@ -116,7 +125,9 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
     loading = true; list.setAttribute('aria-busy', 'true'); refresh.setAttribute('aria-busy', 'true'); refresh.disabled = true; more.disabled = true;
     notice.hidden = true; $('.list-status').textContent = '正在翻页';
     try {
-      const data = await api('/api/messages' + (append && nextCursor ? '?cursor=' + encodeURIComponent(nextCursor) : ''));
+      let data;
+      if (!append && initialMessages) { data = initialMessages; initialMessages = null; }
+      else data = await api('/api/messages' + (append && nextCursor ? '?cursor=' + encodeURIComponent(nextCursor) : ''));
       if (!append) { list.replaceChildren(); seen.clear(); }
       for (const message of data.messages) if (!seen.has(message.id)) { seen.add(message.id); list.append(messageCard(message)); }
       total = data.total; $('.message-count').textContent = String(total); nextCursor = data.nextCursor; listFailed = false;

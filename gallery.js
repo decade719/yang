@@ -21,7 +21,7 @@
   // Keep a complete shuffled deck so every photo appears before the next cycle.
   const deck = [0, ...shuffle(slides.slice(1).map((_, i) => i + 1))];
   let timer = 0, inView = false, hovering = false, focused = false;
-  let userPaused = false, busy = false, touch = null, turns = 0, activeTurn = null;
+  let userPaused = false, busy = false, touch = null, turns = 0, ignoreClicksUntil = 0;
   const pending = new Map();
   const motionStopped = () => reduced.matches || globalMotion?.getAttribute('aria-pressed') === 'true';
   function canPlay() { return inView && !document.hidden && !userPaused && !hovering && !focused && !busy && !motionStopped(); }
@@ -34,15 +34,12 @@
     toggle.firstElementChild.textContent = paused ? '▷' : 'Ⅱ';
     toggle.disabled = motionStopped();
     gallery.classList.toggle('motion-still', motionStopped() || document.hidden || !inView);
-    if (activeTurn && (motionStopped() || document.hidden || !inView)) activeTurn.finish();
     if (canPlay()) timer = setTimeout(() => { timer = 0; turn(1, false); }, 5600 + Math.random() * 2200);
   }
 
   function load(index) {
     if (pending.has(index)) return pending.get(index);
     const slide = slides[index], original = slide.querySelector('.photo-original');
-    const atmosphere = slide.querySelector('.photo-atmosphere');
-    if (atmosphere.dataset.src) { atmosphere.src = atmosphere.dataset.src; delete atmosphere.dataset.src; }
     const source = original.dataset.src || original.getAttribute('src');
     const promise = new Promise((resolve, reject) => {
       const preload = new Image();
@@ -57,17 +54,18 @@
     pending.set(index, promise); return promise;
   }
 
-  function arrange(except = -1) {
+  function arrange() {
     deck.forEach((index, slot) => {
       const slide = slides[index];
-      if (index !== except) slide.dataset.slot = String(slot);
+      slide.dataset.slot = String(slot);
       slide.classList.toggle('is-active', slot === 0);
-      slide.setAttribute('aria-hidden', String(slot !== 0));
+      slide.querySelector('.photo-pick').setAttribute('aria-pressed', String(slot === 0));
     });
+    gallery.dataset.layout = String(Math.floor(Math.abs(turns) / 2) % 2);
     gallery.querySelector('.gallery-current').textContent = String(deck[0] + 1).padStart(2, '0');
   }
   function warmDeck() {
-    deck.slice(0, 4).forEach(index => load(index).catch(() => {}));
+    deck.forEach(index => load(index).catch(() => {}));
   }
 
   async function turn(direction = 1, manual = true, target = null) {
@@ -80,30 +78,13 @@
       await load(next);
       // A slow image load must not restart motion after the user pauses.
       if (!manual && (!inView || document.hidden || userPaused || hovering || focused || motionStopped())) return;
-      const outgoing = deck[0], card = slides[outgoing];
-      const from = getComputedStyle(card).transform;
       const offset = deck.indexOf(next);
       deck.push(...deck.splice(0, offset));
       turns += direction;
       if (target === null && direction > 0 && turns > 0 && turns % slides.length === 0) {
         deck.splice(1, deck.length - 1, ...shuffle(deck.slice(1)));
       }
-      const animate = inView && !document.hidden && !motionStopped() && typeof card.animate === 'function';
-      if (animate) {
-        card.classList.add('is-turning');
-        arrange(outgoing);
-        const sign = direction * (turns % 3 === 0 ? -1 : 1);
-        activeTurn = card.animate([
-          { transform: from, opacity: 1, offset: 0 },
-          { transform: `${from} translate3d(${sign * 12}px,-18px,75px) rotateY(${sign * -16}deg) rotateZ(${sign * -3}deg)`, opacity: 1, offset: .36 },
-          { transform: `${from} translate3d(${sign * -12}%,10%,0) rotateY(${sign * -63}deg) rotateZ(${sign * -8}deg)`, opacity: .4, offset: .78 },
-          { transform: `${from} translate3d(${sign * -16}%,14%,-70px) rotateY(${sign * -76}deg) rotateZ(${sign * -11}deg)`, opacity: 0 }
-        ], { duration: 980 + (Math.abs(turns) % 3) * 90, easing: 'cubic-bezier(.22,.65,.22,1)', fill: 'forwards' });
-        try { await activeTurn.finished; } catch { /* Settle a cancelled turn into its final deck order. */ }
-        arrange();
-        activeTurn.cancel(); activeTurn = null;
-        card.classList.remove('is-turning');
-      } else arrange();
+      arrange();
       if (manual) status.textContent = `第 ${next + 1} 张，共 ${slides.length} 张：${slides[next].querySelector('.photo-original').alt}`;
       warmDeck();
     } catch (error) { status.textContent = error.message; }
@@ -112,7 +93,10 @@
 
   gallery.querySelector('.gallery-prev').addEventListener('click', () => turn(-1));
   gallery.querySelector('.gallery-next').addEventListener('click', () => turn(1));
-  toggle.addEventListener('click', () => { userPaused = !userPaused; updateTimer(); });
+  slides.forEach((slide, index) => slide.querySelector('.photo-pick').addEventListener('click', () => {
+    if (Date.now() >= ignoreClicksUntil) turn(1, true, index);
+  }));
+  toggle.addEventListener('click', () => { userPaused = !userPaused; if (!userPaused) focused = false; updateTimer(); });
   gallery.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
@@ -126,7 +110,7 @@
   stage.addEventListener('pointerup', event => {
     if (!touch || touch.id !== event.pointerId) return;
     const dx = event.clientX - touch.x, dy = event.clientY - touch.y; touch = null;
-    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) turn(dx < 0 ? 1 : -1);
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) { ignoreClicksUntil = Date.now() + 450; turn(dx < 0 ? 1 : -1); }
   }, { passive: true });
   stage.addEventListener('pointercancel', () => { touch = null; }, { passive: true });
   document.addEventListener('visibilitychange', updateTimer);
