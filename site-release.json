@@ -1,0 +1,45 @@
+{
+  "build": "af4b902ecaa7",
+  "assets": [
+    {
+      "source": "styles.css",
+      "url": "/assets/styles.3b8d4967c167.css",
+      "hash": "3b8d4967c167"
+    },
+    {
+      "source": "space.css",
+      "url": "/assets/space.c49147ab9012.css",
+      "hash": "c49147ab9012"
+    },
+    {
+      "source": "gallery.css",
+      "url": "/assets/gallery.5441397e0851.css",
+      "hash": "5441397e0851"
+    },
+    {
+      "source": "typography.css",
+      "url": "/assets/typography.97803039f6ac.css",
+      "hash": "97803039f6ac"
+    },
+    {
+      "source": "guestbook.js",
+      "url": "/assets/guestbook.c51741c9de84.js",
+      "hash": "c51741c9de84"
+    },
+    {
+      "source": "marquee.js",
+      "url": "/assets/marquee.2abbe2e1dd6d.js",
+      "hash": "2abbe2e1dd6d"
+    },
+    {
+      "source": "constellation.js",
+      "url": "/assets/constellation.f03effe02398.js",
+      "hash": "f03effe02398"
+    },
+    {
+      "source": "gallery.js",
+      "url": "/assets/gallery.86b75a022baa.js",
+      "hash": "86b75a022baa"
+    }
+  ]
+}

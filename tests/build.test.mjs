@@ -51,7 +51,7 @@ test('deployed HTML requests content-versioned scripts and styles instead of sta
     assert.match(asset.headers.get('Cache-Control'), /immutable/);
     const bytes = Buffer.from(await asset.arrayBuffer());
     assert.equal(createHash('sha256').update(bytes).digest('hex').slice(0, 12), match[2]);
-    const original = await readFile(new URL(`../${match[1]}.${match[3]}`, import.meta.url));
+    const original = Buffer.from((await readFile(new URL(`../${match[1]}.${match[3]}`, import.meta.url), 'utf8')).replace(/\r\n/g, '\n'));
     if (match[1] === 'typography') {
       const font = JSON.parse(await readFile(new URL('../fonts/manifest.json', import.meta.url), 'utf8'));
       assert.equal(bytes.toString(), original.toString().replaceAll('/fonts/ruoxuan-sans.woff2', font.src));
@@ -64,6 +64,15 @@ test('deployed HTML requests content-versioned scripts and styles instead of sta
   assert.equal(nonexistent.status, 404);
   const index = await worker.fetch(new Request(origin + '/index.html'), {});
   assert.equal(index.headers.get('Cache-Control'), 'no-store');
+  const sourceHTML = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const staticHTML = await readFile(new URL('../latest.html', import.meta.url), 'utf8');
+  assert.equal(sourceHTML, staticHTML);
+  for (const route of references) {
+    const disk = await readFile(new URL('..' + route, import.meta.url));
+    const served = await worker.fetch(new Request(origin + route), {});
+    assert.deepEqual(Buffer.from(await served.arrayBuffer()), disk);
+  }
+  assert.equal(await (await worker.fetch(new Request(origin + '/latest.html'), {})).text(), html);
 });
 
 test('local sans font is served as its exact WOFF2 bytes with immutable caching', async () => {

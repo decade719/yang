@@ -1,7 +1,9 @@
 import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { prepareStaticSite } from './prepare-static.mjs';
 const root = path.resolve(import.meta.dirname, '..');
+await prepareStaticSite(root);
 const manifest = JSON.parse(await readFile(path.join(root, '.openai/hosting.json'), 'utf8'));
 if (!manifest.project_id || manifest.d1 !== 'DB') throw new Error('Missing Sites identity or D1 DB binding.');
 const assets = {};
@@ -18,7 +20,8 @@ for (const [file, route, type] of [
   ['photos.json', '/photos.json', 'application/json; charset=utf-8'],
   ['languages.json', '/languages.json', 'application/json; charset=utf-8'],
   ['favicon.svg', '/favicon.svg', 'image/svg+xml']
-]) assets[route] = { body: await readFile(path.join(root, file), 'utf8'), type };
+]) assets[route] = { body: (await readFile(path.join(root, file), 'utf8')).replace(/\r\n/g, '\n'), type };
+assets['/site-release.json'] = { body: await readFile(path.join(root, 'site-release.json'), 'utf8'), type: 'application/json; charset=utf-8', cache: 'no-store' };
 const font = JSON.parse(await readFile(path.join(root, 'fonts/manifest.json'), 'utf8'));
 if (!/^\/fonts\/ruoxuan-sans-[a-f0-9]{12}\.woff2$/.test(font.src)) throw new Error('Unexpected font path.');
 const fontBytes = await readFile(path.join(root, font.src.slice(1)));

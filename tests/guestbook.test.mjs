@@ -92,6 +92,8 @@ test('the exact custom domains can preflight, read and publish to the shared bac
     const list = await handleApi(req('/api/messages', 'GET', undefined, cors), env);
     assert.equal(list.status, 200);
     assert.equal(list.headers.get('Access-Control-Allow-Origin'), origin);
+    assert.equal(list.headers.get('Access-Control-Expose-Headers'), 'X-Guestbook-Api-Version');
+    assert.equal(list.headers.get('X-Guestbook-Api-Version'), 'shared-20261030-2');
     assert.ok((await list.json()).messages.length > 0);
   }
   assert.equal(env.DB.sqlite.prepare('SELECT COUNT(*) AS n FROM messages').get().n, 2);

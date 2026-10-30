@@ -1,0 +1,32 @@
+/
+  Cache-Control: no-store, max-age=0
+/index.html
+  Cache-Control: no-store, max-age=0
+/latest.html
+  Cache-Control: no-store, max-age=0
+/latest
+  Cache-Control: no-store, max-age=0
+/site-release.json
+  Cache-Control: no-store, max-age=0
+/guestbook.js
+  Cache-Control: no-store, max-age=0
+/gallery.js
+  Cache-Control: no-store, max-age=0
+/marquee.js
+  Cache-Control: no-store, max-age=0
+/constellation.js
+  Cache-Control: no-store, max-age=0
+/styles.css
+  Cache-Control: no-store, max-age=0
+/space.css
+  Cache-Control: no-store, max-age=0
+/gallery.css
+  Cache-Control: no-store, max-age=0
+/typography.css
+  Cache-Control: no-store, max-age=0
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/fonts/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/photos/*.webp
+  Cache-Control: public, max-age=31536000, immutable

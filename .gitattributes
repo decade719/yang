@@ -1,0 +1,5 @@
+/assets/** text eol=lf
+/index.html text eol=lf
+/latest.html text eol=lf
+/site-release.json text eol=lf
+/_headers text eol=lf

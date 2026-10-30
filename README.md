@@ -56,6 +56,8 @@ npm run build
 
 生产构建会给脚本和样式生成包含内容哈希的独立地址，首页返回 `Cache-Control: no-store`，避免重新打开时继续使用更新前的脚本。已经打开的旧页面仍需重新加载一次；本地预览继续使用原文件路径。
 
+`scripts/prepare-static.mjs` 会把八个脚本/样式实际写入 `assets/`，并更新 `index.html`、同内容的 `latest.html` 和 `site-release.json`。这些生成文件需要随源码一起提交，直接托管仓库的域名也能使用指纹地址；不能仅在Worker构建内部创建别名。`npm run build` 自动执行此步骤，亦可单独运行 `npm run prepare:static`。`_headers` 为Cloudflare静态入口设置首页/旧固定路径不缓存、指纹资源长期缓存。`assets/` 保留已有版本，避免已打开页面请求旧指纹时丢失文件。错误时才显示的“连接详情”记录构建号、请求地址、HTTP状态与返回类型，不包含昵称、留言、令牌或IP。
+
 ## 数据存储与安全
 
 `https://yangruoxuan.ltd` 和 `https://www.yangruoxuan.ltd` 是静态前端入口，无法直接执行此仓库的 Worker API。前端识别这两个域名后，会直接连接 `https://yang-ruoxuan-guestbook.spiffy-berry-3280.chatgpt.site` 的共享留言 API；服务端仅为这两个精确的HTTPS来源返回CORS许可和预检响应，不使用通配来源，不携带浏览器Cookie。两个入口使用同一份既有数据库，无需复制留言。字体CSS直接引用仓库中真实存在的哈希字体文件，静态部署也能加载。

@@ -120,6 +120,20 @@ test('a 200 response with the wrong payload cannot become an empty or successful
   assert.equal(calls, 3);
 });
 
+test('unexpected HTML exposes safe routing details without request tokens or message contents', async () => {
+  const { api } = client(async () => new Response('<html>wrong route</html>', { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } }), { baseURL: 'https://api.example', build: 'release14' });
+  await assert.rejects(api('/api/messages?cursor=do-not-expose'), error => {
+    assert.equal(error.code, 'UNEXPECTED_RESPONSE');
+    assert.match(error.message, /网页/);
+    assert.equal(error.diagnostics.url, 'https://api.example/api/messages');
+    assert.equal(error.diagnostics.status, 200);
+    assert.equal(error.diagnostics.contentType, 'text/html');
+    assert.equal(error.diagnostics.build, 'release14');
+    assert.equal(JSON.stringify(error.diagnostics).includes('do-not-expose'), false);
+    return true;
+  });
+});
+
 test('invalid form sessions are rejected before they can be used for a submission', async t => {
   for (const [label, data] of [
     ['empty token', { ...session, token: '' }],

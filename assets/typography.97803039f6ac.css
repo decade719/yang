@@ -1,0 +1,14 @@
+@font-face { font-family: "Ruoxuan Sans"; src: url("/fonts/ruoxuan-sans-3bc1da399db6.woff2") format("woff2"); font-style: normal; font-weight: 300 600; font-display: swap; }
+:root { --sans: "Ruoxuan Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans", Arial, sans-serif; }
+body { font-weight: 400; font-synthesis: none; }
+.name-center h1 { font-weight: 500; letter-spacing: .075em; }
+h2 { font-weight: 500; letter-spacing: .035em; }
+.empty-card h3 { font: 400 15px/1.8 var(--sans); letter-spacing: .015em; }
+.message-content { font: 400 15px/1.9 var(--sans); }
+.message-author { font-weight: 500; }
+.marquee-phrase,.marquee-row:nth-child(even) .marquee-phrase { font-family: var(--sans); font-style: normal; font-weight: 400; }
+input,textarea { font-family: var(--sans); font-weight: 400; font-size: 15px; line-height: 1.8; }
+.field label { font-weight: 400; }
+.connection-details { margin: 0 0 18px; color: var(--muted); font: 400 12px/1.7 var(--sans); }
+.connection-details summary { cursor: pointer; width: fit-content; padding: 5px 0; }
+.connection-details pre { margin: 8px 0 0; padding: 12px; border: 1px solid var(--line); border-radius: 5px; font: inherit; overflow-wrap: anywhere; white-space: pre-wrap; }

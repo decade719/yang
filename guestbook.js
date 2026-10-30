@@ -1,5 +1,5 @@
 // Keep network recovery independent of the page so it can be exercised directly.
-function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve => setTimeout(resolve, ms)), timeoutMs = 10000, baseURL = '' } = {}) {
+function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve => setTimeout(resolve, ms)), timeoutMs = 10000, baseURL = '', pageOrigin = '', build = 'unversioned' } = {}) {
   const validMessage = item => item && typeof item.id === 'string' && typeof item.nickname === 'string' && typeof item.content === 'string' && typeof item.createdAt === 'string' && Number.isFinite(Date.parse(item.createdAt));
   function validData(path, method, data) {
     if (!data || typeof data !== 'object') return false;
@@ -11,6 +11,9 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
   }
   return async function api(path, options = {}) {
     const method = (options.method || 'GET').toUpperCase();
+    const target = baseURL ? new URL(path, baseURL).href : path;
+    const location = new URL(target, pageOrigin || 'https://same-origin.invalid');
+    const diagnosticURL = location.origin + location.pathname;
     const attempts = method === 'GET' ? 3 : 1;
     for (let attempt = 0; attempt < attempts; attempt++) {
       const controller = new AbortController();
@@ -19,21 +22,22 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
       try {
         const headers = new Headers(options.headers);
         headers.set('Accept', 'application/json');
-        const target = baseURL ? new URL(path, baseURL).href : path;
         const response = await fetcher(target, { ...options, headers, signal: controller.signal, credentials: baseURL ? 'omit' : 'same-origin', cache: 'no-store' });
         const data = await response.json().catch(() => null);
         if (response.ok && validData(path, method, data)) return data;
         const applicationError = !response.ok && typeof data?.error === 'string';
         const blocked = !data && response.status === 403;
-        const message = applicationError ? data.error : blocked ? '连接暂时受限，请刷新页面或在系统浏览器中重试。' : '连接暂时中断，请稍后重试，已填写的内容会保留。';
+        const contentType = (response.headers.get('Content-Type') || '').split(';')[0];
+        const message = applicationError ? data.error : blocked ? '连接暂时受限，请展开连接详情查看。' : contentType.includes('html') ? '留言请求收到了网页，暂时无法读取。请展开连接详情查看。' : '留言数据未能正常读取，已填写的内容会保留。';
         failure = Object.assign(new Error(message), {
           code: applicationError ? data.code : blocked ? 'ACCESS_BLOCKED' : 'UNEXPECTED_RESPONSE',
           status: response.status, retryAfter: Number(response.headers.get('Retry-After')) || 0,
           retryable: !applicationError || response.status >= 500 || response.status === 408 || response.status === 429,
+          diagnostics: applicationError ? null : { build, url: diagnosticURL, status: response.status, contentType, apiVersion: response.headers.get('X-Guestbook-Api-Version') || '' },
         });
       } catch (error) {
         const timedOut = error.name === 'AbortError';
-        failure = Object.assign(new Error(timedOut ? '网络有点慢，请稍后重试，已填写的内容会保留。' : '暂时连接不上留言簿，请检查网络后重试。'), { code: timedOut ? 'TIMEOUT' : 'NETWORK_ERROR', retryable: true });
+        failure = Object.assign(new Error(timedOut ? '网络有点慢，请稍后重试，已填写的内容会保留。' : '暂时连接不上留言簿，请展开连接详情查看。'), { code: timedOut ? 'TIMEOUT' : 'NETWORK_ERROR', retryable: true, diagnostics: { build, url: diagnosticURL, status: 0, contentType: '未收到响应', apiVersion: '' } });
       } finally { clearTimeout(timeout); }
       if (!failure.retryable || attempt === attempts - 1) {
         console.warn('Guestbook request failed', { path: new URL(path, 'https://guestbook.invalid').pathname, status: failure.status || 0, code: failure.code });
@@ -50,7 +54,7 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
   const form = $('#message-form'), nickname = $('#nickname'), content = $('#message');
   if (!form) return;
   const customDomain = ['yangruoxuan.ltd', 'www.yangruoxuan.ltd'].includes(window.location?.hostname);
-  const api = createGuestbookApi({ baseURL: customDomain ? 'https://yang-ruoxuan-guestbook.spiffy-berry-3280.chatgpt.site' : '' });
+  const api = createGuestbookApi({ baseURL: customDomain ? 'https://yang-ruoxuan-guestbook.spiffy-berry-3280.chatgpt.site' : '', pageOrigin: window.location?.origin || '', build: $('meta[name="app-build"]')?.content || 'unversioned' });
   const list = $('#message-list'), notice = $('#list-notice'), more = $('.load-more');
   const submit = $('.submit-button'), label = $('.submit-label'), refresh = $('.refresh-button');
   let session = null, sessionPromise = null, nextCursor = null, loading = false, total = 0, cooldown = 0, toastTimer, listFailed = false, recoveryTimer;
@@ -82,6 +86,15 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
   function fieldError(field, text) {
     field.setAttribute('aria-invalid', String(Boolean(text)));
     const node = $('#' + field.id + '-error'); node.textContent = text; node.hidden = !text;
+  }
+  function connectionDetails(error) {
+    const panel = $('#connection-details'), report = $('#connection-report');
+    if (!panel || !report) return;
+    panel.hidden = !error?.diagnostics;
+    if (!panel.hidden) {
+      const d = error.diagnostics;
+      report.textContent = `页面版本：${d.build}\n请求地址：${d.url}\nHTTP状态：${d.status || '无'}\n返回类型：${d.contentType || '未知'}\n接口版本：${d.apiVersion || '未识别'}\n错误代码：${error.code || '未知'}`;
+    }
   }
   const draftKey = 'yang-guestbook-draft';
   function saveDraft() {
@@ -125,7 +138,7 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
   async function loadMessages(append = false) {
     if (loading) return;
     loading = true; list.setAttribute('aria-busy', 'true'); refresh.setAttribute('aria-busy', 'true'); refresh.disabled = true; more.disabled = true;
-    notice.hidden = true; $('.list-status').textContent = '正在翻页';
+    notice.hidden = true; connectionDetails(null); $('.list-status').textContent = '正在翻页';
     try {
       let data;
       if (!append && initialMessages) { data = initialMessages; initialMessages = null; }
@@ -138,6 +151,7 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
       $('.list-status').textContent = total ? '已收好 ' + total + ' 条' : '等待第一句话';
     } catch (error) {
       listFailed = true;
+      connectionDetails(error);
       notice.textContent = error.message; notice.hidden = false; $('.list-status').textContent = '稍后再试';
       if (seen.size === 0) list.replaceChildren(emptyState(true));
     } finally { loading = false; list.setAttribute('aria-busy', 'false'); refresh.setAttribute('aria-busy', 'false'); refresh.disabled = false; more.disabled = false; }
@@ -178,6 +192,7 @@ function createGuestbookApi({ fetcher = fetch, wait = ms => new Promise(resolve 
       cooldown = Date.now() + data.cooldownSeconds * 1000; updateCooldown(); cooldownTimer = setInterval(updateCooldown, 1000);
     } catch (error) {
       status(error.message);
+      connectionDetails(error);
       if (error.code === 'INVALID_SESSION') { session = null; getSession().catch(() => {}); }
       submit.disabled = false; label.textContent = '再试一次';
     }

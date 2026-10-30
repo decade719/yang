@@ -42,7 +42,7 @@ export default {
       return new Response(result.body, { status: result.status, headers });
     }
     if (!['GET', 'HEAD'].includes(request.method)) return new Response('Method not allowed', { status: 405, headers: { ...securityHeaders, Allow: 'GET, HEAD' } });
-    const asset = ASSETS[path === '/index.html' ? '/' : path];
+    const asset = ASSETS[path === '/index.html' || path === '/latest.html' || path === '/latest' ? '/' : path];
     if (!asset) return new Response('这一页还没有写下。', { status: 404, headers: { ...securityHeaders, 'Content-Type': 'text/plain; charset=utf-8' } });
     const body = request.method === 'HEAD' ? null : asset.type.startsWith('text/html') ? await withInitialMessages(request, env, asset.body) : assetBody(path, asset);
     return new Response(body, { headers: { ...securityHeaders, 'Content-Type': asset.type, 'Cache-Control': asset.cache || 'public, max-age=0, must-revalidate' } });

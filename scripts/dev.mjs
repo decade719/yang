@@ -16,6 +16,9 @@ const db = { prepare(sql) { return { bind(...values) { const stmt = sqlite.prepa
 const env = { DB: db, SIGNING_SECRET: process.env.SIGNING_SECRET || randomBytes(32).toString('hex') };
 const files = { '/': ['index.html','text/html'], '/index.html': ['index.html','text/html'], '/styles.css': ['styles.css','text/css'], '/space.css': ['space.css','text/css'], '/guestbook.js': ['guestbook.js','text/javascript'], '/marquee.js': ['marquee.js','text/javascript'], '/constellation.js': ['constellation.js','text/javascript'], '/languages.json': ['languages.json','application/json'], '/favicon.svg': ['favicon.svg','image/svg+xml'] };
 Object.assign(files, { '/gallery.css': ['gallery.css','text/css'], '/gallery.js': ['gallery.js','text/javascript'], '/photos.json': ['photos.json','application/json'] });
+files['/latest.html'] = ['index.html', 'text/html'];
+files['/latest'] = ['index.html', 'text/html'];
+files['/site-release.json'] = ['site-release.json', 'application/json'];
 files['/typography.css'] = ['typography.css', 'text/css'];
 const font = JSON.parse(await readFile(path.join(root, 'fonts/manifest.json'), 'utf8'));
 if (!/^\/fonts\/ruoxuan-sans-[a-f0-9]{12}\.woff2$/.test(font.src)) throw new Error('Unexpected font path.');
@@ -45,7 +48,8 @@ const server = http.createServer(async (req, res) => {
     if (!file) { res.writeHead(404); res.end('Not found'); return; }
     res.writeHead(200, { ...securityHeaders, 'Content-Type': file[1] + (file[1].startsWith('image/') || file[1].startsWith('font/') ? '' : '; charset=utf-8'), 'Cache-Control': 'no-store' });
     const bytes = req.method === 'HEAD' ? null : await readFile(path.join(root, file[0]));
-    res.end(file[1] === 'text/html' && bytes ? await withInitialMessages(new Request(url), env, bytes.toString('utf8')) : bytes);
+    const html = file[1] === 'text/html' && bytes ? bytes.toString('utf8').replace(/\/assets\/([a-z]+)\.[a-f0-9]{12}\.(js|css)/g, '/$1.$2') : null;
+    res.end(html ? await withInitialMessages(new Request(url), env, html) : bytes);
   } catch (error) { console.error(error.message); res.writeHead(500); res.end('Temporary error'); }
 });
 server.listen(port, '127.0.0.1', () => console.log(`Guestbook ready: http://127.0.0.1:${port} (persistent SQLite in .data/)`));

@@ -9,3 +9,6 @@ h2 { font-weight: 500; letter-spacing: .035em; }
 .marquee-phrase,.marquee-row:nth-child(even) .marquee-phrase { font-family: var(--sans); font-style: normal; font-weight: 400; }
 input,textarea { font-family: var(--sans); font-weight: 400; font-size: 15px; line-height: 1.8; }
 .field label { font-weight: 400; }
+.connection-details { margin: 0 0 18px; color: var(--muted); font: 400 12px/1.7 var(--sans); }
+.connection-details summary { cursor: pointer; width: fit-content; padding: 5px 0; }
+.connection-details pre { margin: 8px 0 0; padding: 12px; border: 1px solid var(--line); border-radius: 5px; font: inherit; overflow-wrap: anywhere; white-space: pre-wrap; }

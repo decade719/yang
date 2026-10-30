@@ -9,6 +9,7 @@ const encoder = new TextEncoder();
 const CONTROL_CHARACTERS = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\u202a-\u202e\u2066-\u2069]/u;
 const URL_PATTERN = /(?:https?:\/\/|www\.|\b[a-z0-9][a-z0-9.-]*\.(?:com|net|org|cn|io|xyz|top|vip|shop|cc|me|link)(?:\b|\/))/iu;
 const JSON_HEADERS = {
+  'X-Guestbook-Api-Version': 'shared-20261030-2',
   'Content-Type': 'application/json; charset=utf-8',
   'Cache-Control': 'no-store',
   'X-Content-Type-Options': 'nosniff',
@@ -276,6 +277,7 @@ export async function handleApi(request, env) {
   if (!FRONTEND_ORIGINS.has(origin)) return response;
   const headers = new Headers(response.headers);
   headers.set('Access-Control-Allow-Origin', origin);
+  headers.set('Access-Control-Expose-Headers', 'X-Guestbook-Api-Version');
   headers.set('Vary', 'Origin');
   if (request.method === 'OPTIONS' && response.status === 204) {
     headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
