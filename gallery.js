@@ -21,14 +21,15 @@
   // Keep a complete shuffled deck so every photo appears before the next cycle.
   const deck = [0, ...shuffle(slides.slice(1).map((_, i) => i + 1))];
   let timer = 0, inView = false, hovering = false, focused = false;
-  let userPaused = false, busy = false, touch = null, turns = 0, ignoreClicksUntil = 0;
+  let userPaused = false, busy = false, touch = null, turns = 0, ignoreClicksUntil = 0, centered = null;
   const pending = new Map();
+  const returning = new Map();
   const motionStopped = () => reduced.matches || globalMotion?.getAttribute('aria-pressed') === 'true';
-  function canPlay() { return inView && !document.hidden && !userPaused && !hovering && !focused && !busy && !motionStopped(); }
+  function canPlay() { return inView && !document.hidden && !userPaused && centered === null && !hovering && !focused && !busy && !motionStopped(); }
 
   function updateTimer() {
     clearTimeout(timer); timer = 0;
-    const paused = userPaused || motionStopped();
+    const paused = userPaused || centered !== null || motionStopped();
     toggle.setAttribute('aria-pressed', String(paused));
     toggle.setAttribute('aria-label', paused ? '播放照片自动切换' : '暂停照片自动切换');
     toggle.firstElementChild.textContent = paused ? '▷' : 'Ⅱ';
@@ -59,10 +60,31 @@
       const slide = slides[index];
       slide.dataset.slot = String(slot);
       slide.classList.toggle('is-active', slot === 0);
-      slide.querySelector('.photo-pick').setAttribute('aria-pressed', String(slot === 0));
+      const pick = slide.querySelector('.photo-pick');
+      pick.setAttribute('aria-pressed', String(slot === 0));
+      pick.setAttribute('aria-label', `${centered === index ? '收回照片' : '查看照片'}：${slide.querySelector('.photo-original').alt}`);
     });
     gallery.dataset.layout = String(Math.floor(Math.abs(turns) / 2) % 2);
     gallery.querySelector('.gallery-current').textContent = String(deck[0] + 1).padStart(2, '0');
+  }
+  function centerPhoto(index) {
+    centered = index;
+    gallery.classList.toggle('has-centered', index !== null);
+    slides.forEach((slide, photo) => {
+      const wasCentered = slide.classList.contains('is-centered');
+      slide.classList.toggle('is-centered', photo === index);
+      if (photo === index) {
+        clearTimeout(returning.get(photo)); returning.delete(photo);
+        slide.classList.remove('is-returning');
+      }
+      else if (wasCentered) {
+        clearTimeout(returning.get(photo));
+        // Let a photo settle back above the collage instead of dropping behind it mid-move.
+        slide.classList.add('is-returning');
+        returning.set(photo, setTimeout(() => { slide.classList.remove('is-returning'); returning.delete(photo); }, 1000));
+      }
+    });
+    arrange();
   }
   function warmDeck() {
     deck.forEach(index => load(index).catch(() => {}));
@@ -71,20 +93,28 @@
   async function turn(direction = 1, manual = true, target = null) {
     if (busy) return;
     const next = target ?? (direction > 0 ? deck[1] : deck[deck.length - 1]);
-    if (next === deck[0]) return;
+    if (next === deck[0]) {
+      if (manual && target !== null) {
+        centerPhoto(centered === next ? null : next);
+        status.textContent = centered === null ? '照片已回到叠放位置。' : `已移到中央：${slides[next].querySelector('.photo-original').alt}。再次点击或按 Escape 收回。`;
+        updateTimer();
+      }
+      return;
+    }
     busy = true;
     clearTimeout(timer); timer = 0;
     try {
       await load(next);
       // A slow image load must not restart motion after the user pauses.
-      if (!manual && (!inView || document.hidden || userPaused || hovering || focused || motionStopped())) return;
+      if (!manual && (!inView || document.hidden || userPaused || centered !== null || hovering || focused || motionStopped())) return;
       const offset = deck.indexOf(next);
       deck.push(...deck.splice(0, offset));
       turns += direction;
       if (target === null && direction > 0 && turns > 0 && turns % slides.length === 0) {
         deck.splice(1, deck.length - 1, ...shuffle(deck.slice(1)));
       }
-      arrange();
+      if (manual && (target !== null || centered !== null)) centerPhoto(next);
+      else arrange();
       if (manual) status.textContent = `第 ${next + 1} 张，共 ${slides.length} 张：${slides[next].querySelector('.photo-original').alt}`;
       warmDeck();
     } catch (error) { status.textContent = error.message; }
@@ -96,11 +126,22 @@
   slides.forEach((slide, index) => slide.querySelector('.photo-pick').addEventListener('click', () => {
     if (Date.now() >= ignoreClicksUntil) turn(1, true, index);
   }));
-  toggle.addEventListener('click', () => { userPaused = !userPaused; if (!userPaused) focused = false; updateTimer(); });
+  toggle.addEventListener('click', () => {
+    if (centered !== null) { centerPhoto(null); userPaused = false; }
+    else userPaused = !userPaused;
+    if (!userPaused) focused = false;
+    updateTimer();
+  });
   gallery.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && centered !== null) {
+      event.preventDefault(); centerPhoto(null); status.textContent = '照片已回到叠放位置。'; updateTimer(); return;
+    }
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
     turn(event.key === 'ArrowLeft' ? -1 : 1, true, event.key === 'Home' ? 0 : event.key === 'End' ? slides.length - 1 : null);
+  });
+  stage.addEventListener('click', event => {
+    if (event.target === stage && centered !== null) { centerPhoto(null); updateTimer(); }
   });
   stage.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch' && !coarse.matches) { hovering = true; updateTimer(); } });
   stage.addEventListener('pointerleave', () => { hovering = false; updateTimer(); });

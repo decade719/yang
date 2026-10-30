@@ -1,5 +1,5 @@
 {
-  "build": "af4b902ecaa7",
+  "build": "0679cd0b9d94",
   "assets": [
     {
       "source": "styles.css",
@@ -13,8 +13,8 @@
     },
     {
       "source": "gallery.css",
-      "url": "/assets/gallery.5441397e0851.css",
-      "hash": "5441397e0851"
+      "url": "/assets/gallery.98b7fcf3261d.css",
+      "hash": "98b7fcf3261d"
     },
     {
       "source": "typography.css",
@@ -38,8 +38,8 @@
     },
     {
       "source": "gallery.js",
-      "url": "/assets/gallery.86b75a022baa.js",
-      "hash": "86b75a022baa"
+      "url": "/assets/gallery.a65127265f8b.js",
+      "hash": "a65127265f8b"
     }
   ]
 }
