@@ -106,9 +106,11 @@ test('page includes initial shared messages safely without relying on a browser 
   assert.equal(await head.text(), '');
 });
 
-test('six full-frame photos and previews survive binary packaging with immutable hashed URLs', async () => {
+test('seven full-frame photos and previews survive binary packaging with the sea photo first', async () => {
   const photos = await (await worker.fetch(new Request(origin + '/photos.json'), {})).json();
-  assert.equal(photos.length, 6);
+  assert.equal(photos.length, 7);
+  assert.equal(photos[0].alt, '海鸥与海岸');
+  assert.ok(html.indexOf(photos[0].src) < html.indexOf(photos[1].src));
   let total = 0;
   for (const photo of photos) {
     assert.ok(photo.width > 0 && photo.height > 0 && photo.alt);

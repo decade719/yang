@@ -37,7 +37,7 @@ for (const [route, asset] of Object.entries(assets)) {
 }
 assets['/'].cache = 'no-store';
 const photos = JSON.parse(assets['/photos.json'].body);
-if (!Array.isArray(photos) || photos.length !== 6) throw new Error('Expected the six selected photos.');
+if (!Array.isArray(photos) || photos.length !== 7) throw new Error('Expected the seven selected photos.');
 for (const photo of photos) for (const route of [photo.src, photo.thumbnail]) {
   if (!/^\/photos\/(?:moment|thumb)-\d{2}-[a-f0-9]{10}\.webp$/.test(route)) throw new Error('Unexpected photo path.');
   const bytes = await readFile(path.join(root, route.slice(1)));
@@ -53,4 +53,4 @@ await mkdir(path.join(root, 'dist/server'), { recursive: true });
 await mkdir(path.join(root, 'dist/.openai'), { recursive: true });
 await writeFile(path.join(root, 'dist/server/index.js'), source);
 await copyFile(path.join(root, '.openai/hosting.json'), path.join(root, 'dist/.openai/hosting.json'));
-console.log(`Built guestbook Worker with ${Object.keys(assets).length} embedded assets, six photos and a local sans font.`);
+console.log(`Built guestbook Worker with ${Object.keys(assets).length} embedded assets, seven photos and a local sans font.`);

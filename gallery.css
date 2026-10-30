@@ -3,12 +3,13 @@
 .photo-stage { position: relative; width: 100%; aspect-ratio: 1.6; isolation: isolate; touch-action: pan-y pinch-zoom; }
 .photo-stage:focus-visible { outline-offset: 12px; border-radius: 5px; }
 .photo-slide { --mat: clamp(5px,.9vw,9px); --dx: 0px; --dy: 0px; --tilt: 0deg; position: absolute; left: var(--x); top: var(--y); width: var(--card-w); height: auto; margin: 0; padding: var(--mat) var(--mat) calc(var(--mat) * 2.4); background: #f6f3ed; border: 1px solid #e6e3dc; border-radius: 1px; box-shadow: 0 15px 30px #0006, 0 2px 5px #0005; z-index: var(--layer); transform: translate(-50%,-50%) translate(var(--dx),var(--dy)) rotate(calc(var(--angle) + var(--tilt))); transform-origin: center; transition: transform 1.1s cubic-bezier(.22,.65,.2,1), box-shadow .8s; }
-.photo-slide[data-photo="0"] { --x: 34%; --y: 38%; --card-w: 40%; --angle: -12deg; --layer: 5; }
-.photo-slide[data-photo="1"] { --x: 58%; --y: 25%; --card-w: 30%; --angle: 7deg; --layer: 1; }
-.photo-slide[data-photo="2"] { --x: 81%; --y: 29%; --card-w: 21%; --angle: 13deg; --layer: 3; }
-.photo-slide[data-photo="3"] { --x: 52%; --y: 65%; --card-w: 22%; --angle: 9deg; --layer: 4; }
-.photo-slide[data-photo="4"] { --x: 25%; --y: 73%; --card-w: 30%; --angle: -7deg; --layer: 2; }
-.photo-slide[data-photo="5"] { --x: 81%; --y: 76%; --card-w: 18%; --angle: -5deg; --layer: 6; }
+.photo-slide[data-photo="0"] { --x: 44%; --y: 47%; --card-w: 25%; --angle: -7deg; --layer: 7; }
+.photo-slide[data-photo="1"] { --x: 27%; --y: 28%; --card-w: 38%; --angle: -12deg; --layer: 4; }
+.photo-slide[data-photo="2"] { --x: 62%; --y: 23%; --card-w: 28%; --angle: 8deg; --layer: 1; }
+.photo-slide[data-photo="3"] { --x: 83%; --y: 30%; --card-w: 19%; --angle: 12deg; --layer: 3; }
+.photo-slide[data-photo="4"] { --x: 60%; --y: 69%; --card-w: 21%; --angle: 9deg; --layer: 5; }
+.photo-slide[data-photo="5"] { --x: 21%; --y: 73%; --card-w: 28%; --angle: -8deg; --layer: 2; }
+.photo-slide[data-photo="6"] { --x: 84%; --y: 77%; --card-w: 17%; --angle: -5deg; --layer: 6; }
 .photo-gallery[data-layout="1"] .photo-slide:nth-child(odd) { --dx: -3px; --dy: 4px; --tilt: 1.2deg; }
 .photo-gallery[data-layout="1"] .photo-slide:nth-child(even) { --dx: 3px; --dy: -3px; --tilt: -1deg; }
 .photo-slide.is-active, .photo-slide:focus-within { z-index: 8; transform: translate(-50%,-50%) translate(var(--dx),calc(var(--dy) - 7px)) rotate(calc(var(--angle) + var(--tilt) + 1.4deg)) scale(1.025); box-shadow: 0 23px 46px #0008, 0 3px 7px #0005; }
@@ -27,13 +28,14 @@
 @media(max-width:1000px) { .photo-gallery { width: calc(100% - 64px); padding-bottom: 60px; } }
 @media(max-width:600px) {
   .photo-gallery { width: min(500px,calc(100% - 32px)); padding-top: 10px; padding-bottom: 42px; }
-  .photo-stage { aspect-ratio: .6; }
-  .photo-slide[data-photo="0"] { --x: 35%; --y: 18%; --card-w: 61%; --angle: -10deg; }
-  .photo-slide[data-photo="1"] { --x: 32%; --y: 46%; --card-w: 50%; --angle: 6deg; }
-  .photo-slide[data-photo="2"] { --x: 73%; --y: 26%; --card-w: 37%; --angle: 9deg; }
-  .photo-slide[data-photo="3"] { --x: 31%; --y: 78%; --card-w: 39%; --angle: -7deg; }
-  .photo-slide[data-photo="4"] { --x: 71%; --y: 57%; --card-w: 53%; --angle: -8deg; }
-  .photo-slide[data-photo="5"] { --x: 77%; --y: 83%; --card-w: 29%; --angle: 9deg; }
+  .photo-stage { aspect-ratio: .54; }
+  .photo-slide[data-photo="0"] { --x: 48%; --y: 45%; --card-w: 46%; --angle: -6deg; }
+  .photo-slide[data-photo="1"] { --x: 34%; --y: 15%; --card-w: 60%; --angle: -10deg; }
+  .photo-slide[data-photo="2"] { --x: 22%; --y: 38%; --card-w: 40%; --angle: 7deg; }
+  .photo-slide[data-photo="3"] { --x: 75%; --y: 19%; --card-w: 34%; --angle: 9deg; }
+  .photo-slide[data-photo="4"] { --x: 28%; --y: 72%; --card-w: 38%; --angle: -7deg; }
+  .photo-slide[data-photo="5"] { --x: 72%; --y: 65%; --card-w: 50%; --angle: -8deg; }
+  .photo-slide[data-photo="6"] { --x: 75%; --y: 88%; --card-w: 28%; --angle: 9deg; }
   .photo-slide.is-active, .photo-slide:focus-within { transform: translate(-50%,-50%) translate(var(--dx),calc(var(--dy) - 4px)) rotate(calc(var(--angle) + var(--tilt) + 1deg)) scale(1.02); }
   .gallery-footer { gap: 12px; padding: 22px 4% 0; }
   .gallery-controls { gap: 10px; }.gallery-control { height: 40px; width: 40px; }
