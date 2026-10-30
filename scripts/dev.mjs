@@ -24,6 +24,11 @@ const font = JSON.parse(await readFile(path.join(root, 'fonts/manifest.json'), '
 if (!/^\/fonts\/ruoxuan-sans-[a-f0-9]{12}\.woff2$/.test(font.src)) throw new Error('Unexpected font path.');
 files[font.src] = [font.src.slice(1), 'font/woff2'];
 files['/fonts/ruoxuan-sans.woff2'] = [font.src.slice(1), 'font/woff2'];
+const guestbookFont = JSON.parse(await readFile(path.join(root, 'fonts/guestbook/manifest.json'), 'utf8'));
+for (const face of guestbookFont.fonts) {
+  if (!/^\/fonts\/guestbook\/guestbook-sans-(?:400|500)-[a-f0-9]{12}\.woff2$/.test(face.src)) throw new Error('Unexpected guestbook font path.');
+  files[face.src] = [face.src.slice(1), 'font/woff2'];
+}
 const photos = JSON.parse(await readFile(path.join(root, 'photos.json'), 'utf8'));
 for (const photo of photos) for (const route of [photo.src, photo.thumbnail]) {
   if (!/^\/photos\/(?:moment|thumb)-\d{2}-[a-f0-9]{10}\.webp$/.test(route)) throw new Error('Unexpected photo path.');

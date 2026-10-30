@@ -1,5 +1,5 @@
 {
-  "build": "0679cd0b9d94",
+  "build": "bf36b806c6d8",
   "assets": [
     {
       "source": "styles.css",
@@ -18,8 +18,8 @@
     },
     {
       "source": "typography.css",
-      "url": "/assets/typography.97803039f6ac.css",
-      "hash": "97803039f6ac"
+      "url": "/assets/typography.c233cf7885e1.css",
+      "hash": "c233cf7885e1"
     },
     {
       "source": "guestbook.js",

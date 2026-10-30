@@ -94,6 +94,27 @@ test('local sans font is served as its exact WOFF2 bytes with immutable caching'
   assert.ok(staticCSS.includes(font.src), 'source deployment must reference an existing font file without a Worker alias');
 });
 
+test('dedicated guestbook font faces are embedded and reachable from the published stylesheet', async () => {
+  const manifest = JSON.parse(await readFile(new URL('../fonts/guestbook/manifest.json', import.meta.url), 'utf8'));
+  assert.deepEqual(manifest.fonts.map(face => face.weight).sort(), [400, 500]);
+  const stylesheet = await (await worker.fetch(new Request(origin + '/typography.css'), {})).text();
+  let totalBytes = 0;
+  for (const face of manifest.fonts) {
+    assert.ok(stylesheet.includes(face.src), 'published CSS must request a real font resource');
+    const response = await worker.fetch(new Request(origin + face.src), {});
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('Content-Type'), 'font/woff2');
+    assert.match(response.headers.get('Cache-Control'), /immutable/);
+    const bytes = Buffer.from(await response.arrayBuffer());
+    assert.equal(bytes.subarray(0, 4).toString(), 'wOF2');
+    assert.ok(face.src.endsWith(createHash('sha256').update(bytes).digest('hex').slice(0, 12) + '.woff2'));
+    assert.deepEqual(bytes, await readFile(new URL('..' + face.src, import.meta.url)));
+    totalBytes += bytes.length;
+  }
+  assert.ok(totalBytes < 1600000, 'the two reading weights must stay within the font budget');
+  assert.match(await readFile(new URL('../fonts/guestbook/OFL.txt', import.meta.url), 'utf8'), /SIL OPEN FONT LICENSE/);
+});
+
 test('page includes initial shared messages safely without relying on a browser API fetch', async () => {
   const row = { id: '00000000-0000-4000-8000-000000000001', nickname: '</script><img src=x onerror=alert(1)>', content: 'hello </script>\u2028 $&', created_at: 1793285192619 };
   const env = { DB: { prepare(sql) {

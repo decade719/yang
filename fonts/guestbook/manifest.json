@@ -1,0 +1,22 @@
+{
+  "family": "Guestbook Sans",
+  "fonts": [
+    {
+      "src": "/fonts/guestbook/guestbook-sans-400-526d37fd5e2a.woff2",
+      "weight": 400,
+      "sha256": "526d37fd5e2ac06f5ea4e32cf5b53ab189602d448e4a6940eb4a8d464ffa8bad",
+      "bytes": 676684,
+      "glyphs": 4061
+    },
+    {
+      "src": "/fonts/guestbook/guestbook-sans-500-09bf77a5fb68.woff2",
+      "weight": 500,
+      "sha256": "09bf77a5fb6813f0fc862416322e99a0ce8e57f4f1450cdd8ca1aec942bee776",
+      "bytes": 698212,
+      "glyphs": 4060
+    }
+  ],
+  "source": "https://github.com/IBM/plex/tree/master/packages/plex-sans-sc",
+  "package": "@ibm/plex-sans-sc@1.1.0",
+  "license": "OFL.txt"
+}

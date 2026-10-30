@@ -27,6 +27,13 @@ if (!/^\/fonts\/ruoxuan-sans-[a-f0-9]{12}\.woff2$/.test(font.src)) throw new Err
 const fontBytes = await readFile(path.join(root, font.src.slice(1)));
 if (!font.src.endsWith(createHash('sha256').update(fontBytes).digest('hex').slice(0, 12) + '.woff2')) throw new Error('Font hash mismatch.');
 assets[font.src] = { body: fontBytes.toString('base64'), encoding: 'base64', type: 'font/woff2', cache: 'public, max-age=31536000, immutable' };
+const guestbookFont = JSON.parse(await readFile(path.join(root, 'fonts/guestbook/manifest.json'), 'utf8'));
+for (const face of guestbookFont.fonts) {
+  if (!/^\/fonts\/guestbook\/guestbook-sans-(?:400|500)-[a-f0-9]{12}\.woff2$/.test(face.src)) throw new Error('Unexpected guestbook font path.');
+  const bytes = await readFile(path.join(root, face.src.slice(1)));
+  if (!face.src.endsWith(createHash('sha256').update(bytes).digest('hex').slice(0, 12) + '.woff2')) throw new Error('Guestbook font hash mismatch.');
+  assets[face.src] = { body: bytes.toString('base64'), encoding: 'base64', type: 'font/woff2', cache: 'public, max-age=31536000, immutable' };
+}
 assets['/typography.css'].body = assets['/typography.css'].body.replaceAll('/fonts/ruoxuan-sans.woff2', font.src);
 // Each deployed page references the exact script/style content it was built with.
 // Keep the old paths for already-open pages, but new pages never reuse their URLs.
@@ -56,4 +63,4 @@ await mkdir(path.join(root, 'dist/server'), { recursive: true });
 await mkdir(path.join(root, 'dist/.openai'), { recursive: true });
 await writeFile(path.join(root, 'dist/server/index.js'), source);
 await copyFile(path.join(root, '.openai/hosting.json'), path.join(root, 'dist/.openai/hosting.json'));
-console.log(`Built guestbook Worker with ${Object.keys(assets).length} embedded assets, seven photos and a local sans font.`);
+console.log(`Built guestbook Worker with ${Object.keys(assets).length} embedded assets, seven photos and local sans fonts.`);

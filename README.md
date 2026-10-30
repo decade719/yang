@@ -22,6 +22,7 @@
 | `marquee.js`、`languages.json`、`LANGUAGE_SOURCES.md` | 多语言弹幕、数据及来源归属 |
 | `constellation.js`、`space.css` | Canvas星空、指针交互和深空/蓝调配色 |
 | `gallery.js`、`gallery.css`、`photos.json`、`photos/` | 七张白边照片拼贴；点击照片平滑居中并摆正，再次点击或 Escape 收回；保留周围叠放和压缩的WebP图片 |
+| `typography.css`、`fonts/guestbook/` | 留言区专用无衬线字库、正文与表单字体层级；字库来源和开放授权随文件保存 |
 | `worker/index.js` | 页面、静态资源路由和安全响应头 |
 | `worker/guestbook.js` | 共享留言 API、签名表单令牌和防刷校验 |
 | `db/`、`drizzle.config.ts` | 生产数据库结构与迁移生成配置 |

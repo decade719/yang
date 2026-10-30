@@ -1,3 +1,5 @@
+@font-face { font-family: "Guestbook Sans"; src: url("/fonts/guestbook/guestbook-sans-400-526d37fd5e2a.woff2") format("woff2"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "Guestbook Sans"; src: url("/fonts/guestbook/guestbook-sans-500-09bf77a5fb68.woff2") format("woff2"); font-style: normal; font-weight: 500; font-display: swap; }
 @font-face { font-family: "Ruoxuan Sans"; src: url("/fonts/ruoxuan-sans-3bc1da399db6.woff2") format("woff2"); font-style: normal; font-weight: 300 600; font-display: swap; }
 :root { --sans: "Ruoxuan Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans", Arial, sans-serif; }
 body { font-weight: 400; font-synthesis: none; }
@@ -12,3 +14,44 @@ input,textarea { font-family: var(--sans); font-weight: 400; font-size: 15px; li
 .connection-details { margin: 0 0 18px; color: var(--muted); font: 400 12px/1.7 var(--sans); }
 .connection-details summary { cursor: pointer; width: fit-content; padding: 5px 0; }
 .connection-details pre { margin: 8px 0 0; padding: 12px; border: 1px solid var(--line); border-radius: 5px; font: inherit; overflow-wrap: anywhere; white-space: pre-wrap; }
+
+/* A calmer reading rhythm and a dedicated UI face for the guestbook. */
+.guestbook-grid {
+  --sans: "Guestbook Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Ruoxuan Sans", Arial, sans-serif;
+  font: 400 16px/1.75 var(--sans);
+  letter-spacing: 0;
+  gap: clamp(32px, 4vw, 56px);
+}
+.guestbook-grid h2 { font: 500 27px/1.4 var(--sans); letter-spacing: .015em; }
+.guestbook-grid .section-heading { margin-bottom: 26px; }
+.guestbook-grid .message-count { font: 400 12px/1.8 var(--sans); margin-left: 12px; min-width: 26px; letter-spacing: 0; }
+.guestbook-grid .message-card { padding: 26px 28px; border-radius: 12px; }
+.guestbook-grid .message-meta { gap: 12px; }
+.guestbook-grid .avatar { width: 36px; height: 36px; font: 500 14px/1 var(--sans); }
+.guestbook-grid .message-author { font: 500 14px/1.6 var(--sans); letter-spacing: .005em; }
+.guestbook-grid .message-number { display: none; }
+.guestbook-grid .message-content { margin: 20px 0 24px; font: 400 17px/1.85 var(--sans); letter-spacing: .01em; color: #e4ecf7; }
+.guestbook-grid .message-time { font: 400 12px/1.6 var(--sans); letter-spacing: .01em; }
+.guestbook-grid .compose-card { padding: 28px 30px; border-radius: 14px; }
+.guestbook-grid .compose-card h2 { margin-bottom: 28px; }
+.guestbook-grid .field { margin-bottom: 24px; }
+.guestbook-grid .field label { margin-bottom: 10px; font: 500 13px/1.6 var(--sans); letter-spacing: .015em; color: #c3d0e1; }
+.guestbook-grid input, .guestbook-grid textarea { padding: 13px 15px; border-radius: 8px; font: 400 16px/1.75 var(--sans); letter-spacing: .005em; }
+.guestbook-grid input::placeholder, .guestbook-grid textarea::placeholder { color: #8799b1; opacity: 1; }
+.guestbook-grid textarea { min-height: 174px; }
+.guestbook-grid .textarea-footer { margin-top: 9px; font: 400 12px/1.6 var(--sans); font-variant-numeric: tabular-nums; }
+.guestbook-grid .submit-button { padding: 15px 18px; border-radius: 8px; font: 500 16px/1.65 var(--sans); letter-spacing: .035em; }
+.guestbook-grid .public-note { margin-top: 16px; font: 400 12px/1.6 var(--sans); letter-spacing: 0; }
+.guestbook-grid .empty-card h3 { font: 400 16px/1.8 var(--sans); letter-spacing: .01em; }
+.guestbook-grid .empty-card a, .guestbook-grid .load-more { font: 400 14px/1.7 var(--sans); }
+.guestbook-grid .list-notice { font: 400 14px/1.8 var(--sans); }
+.guestbook-grid .field-error, .guestbook-grid .form-status { font: 400 13px/1.75 var(--sans); }
+@media(max-width:760px) {
+  .guestbook-grid { gap: 32px; }
+  .guestbook-grid h2 { font-size: 25px; }
+  .guestbook-grid .message-card, .guestbook-grid .compose-card { padding: 24px; }
+  .guestbook-grid .message-content { font-size: 16px; }
+}
+@media(max-width:360px) {
+  .guestbook-grid .message-card, .guestbook-grid .compose-card { padding: 20px; }
+}
